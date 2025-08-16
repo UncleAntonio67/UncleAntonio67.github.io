@@ -27,8 +27,8 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content=".进程里有很多线程，有内存（逻辑内存），指代内存的寻址空间，并不是真正分了4G，本质是给了寻址空间；文件&#x2F;网络句柄，多个进程可以共用线程里是调用栈，主线程调用会入栈，PC是下一个指令，存放在内存中。还有TLS，这里有独立内存空间。进程是容器，线程是运行。 存储层次结构硬盘、内存、缓存、寄存器，以此由慢到贵，由便宜到贵 寻址空间进程指针取值范围，操作系统32位就是4G，目前大多数是64位的">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2025-08-16T15:19:28.000Z">
-<meta property="article:modified_time" content="2025-08-16T15:19:28.633Z">
+<meta property="article:published_time" content="2025-08-16T15:25:50.000Z">
+<meta property="article:modified_time" content="2025-08-16T15:25:50.822Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
 
@@ -173,7 +173,7 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2025-08-16 23:19:28" itemprop="dateCreated datePublished" datetime="2025-08-16T23:19:28+08:00">2025-08-16</time>
+              <time title="Created: 2025-08-16 23:25:50" itemprop="dateCreated datePublished" datetime="2025-08-16T23:25:50+08:00">2025-08-16</time>
             </span>
 
           
@@ -195,38 +195,19 @@
 <h2 id="TCP解决可靠性问题的方案，滑动窗口"><a href="#TCP解决可靠性问题的方案，滑动窗口" class="headerlink" title="TCP解决可靠性问题的方案，滑动窗口"></a>TCP解决可靠性问题的方案，滑动窗口</h2><p>维持发送方和接收方的缓冲区，各自维护缓冲区来解决不可靠的问题。发一个确认一个，这样很浪费，慢慢改进。<br>滑动窗口的演示，正常情况，丢包情况<br>丢包情况，等ACK，这里有超时重传机制，一定要按顺利ACK</p>
 <h2 id="关系型数据库"><a href="#关系型数据库" class="headerlink" title="关系型数据库"></a>关系型数据库</h2><p>基于关系代数理论<br>缺点：表结构不直观、实现复杂、速度慢<br>优点：健壮性高、社区庞大</p>
 <h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><p>ACID<br>A原子性<br>C一致性<br>I隔离性<br>D持久性</p>
-<h2 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h2><p>Read uncommitted<br>Read committed<br>Repeatable Read<br>Serializable</p>
-<p>for update 加写锁，耗费资源<br>乐观锁：加一个版本保护，记录Timestamp，冲突机会不多的情况下使用</p>
+<h2 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h2><p>Read uncommitted<br>Read committed<br>Repeatable Read<br>Serializable<br>for update 加写锁，耗费资源<br>乐观锁：加一个版本保护，记录Timestamp，冲突机会不多的情况下使用</p>
 <h2 id="程序设计语言"><a href="#程序设计语言" class="headerlink" title="程序设计语言"></a>程序设计语言</h2><p>类型检查分类<br>编译时：C、C++、Java、Go<br>运行时：Python、Perl、JavaScript<br>运行&#x2F;编译：<br>直接编译为机器代码：C、C++<br>编译为中间代码：Java、C#<br>解释执行：Python、Perl<br>编范范式：<br>面向过程、面向对象、函数式</p>
-<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>boolean、byte、char<br>short、int、long、float、double<br>String、Enumerate、Array<br>Object</p>
-<p>32为int的取值范围，主要是看符号位和数值位<br>补码：取反加1，为了便于和数学一致</p>
-<h2 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h2><p>符号位|指数部分|基数部分</p>
-<p>浮点数比较，有精度问题，差的绝对值看是否小于eps，具体分析<br>用BigDecimal算钱</p>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>boolean、byte、char<br>short、int、long、float、double<br>String、Enumerate、Array<br>Object<br>32为int的取值范围，主要是看符号位和数值位<br>补码：取反加1，为了便于和数学一致</p>
+<h2 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h2><p>符号位|指数部分|基数部分<br>浮点数比较，有精度问题，差的绝对值看是否小于eps，具体分析<br>用BigDecimal算钱</p>
 <h2 id="Java数据类型"><a href="#Java数据类型" class="headerlink" title="Java数据类型"></a>Java数据类型</h2><p>值类型和对象类型<br>装箱和拆箱<br>显示装箱、隐式装箱<br>拆箱</p>
-<h2 id="数学归纳法"><a href="#数学归纳法" class="headerlink" title="数学归纳法"></a>数学归纳法</h2><p>用于证明断言对所有自然数成立，这是个公理<br>证明N&#x3D;1成立<br>如果N&gt;1成立，则N成立</p>
-<p>递归控制<br>严格定义递归含义的作用，包括参数、返回值、全局状态<br>先一般、后特殊，先写假设和推导，再写特殊情况<br>每次调用必须缩小问题的规模<br>每次问题规模缩小程序必须为1</p>
-<p>递归的缺点<br>Stack<br>函数调用开销，Stack Overflow错误</p>
-<p>循环控制<br>一般化的方法仍然需要栈，代码会变复杂（入栈出栈的代码），不能根本解决问题</p>
-<p>循环不变式，是一句断言定义各变量所满足的条件</p>
-<h2 id="边界控制"><a href="#边界控制" class="headerlink" title="边界控制"></a>边界控制</h2><p>主要还是看经验</p>
-<p>二分查找有一个隐藏10年的bug</p>
+<h2 id="数学归纳法"><a href="#数学归纳法" class="headerlink" title="数学归纳法"></a>数学归纳法</h2><p>用于证明断言对所有自然数成立，这是个公理<br>证明N&#x3D;1成立<br>如果N&gt;1成立，则N成立<br>递归控制<br>严格定义递归含义的作用，包括参数、返回值、全局状态<br>先一般、后特殊，先写假设和推导，再写特殊情况<br>每次调用必须缩小问题的规模<br>每次问题规模缩小程序必须为1<br>递归的缺点<br>Stack<br>函数调用开销，Stack Overflow错误<br>循环控制<br>一般化的方法仍然需要栈，代码会变复杂（入栈出栈的代码），不能根本解决问题<br>循环不变式，是一句断言定义各变量所满足的条件</p>
+<h2 id="边界控制"><a href="#边界控制" class="headerlink" title="边界控制"></a>边界控制</h2><p>主要还是看经验<br>二分查找有一个隐藏10年的bug</p>
 <h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>树<br>容易理解、难度大、综合性强<br>二叉树的遍历（前序、中序、后续）<br>先遍历树根，<br>然后前序遍历左子树<br>再前序遍历右子树</p>
-<h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><p>Singleton优缺点<br>确保全局至多只有一个对象<br>用于构造缓慢的对象，需要统一管理的资源<br>缺点，很多全局状态、线程安全性<br>双重锁模式&#x2F;使用Java类的静态变量&#x2F;使用框架提供的能力</p>
-<p>继承关系，is a关系，不要用继承关系来实现复用，使用设计模式实现代码复用<br>状态模式<br>装饰器模式</p>
-<p>创建对象：创建哪个类，参数不明确</p>
-<p>抽象工厂模式<br>构建模式</p>
-<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>死锁分析<br>synchronized关键字<br>在任何地方都可以线程切换，甚至在一句语句中心<br>要尽力设想对自己最不利的情况</p>
-<p>死锁的四个条件：<br>互斥等待——一般无法破除<br>hold and wait——一次性获取所有资源<br>循环等待——按顺序获取资源<br>无法剥夺的等待——加入超时</p>
-<p>线程池的演示</p>
+<h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><p>Singleton优缺点<br>确保全局至多只有一个对象<br>用于构造缓慢的对象，需要统一管理的资源<br>缺点，很多全局状态、线程安全性<br>双重锁模式&#x2F;使用Java类的静态变量&#x2F;使用框架提供的能力<br>继承关系，is a关系，不要用继承关系来实现复用，使用设计模式实现代码复用<br>状态模式<br>装饰器模式<br>创建对象：创建哪个类，参数不明确<br>抽象工厂模式<br>构建模式</p>
+<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>死锁分析<br>synchronized关键字<br>在任何地方都可以线程切换，甚至在一句语句中心<br>要尽力设想对自己最不利的情况<br>死锁的四个条件：<br>互斥等待——一般无法破除<br>hold and wait——一次性获取所有资源<br>循环等待——按顺序获取资源<br>无法剥夺的等待——加入超时<br>线程池的演示</p>
 <h2 id="资源管理"><a href="#资源管理" class="headerlink" title="资源管理"></a>资源管理</h2><p>不被引用的对象会被回收<br>垃圾回收包括Minor GC、Full GC<br>垃圾回收时所有运行暂停<br>Java和C++销毁对象</p>
-<h2 id="并行计算"><a href="#并行计算" class="headerlink" title="并行计算"></a>并行计算</h2><p>如何排序10G个算法</p>
-<p>扩展的归并排序，分左右两半排序后，将两个有序数据归并<br>用堆的数据结构，<br>堆——完全二叉树，根是最小的，PriorityQueue<br>最后还是10G的数据送进去<br>将一部分放进内存里</p>
-<h2 id="面向对象思想"><a href="#面向对象思想" class="headerlink" title="面向对象思想"></a>面向对象思想</h2><p>类与对象<br>类的成员变量——对象状态<br>类的成员函数——对象行为<br>类的静态变量、静态函数——全局就一份<br>类的特殊函数<br>构造函数<br>Hashcode和equal 必要非充分的关系</p>
-<p>接口<br>从用户角度看问题<br>是模块间协作的合约，无成员变量，没有实现<br>Java Interface关键字<br>C++ 一个全部是纯虚函数的类<br>python：依靠注释来生命</p>
-<p>接口和抽象类：<br>从实现角度，抽象类可以有成员变量、部分实现<br>抽象类不可以多重继承，接口可以</p>
-<p>为什么设计成这样：<br>从用户角度看问题、强调合约、、强制协作双方无法犯错<br>包装链表类，实现iteratable接口</p>
-<p>继承（is-a）与封装<br>类内&#x2F;包内&#x2F;派生&#x2F;外部<br>private<br>默认<br>protected<br>public<br>尽量只是用private、public</p>
-<p>不可变对象<br>可以引用传递，可以缓存；线程安全<br>final关键字无法保证不可变性<br>通过final关键字声明，不能被继承、不能重写、不能指向其他对象<br>从接口定义，类的实现上保证不可变性<br>Collections.Unmodified<br>泛型<br>第一层是结构，第二层是类型，从List到List<T><br>Java Type Erasure<br>Covariance<br>基础知识：广度优先、在兴趣点深入</p>
+<h2 id="并行计算"><a href="#并行计算" class="headerlink" title="并行计算"></a>并行计算</h2><p>如何排序10G个算法<br>扩展的归并排序，分左右两半排序后，将两个有序数据归并<br>用堆的数据结构，<br>堆——完全二叉树，根是最小的，PriorityQueue<br>最后还是10G的数据送进去<br>将一部分放进内存里</p>
+<h2 id="面向对象思想"><a href="#面向对象思想" class="headerlink" title="面向对象思想"></a>面向对象思想</h2><p>类与对象<br>类的成员变量——对象状态<br>类的成员函数——对象行为<br>类的静态变量、静态函数——全局就一份<br>类的特殊函数<br>构造函数<br>Hashcode和equal 必要非充分的关系<br>接口<br>从用户角度看问题<br>是模块间协作的合约，无成员变量，没有实现<br>Java Interface关键字<br>C++ 一个全部是纯虚函数的类<br>python：依靠注释来生命<br>接口和抽象类：<br>从实现角度，抽象类可以有成员变量、部分实现<br>抽象类不可以多重继承，接口可以<br>为什么设计成这样：<br>从用户角度看问题、强调合约、、强制协作双方无法犯错<br>包装链表类，实现iteratable接口<br>继承（is-a）与封装<br>类内&#x2F;包内&#x2F;派生&#x2F;外部<br>private<br>默认<br>protected<br>public<br>尽量只是用private、public<br>不可变对象<br>可以引用传递，可以缓存；线程安全<br>final关键字无法保证不可变性<br>通过final关键字声明，不能被继承、不能重写、不能指向其他对象<br>从接口定义，类的实现上保证不可变性<br>Collections.Unmodified<br>泛型<br>第一层是结构，第二层是类型，从List到List<T><br>Java Type Erasure<br>Covariance<br>基础知识：广度优先、在兴趣点深入</p>
 
     </div>
 
