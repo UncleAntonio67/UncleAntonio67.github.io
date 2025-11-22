@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 7.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="作者： 张俊林阅读日期：20250904——20250930学习方式：书本阅读 前言本书专注于与大数据处理有关的架构与算法。 目录第0章——当谈论大数据时我们在谈什么第1章——数据分片与路由第2章——数据复制与一致性第3章——大数据常用的算法与数据结构第4章——集群资源管理与调度第5章——分布式协调系统第6章——分布式通信第7章——数据通道第8章——分布式文件系统第9章——内存KV数据库第10章—">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据日知录">
+<meta property="og:url" content="http://example.com/2025/08/01/%E6%8A%80%E6%9C%AF%E4%B9%A6%E7%B1%8D/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%97%A5%E7%9F%A5%E5%BD%95/index.html">
+<meta property="og:site_name" content="Uncle Antonio">
+<meta property="og:description" content="作者： 张俊林阅读日期：20250904——20250930学习方式：书本阅读 前言本书专注于与大数据处理有关的架构与算法。 目录第0章——当谈论大数据时我们在谈什么第1章——数据分片与路由第2章——数据复制与一致性第3章——大数据常用的算法与数据结构第4章——集群资源管理与调度第5章——分布式协调系统第6章——分布式通信第7章——数据通道第8章——分布式文件系统第9章——内存KV数据库第10章—">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2025-08-01T04:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-22T14:05:25.895Z">
+<meta property="article:author" content="Uncle Antonio">
+<meta property="article:tag" content="书籍">
+<meta property="article:tag" content="大数据">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2025/08/01/%E6%8A%80%E6%9C%AF%E4%B9%A6%E7%B1%8D/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%97%A5%E7%9F%A5%E5%BD%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>大数据日知录 | Uncle Antonio</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Uncle Antonio</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-calendar fa-fw"></i>Schedule</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>Sitemap</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-heartbeat fa-fw"></i>Commonweal 404</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/08/01/%E6%8A%80%E6%9C%AF%E4%B9%A6%E7%B1%8D/%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%97%A5%E7%9F%A5%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/icon.JPG">
+      <meta itemprop="name" content="Uncle Antonio">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Uncle Antonio">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          大数据日知录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-08-01 12:00:00" itemprop="dateCreated datePublished" datetime="2025-08-01T12:00:00+08:00">2025-08-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-11-22 22:05:25" itemprop="dateModified" datetime="2025-11-22T22:05:25+08:00">2025-11-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%8A%80%E6%9C%AF%E4%B9%A6%E7%B1%8D/" itemprop="url" rel="index"><span itemprop="name">技术书籍</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>作者： 张俊林<br>阅读日期：20250904——20250930<br>学习方式：书本阅读</p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本书专注于与大数据处理有关的架构与算法。</p>
+<h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><p>第0章——当谈论大数据时我们在谈什么<br>第1章——数据分片与路由<br>第2章——数据复制与一致性<br>第3章——大数据常用的算法与数据结构<br>第4章——集群资源管理与调度<br>第5章——分布式协调系统<br>第6章——分布式通信<br>第7章——数据通道<br>第8章——分布式文件系统<br>第9章——内存KV数据库<br>第10章——列式数据库<br>第11章——大规模批处理系统<br>第12章——流式计算<br>第13章——交互式数据分析<br>第14章——图数据库：架构与算法<br>第15章——机器学习：范型与架构<br>第16章——机器学习：分布式算法<br>第17章——增量计算</p>
+<h1 id="第0章——当谈论大数据时我们在谈什么"><a href="#第0章——当谈论大数据时我们在谈什么" class="headerlink" title="第0章——当谈论大数据时我们在谈什么"></a>第0章——当谈论大数据时我们在谈什么</h1><h2 id="大数据是什么"><a href="#大数据是什么" class="headerlink" title="大数据是什么"></a>大数据是什么</h2><p>多大才算大：数据量的衡量单位，从小到大依次为KB、MB、GB、TB、PB、EP和ZB</p>
+<p>电子数据正在暴涨：2010年全世界信息总量是1ZB，最近3年人类产生的信息量已经超过了之前历史上人类产生的所有信息之和。</p>
+<p>大数据的定义：</p>
+<ul>
+<li>维基百科：数据量太大，手头的工具已经不便于管理</li>
+<li>IBM：3V（Volume、Velocity、Variety）+1V（Value）</li>
+<li>IDC：代表新一代的技术脚骨，能够高速获取数据进行分析挖掘，抽取价值信息</li>
+<li>Google：海量数据可广泛获得，所稀缺的是如何从中挖掘出智慧和观点。</li>
+</ul>
+<h2 id="大数据之翼：技术范型转换"><a href="#大数据之翼：技术范型转换" class="headerlink" title="大数据之翼：技术范型转换"></a>大数据之翼：技术范型转换</h2><p>关系型数据库——&gt;并行数据库——&gt;NoSql数据库</p>
+<p>整体架构：<br>——&gt;数据源<br>来源各异，形式不规整<br>——&gt;数据管理<br>NoSQL不追求应用场景的统一，而且不同类型不同NoSQL库存储管理<br>——&gt;数据分析<br>挖掘分析，利用数据挖掘、机器学习、时序分析<br>——&gt;数据获取<br>数据可视化展现</p>
+<p>大数据技术处理架构图<br>![[Pasted image 20250904182932.jpg]]</p>
+<h2 id="大数据商业炼金术"><a href="#大数据商业炼金术" class="headerlink" title="大数据商业炼金术"></a>大数据商业炼金术</h2><p>互联网、传统IT、金融、零售行业都在利于大数据提升企业收益</p>
+<h2 id="大数据在路上"><a href="#大数据在路上" class="headerlink" title="大数据在路上"></a>大数据在路上</h2><p>概念最早由麦肯锡提出，巨型公司提供基础架构平台，中小型创业公司完善分布式计算生态系统，或者提供大数据服务等。</p>
+<h1 id="第1章——数据分片与路由"><a href="#第1章——数据分片与路由" class="headerlink" title="第1章——数据分片与路由"></a>第1章——数据分片与路由</h1><p>数据规模越来越大：</p>
+<ul>
+<li>并行数据库通过纵向扩展解决问题（Scale Up），扩展机器</li>
+<li>大数据系统通过横向扩展解决问题（Scale Out），增加机器</li>
+</ul>
+<p>增加机器就带来了<strong>数据分片</strong>，分片后就必须找到数据，即<strong>数据路由</strong>。</p>
+<ul>
+<li>数据分片：实现水平扩展</li>
+<li>数据复制：保证数据高可用，因为服务器经常存在故障，所以需要存储多份副本</li>
+</ul>
+<p>数据复制面临的问题：并发对数据更新时，如何保证数据的一致性。</p>
+<p>常见的数据分片方法包括哈希分片与范围分片，先讲通用模型再将具体实现。</p>
+<h2 id="抽象模型"><a href="#抽象模型" class="headerlink" title="抽象模型"></a>抽象模型</h2><p>二级映射：第一级：key-partition，一个分片包含多个数据记录；第二级：partition-machine，一个物理机器容纳多个数据分片。</p>
+<p>![[Pasted image 20250904184458.jpg]]</p>
+<p>在做数据分片时，根据key-partition映射关系将大数据水平切割成众多数据分片，然后再按照partition-machine映射关系将数据分片放置到对应的物理机器上。</p>
+<ul>
+<li>哈希分片：主要通过哈希函数来建立key-partition映射关系，<strong>点查询</strong>，不支持范围查询。Dynamo、Cassandra、Riak、Voldmort、Membase等都支持</li>
+<li>范围分片：<strong>支持点查询也可以支持范围查询</strong>，包括Google的BigTable和微软的Azure等系统</li>
+</ul>
+<h2 id="哈希分片"><a href="#哈希分片" class="headerlink" title="哈希分片"></a>哈希分片</h2><p>通过哈希函数分片，有三种哈希分片方式：Round Robin、虚拟桶及一致性哈希方法</p>
+<h3 id="Round-Robin"><a href="#Round-Robin" class="headerlink" title="Round Robin"></a><strong>Round Robin</strong></h3><p>就是哈希取模法，哈希函数：H(key) &#x3D; hash(key) mod K。机器编号0-K-1，全部数据分配到K台物理机。</p>
+<ul>
+<li>优点：非常简单</li>
+<li>缺点：灵活性差，增加一个节点，就需要重分布</li>
+</ul>
+<p>它是物理机和数据分片的二合一，机器和映射函数紧耦合，这是缺乏扩展灵活性的根本原因。</p>
+<h3 id="虚拟桶"><a href="#虚拟桶" class="headerlink" title="虚拟桶"></a>虚拟桶</h3><p>MemBase对于数据分片管理提出了虚拟桶的实现方式：<br>记录和物理机引入虚拟桶，数据线到桶，再到物理机，都是多对一的映射。</p>
+<p>虚拟桶层就是数据分片层，key-partition映射采用哈希函数，而partition-machine映射采用表格管理实现。<br>![[Pasted image 20250905104631.jpg]]<br>系统灵活性、扩展性更强</p>
+<h3 id="一致性哈希"><a href="#一致性哈希" class="headerlink" title="一致性哈希"></a>一致性哈希</h3><p>分布式哈希表：哈希表的分布式扩展。<br>一致性哈希就是分布式哈希的一种实现方式。</p>
+<p>“一致性哈希”算法将哈希数值空间按照大小组成一个首尾相接的环状序列。对于每台机器，可以根据其IP和端口号经过哈希函数映射到哈希数值空间内，这样不同的机器就成了环状序列中的不同节点。<br>![[Pasted image 20250908145043.jpg]]<br><strong>路由方面</strong>：可以在每个机器节点配置路由表，路由表存储m 条路由信息，其中第i 项（0≤i ≤m −1）路由信息代表距离当前节点为2 i 的哈希空间数值所在的机器节点编号。<br>通常情况下，路由算法发送的消息不会多于m 条，因为这个过程类似于在0～(2 m −1)数值空间上的二分查找法。</p>
+<p><strong>扩展方面</strong>：首先增加节点对应的前驱和后继节点关系，然后还需要进行数据重分布。并发情况下需要进行稳定性检测。</p>
+<p><strong>离开方面</strong>：正常离开进行通知准备，进行数据重分布，异常离开通过数据多副本保障。</p>
+<p><strong>虚拟节点</strong>：两个问题，节点到环状结构的位置随机，容易存在负载不均衡的问题，另外不同机器间的性能也不同。所以引入虚拟节点，即将一个物理节点虚拟成若干虚拟节点，分别映射到一致性哈希的环状结构不同位置。这样一方面可以导致更佳的负载均衡，也可以兼顾到机器异质性问题。</p>
+<p><strong>一致性哈希</strong>：将集群机器数目这一变量从哈希函数中移出，转而将机器及记录主键都映射到哈希数值空间，解除了机器与数据分布函数之间的直接耦合。大大增强了数据分片的灵活性，但是维护成本很高。</p>
+<h3 id="范围分片"><a href="#范围分片" class="headerlink" title="范围分片"></a>范围分片</h3><p>范围分片首先将所有记录的主键进行排序，然后在排好序的主键空间里将记录划分成数据分片，每个数据分片存储有序的主键空间片段内的所有记录。至于数据分片在物理机的管理方式往往采用LSM树，这是一种高效写入的数据索引结构。</p>
+<p>![[Pasted image 20250908175559.jpg]]</p>
+<p>很多大规模存储系统都支持上述范围分片模式，比如Yahoo的PNUTS和微软的Azure。Google的BigTable也基本遵循上述模式，不同点在于其数据分片映射表不是单层结构，而是组织成类似B+树的层次结构。</p>
+<h1 id="第2章——数据复制与一致性协议"><a href="#第2章——数据复制与一致性协议" class="headerlink" title="第2章——数据复制与一致性协议"></a>第2章——数据复制与一致性协议</h1><p>大数据领域，增加系统高可用，即将数据进行多副本存储，但是多副本会带来兵法写入的一致性问题。</p>
+<h2 id="基本原则与设计理念"><a href="#基本原则与设计理念" class="headerlink" title="基本原则与设计理念"></a>基本原则与设计理念</h2><p>CAP、BASE、ACID理论</p>
+<h3 id="原教旨CAP主义"><a href="#原教旨CAP主义" class="headerlink" title="原教旨CAP主义"></a>原教旨CAP主义</h3><p>CAP是对“Consistency&#x2F;Availability&#x2F;Partition Tolerance”：</p>
+<ul>
+<li><strong>强一致性</strong>：在分布式系统中的同一数据多副本情形下，对于数据的更新操作体现出的效果与只有单份数据是一样的。</li>
+<li><strong>可用性</strong>：客户端在任何时刻对大规模数据系统的读／写操作都应该保证在限定延时内完成。</li>
+<li><strong>分区容忍性</strong>：网络分区通讯有问题，仍然能够继续工作。</li>
+</ul>
+<p>1999年Eric Brewer提出该理论，只能实现三个中的两个，一般不舍弃P，故只有AP或CP.</p>
+<p>![[Pasted image 20250908180836.jpg]]</p>
+<ul>
+<li>传统的关系数据库在三要素中选择CA两个因素，即强一致性、高可用性，但是可扩展性与容错性差。</li>
+<li>NoSQL系统往往更关注AP因素，即高可扩展性和高可用性，但是往往以弱一致性作为代价.</li>
+</ul>
+<p>2012年，Eric Brewer又提出P很低概率出现，正常情况下还是要兼顾CAP，在进行差异化、细粒度的CA取舍。修正后的示意图如下，在过程中满足CAP、AP、CAP因素：<br>![[Pasted image 20250908181729.jpg]]</p>
+<h3 id="ACID原则"><a href="#ACID原则" class="headerlink" title="ACID原则"></a>ACID原则</h3><ul>
+<li><strong>原子性</strong> （Atomicity）：是指一个事务要么全部执行，要么完全不执行。也就是不允许一个事务只执行了一半就停止。</li>
+<li><strong>一致性</strong> （Consistency）：事务在开始和结束时，应该始终满足一致性约束条件。</li>
+<li><strong>事务独立</strong> （Isolation）：如果有多个事务同时执行，彼此之间不需要知晓对方的存在，而且执行时互不影响。</li>
+<li><strong>持久性</strong> （Durability）：事务的持久性是指事务运行成功以后，对系统状态的更新是永久的，不会无缘由地回滚撤销。</li>
+</ul>
+<h3 id="BASE原则"><a href="#BASE原则" class="headerlink" title="BASE原则"></a>BASE原则</h3><p>大多数大数据环境下的云存储系统和NoSQL系统则采纳BASE原则</p>
+<ul>
+<li><strong>基本可用</strong> （Basically Available）。在绝大多数时间内系统处于可用状态，允许偶尔的失败，所 以称为基本可用。</li>
+<li><strong>软状态或者柔性状态</strong> （Soft State），是指数据状态不要求在任意时刻都完全保持同步，到目前为止软状态并无一个统一明晰的定义，但是从概念上是可理解的，即处于有状态（State）和无状态（Stateless）之间的中间状态。</li>
+<li><strong>最终一致性</strong> （Eventual Consistency）。与强一致性相比，最终一致性是一种弱一致性，尽管软状态不要求任意时刻数据保持一致同步，但是最终一致性要求在给定时间窗口内数据会达到一致状态。</li>
+</ul>
+<h3 id="CAP-ACID-BASE三者关系"><a href="#CAP-ACID-BASE三者关系" class="headerlink" title="CAP&#x2F;ACID&#x2F;BASE三者关系"></a>CAP&#x2F;ACID&#x2F;BASE三者关系</h3><p>ACID强调一致性，BASE强调可用性，弱化一致性。CAP和ACID的区别：</p>
+<ul>
+<li>ACID的C是操作一致性约束，CAP的C是数据的强一致性。CAP中的C是ACID中的C所涵盖语义的子集。</li>
+<li>出现网络分区后，ACID的I只能在某个分区执行</li>
+<li>当出现网络分区时，多个分区都可以各自进行ACID中的数据持久化（D）操作。</li>
+</ul>
+<h3 id="幂等性"><a href="#幂等性" class="headerlink" title="幂等性"></a>幂等性</h3><p><strong>分布式的幂等性</strong>：调用方反复执行同一操作与只正确执行一次操作效果相同，即对分布式系统内部状态来说，同一操作调用一次与反复调用多次其状态保持相同。</p>
+<h2 id="一致性模型分类"><a href="#一致性模型分类" class="headerlink" title="一致性模型分类"></a>一致性模型分类</h2><p>理想情况下就只有强一致性<br>为了在分布式环境下追求高可用和高扩展，采用弱一致性模型，很多NoSQL系统采用弱一致性模型</p>
+<p>一致性模型关系图：<br>![[Pasted image 20250909192340.jpg]]</p>
+<h3 id="强一致性"><a href="#强一致性" class="headerlink" title="强一致性"></a>强一致性</h3><p>更新后所有的读都是更新的值</p>
+<p>![[Pasted image 20250909192434.jpg]]</p>
+<h3 id="最终一致性"><a href="#最终一致性" class="headerlink" title="最终一致性"></a>最终一致性</h3><p>无法保证强一致性的时间片段被称为“不一致窗口”，这个窗口可能会看到旧的数值<br>![[Pasted image 20250909192520.jpg]]</p>
+<h3 id="因果一致性"><a href="#因果一致性" class="headerlink" title="因果一致性"></a>因果一致性</h3><p>有因果依赖的，保证数据的因果一致性，但不一致窗口内仍然会看到旧值<br>![[Pasted image 20250909192650.jpg]]</p>
+<h3 id="读你所写一致性"><a href="#读你所写一致性" class="headerlink" title="读你所写一致性"></a>读你所写一致性</h3><p>“读你所写”一致性是因果一致性的特例<br>![[Pasted image 20250909192812.jpg]]</p>
+<h3 id="会话一致性"><a href="#会话一致性" class="headerlink" title="会话一致性"></a>会话一致性</h3><p>读你所写的变体：回话一致性<br>![[Pasted image 20250909193509.jpg]]</p>
+<h3 id="单调读一致性"><a href="#单调读一致性" class="headerlink" title="单调读一致性"></a>单调读一致性</h3><p>读到一次最新的，后面就都是最新的<br>![[Pasted image 20250909193611.jpg]]</p>
+<h3 id="单调写一致性"><a href="#单调写一致性" class="headerlink" title="单调写一致性"></a>单调写一致性</h3><p>单调写一致性可以保证其多次写操作的序列化，如果没有这种保证，对于应用开发者来说是很难进行程序开发的。</p>
+<h2 id="副本更新策略"><a href="#副本更新策略" class="headerlink" title="副本更新策略"></a>副本更新策略</h2><p>分布式存储下，数据冗余增加可用性，也增加读操作的并发性。但是一致性问题如何解决呢？</p>
+<h3 id="同时更新"><a href="#同时更新" class="headerlink" title="同时更新"></a>同时更新</h3><p>具体又有两种类型：</p>
+<ul>
+<li>A：不通过任何一致性协议直接同时更新多个副本数据。会有潜在的一致性问题，多个update并发执行</li>
+<li>B：通过某种一致性协议预先处理，有处理成本，所以请求延时会有所增加。</li>
+</ul>
+<h3 id="主从式更新"><a href="#主从式更新" class="headerlink" title="主从式更新"></a>主从式更新</h3><p>所有的更新操作都先提到主副本，主副本再去更新从副本。根据主副本通知从副本的不同机制来区分，存在以下3种类型。</p>
+<ul>
+<li><strong>同步方式</strong>：主副本等待所有从副本更新完成之后才确认更新操作完成，这可以确保数据的强一致性，但是会存在较大请求延时。</li>
+<li><strong>异步方式</strong>：主副本在通知从副本更新之前即可确认更新操作。按照读操作又可以分为如下两类：<ul>
+<li>如果所有读请求都要通过主副本来响应，即任意一个副本接收到读请求后将其转发给主副本；可以保障强一致性，但是会有请求延时。</li>
+<li>如果任意一个副本都可以响应读请求，那么请求延时将会大大降低，但是这可能导致读结果不一致的问题。</li>
+</ul>
+</li>
+<li><strong>混合方式</strong>：同步和异步混合起来用，按照读操作又可以分为如下两类：<ul>
+<li>如果读操作的数据至少要从一个同步更新的节点中读出，比如类似于RWN协议的R+W&gt;N，可以保证强一致性，会有请求延时。</li>
+<li>如果读操作不要求一定要从至少一个同步更新节点中读出，即RWN协议中的R+W&lt;&#x3D;N 的模式，会有不一致问题。</li>
+</ul>
+</li>
+</ul>
+<h3 id="任意节点更新"><a href="#任意节点更新" class="headerlink" title="任意节点更新"></a>任意节点更新</h3><p>数据更新请求可能发给多副本中的任意一个节点，然后由这个节点来负责通知其他副本进行数据更新。有可能有两个不同客户端在同一时刻对同一个数据发出数据更新请求，而此时有可能有两个不同副本各自响应。</p>
+<ul>
+<li>类型A：同步通知其他副本：存在和“主从式更新”类型A相似的情况，延时更多</li>
+<li>类型B：异步通知其他副本：存在和“同时更新”策略及“主从式更新”策略的类型B类似的问题。</li>
+</ul>
+<h2 id="一致性协议"><a href="#一致性协议" class="headerlink" title="一致性协议"></a>一致性协议</h2><h3 id="两阶段提交协议2PC"><a href="#两阶段提交协议2PC" class="headerlink" title="两阶段提交协议2PC"></a>两阶段提交协议2PC</h3><p>两阶段提交协议是很常用的解决分布式事务问题的方式，它可以保证在分布式事务中，要么所有参与进程都提交事务，要么都取消事务，即实现ACID中的原子性（A）的常用手段。<br>2PC更多的是作为实现数据更新原子性手段出现。</p>
+<p>存在两类不同实体：唯一的协调者（Coordinator）和众多的参与者（Participants）。协调者起到分布式事务的特殊的管理协调作用。<br>分为两个阶段：表决阶段（Voting）和提交阶段（Commit）。</p>
+<ul>
+<li><strong>表决阶段（Voting）</strong>：协调者向所有参与者发送表决请求，参与者响应准备情况</li>
+<li><strong>提交阶段（Commit）</strong>：协调者收集表决信息，如果参与者均认为可提交，则通知大家提交，如果有一个表决中止，通知大家取消。</li>
+</ul>
+<p>![[file-20250910190231949.jpg|400]]<br>可以进一步转换为协调者和参与者的状态机：</p>
+<p>![[file-20250910190813183.jpg|400]]![[file-20250910191009985.jpg|400]]<br>对于阻塞状态可以引入超时判断机制和参与者互询机制。</p>
+<ul>
+<li>引入超时判断机制可以解决协调者的WAIT状态和参与者的INIT状态的长时阻塞情形</li>
+<li>引入互询机制可以解决大部分情形下参与者READY状态的长时阻塞可能。</li>
+</ul>
+<p>如果参与者Q是READY，P从Q无法获得更多信息，如果其它参与者都在READY，所有参与者必须长时间处于阻塞状态，等待崩溃的协调者重新启动。这种情形就是上文提到的<strong>2PC无法解决的一种长时阻塞状态</strong>。</p>
+<p>三阶段提交协议（3PC）是学术界提出的用来解决2PC协议存在长时阻塞的办法，其核心思想是将2PC的提交阶段再次细分为两个阶段：预提交阶段和提交阶段。</p>
+<p>![[file-20250910191727851.jpg|400]]<br>![[file-20250910191735909.jpg|400]]</p>
+<p>该协议的本质在于通过引入PRECOMMIT状态，使得协调者和每个参与者都满足以下两个条件。<br><strong>条件一</strong>：没有一个可以直接转换到COMMIT或者ABORT状态的单独状态（2PC中，协调者的WAIT状态和参与者的READY状态就是这种单独状态）。<br><strong>条件二</strong>：不存在这样一个状态，即它不能做出最后决定，而且可以从它直接转到COMMIT状态（2PC中，协调者的WAIT状态和参与者的READY状态就是这种状态。3PC中的PRECOMMIT状态可直接转到COMMIT状态，但是它已经做出了提交决定）。</p>
+<p>这两个条件是使得提交协议不阻塞的充要条件。3PC在实际系统中很少使用，一方面是由于2PC中长时阻塞情况很少发生，另外一方面是3PC效率过低。</p>
+<h3 id="向量时钟"><a href="#向量时钟" class="headerlink" title="向量时钟"></a>向量时钟</h3><p>向量时钟是在分布式环境下生成事件之间偏序关系的算法，偏序关系代表事件发生先后顺序导致的事件间因果依赖关系语义，通过将时间戳和事件绑定可以用来判定事件之间的因果相关性。</p>
+<p>设分布式系统有A、B和C这3个进程，根据上述规则其各自对应的逻辑时钟随着时间演化情况如图所示。<br>![[file-20250910193411653.jpg|600]]<br>向量时钟的典型应用场景是用来判断分布式环境下不同事件之间是否存在因果关系。对于两个事件E<br> 和F，假设其各自的向量时钟分别是E.VC和F.VC，我们可以根据如下方法判断其是否存在因果关系：<br> ![[file-20250910193536308.jpg]]<br> 即如果事件E的时钟向量各个维度的数值都小于等于事件F对应位置的数值且至少有一位是小于，那么可以称为事件E是事件F的原因，事件F是事件E的结果。</p>
+<p>Dynamo中使用向量时钟进行数据版本管理，配合RWN协议共同完成数据一致性维护。</p>
+<h3 id="RWN协议"><a href="#RWN协议" class="headerlink" title="RWN协议"></a>RWN协议</h3><p>“RWN协议”是亚马逊公司在实现Dynamo KV存储系统时提出的。这是一种通过对分布式环境<br> 下多备份数据如何读／写成功进行配置来保证达到数据一致性的简明分析和约束设置。</p>
+<ul>
+<li>N：在分布式存储系统中，有多少份备份数据。</li>
+<li>W：代表一次成功的更新操作要求至少有W份数据写入成功。</li>
+<li>R：代表一次成功的读操作要求至少有R份数据成功读取。</li>
+</ul>
+<p>如果R+W&gt;N，则满足“数据一致性协议”。成功写入的备份集合和成功读取的备份集合一定会存在交集，而这就可以保证数据的强一致性，即读取操作一定可以读到最新的数据版本。<br>![[file-20250910194226349.jpg|400]]</p>
+<p>在满足数据一致性协议的前提下，R或者W设置得越大，则系统延迟越大，因为这取决于最慢的那份备份数据的响应时间。而如果R+W &lt;&#x3D;N，则无法保证数据的强一致性.</p>
+<p>在具体实现系统时，仅仅依靠RWN协议还不能完成一致性保证，因为在上述过程中，当读取到多个备份数据时，需要判断哪些数据是最新的，如何判断数据的新旧？这需要向量时钟来配合。</p>
+<h3 id="Paxos协议"><a href="#Paxos协议" class="headerlink" title="Paxos协议"></a>Paxos协议</h3><p>“所有一致性协议本质上要么是Paxos，要么是其变体”</p>
+<p>Paxos的难理解性在于是什么因素导致协议以此种方式呈现以及其正确性证明过程而非最终协议内容本身.</p>
+<p>首先介绍副本状态机模型，之后介绍Paxos的一些基本概念，然后描述Paxos协议本身内容。</p>
+<p><strong>副本状态机模型</strong>（Replicated State Machines）</p>
+<p>在分布式环境下，一致性协议的应用场景一般会采用副本状态机来表达，这是对各种不同应用场景的一种抽象化表述。</p>
+<p>![[file-20250910195324044.jpg|500]]<br>集群中多台服务器各自保存一份Log副本及内部状态机，Log内顺序记载客户端发来的操作指令，服务器依次执行Log内的指令并将其体现到内部状态机上，如果保证每台机器内的Log副本内容完全一致，那么对应的状态机也可以保证整体状态一致。一致性协议的作用就是保证各个Log副本数据的一致性。</p>
+<p>追求三个特性：</p>
+<ul>
+<li>安全性（Safety）保证：即非拜占庭模型（此概念参考后面的内容）下，状态机从不返回错误的结果，多个提议中只会有一个被选中。</li>
+<li>可用性（Available）保证：只要大多数服务器正常，则整个服务保持可用。比如副本状态机有5台服务器，那么最多可以容忍2台服务器发生故障，此时整个服务仍然可用，即对于2f+1台副本状态机的配置，最多可容忍f个状态机失效。</li>
+<li>一般情况下，大多数状态机维护Log一致即可快速通知客户端操作成功，这样避免了少数最慢的状态机拖慢整个请求响应速度。</li>
+</ul>
+<p>**Paxos基本概念</p>
+<p>分为两种：单Paxos（Single-Decree Paxos）和多Paxos（Multi-Paxos）</p>
+<ul>
+<li>单Paxos，即副本状态机中各个服务器 针对Log中固定某个位置的操作命令通过协议达成一致，因为可能某一时刻不同服务器的Log中相同位置的操作命令是不一样的，通过执行协议后使得各个服务器对应某个固定位置的操作命令达成一致。</li>
+<li>多Paxos则是指这些服务器对应的Log内容中多个位置的操作命令序列通过协议保持一致。多Paxos往往是同时运行的多个单Paxos协议共同执行的结果。</li>
+</ul>
+<p>Paxos协议下不同并行进程可能承担的3种角色如下：</p>
+<ul>
+<li><strong>倡议者</strong>：倡议者可以提出提议（数值或操作命令等）以供投票表决。</li>
+<li><strong>接受者</strong>：接受者可以对倡议者提出的提议进行投票表决，从众多提议中选出唯一确定的一个。</li>
+<li><strong>学习者</strong>：学习者无倡议投票权，但是可以从接受者那里获知是哪个提议最终被选中。</li>
+</ul>
+<p>在一致性协议框架中，一个并行进程可以同时承担以上多种角色。</p>
+<p>Paxos协议以及很多一致性协议都是基于非拜占庭模型的，即在非拜占庭条件下，Paxos协议可以就不同提议达成一致，而在拜占庭模型下情况会更加复杂一些。</p>
+<p>**Paxos一致性协议</p>
+<ul>
+<li><strong>阶段一：</strong><ol>
+<li>【倡议者视角】倡议者选择倡议编号n，然后向大多数（即超过半数以上）接受者发送Prepare请求，请求中附带倡议编号n</li>
+<li>【接受者视角】对于某个接受者来说，如果接收到带有倡议编号n的Prepare请求，则做如下判断：若倡议编号n比此接受者之前响应过的任何其他Prepare请求附带的倡议编号都大，那么此接受者会给倡议者以响应，并承诺不会响应之后接收到的其他任何倡议编号小于n的请求，另外，如果接受者曾经响应过2.2阶段的Accept请求，则将所有响应的Accept请求中倡议编号最高的倡议内容发送给倡议者，倡议内容包括两项信息：Accept请求中的倡议编号以及其倡议值。若倡议编号n不比此接受者之前响应过的任何其他Prepare请求附带的倡议编号都大，那么此接受者不会给倡议者以响应。</li>
+</ol>
+</li>
+<li><strong>阶段二：</strong><ol>
+<li>【倡议者视角】如果倡议者接收到大多数接受者关于带有倡议编号n的Prepare请求的响应，那么倡议者向这些接受者发送Accept请求，Accept请求附带两个信息：倡议编号n以及倡议值v。倡议值v的选择方式如下：如果在1.2阶段接受者返回了自己曾经接收的具有最高倡议编号Accept请求倡议内容，则从这些倡议内容里面选择倡议编号最高的并将其倡议值作为倡议值v；如果1.2阶段没有收到任何接受者的Accept请求倡议内容，则可以任意赋值给倡议值v。</li>
+<li>【接受者视角】如果接受者接收到了任意倡议编号为n的Accept请求，则接受者接受此请求，除非在此期间接受者响应过具有比n更高编号的Prepare请求。</li>
+</ol>
+</li>
+</ul>
+<p>对于学习者来说，其需要从接受者那里获知到底是哪个倡议值被选出。一个直观的方法如下：每当接受者执行完2.2步骤，即接受某个Accept请求后，由其通知所有学习者其所接受的倡议，这样，学习者很快习得是哪个倡议被最终选出。有通讯成本，可以选出若干学习者作为代表，由这些代表从接受者那里获知最终倡议值，然后通知其他学习者。</p>
+<p>通过以上流程，如果有多个并发进程提出各自的倡议值，Paxos就可以保证从中选出且只选出一个唯一确定的倡议值，以此来达到副本状态机保持状态一致的目标。</p>
+<h3 id="Raft协议"><a href="#Raft协议" class="headerlink" title="Raft协议"></a>Raft协议</h3><p>Raft一致性协议最主要的目标有两个：</p>
+<ul>
+<li>首先是可理解性，在做技术决策和选型的时候，在达到相似功能前提下，首先以易于理解作为选型标准；</li>
+<li>其次是实现实际系统的确定性，鉴于之前提到的根据Paxos实现具体系统时的不统一，Raft追求每个技术细节的清晰界定与描述，以此达到实现具体系统时的明确性。</li>
+</ul>
+<p>为了达到上述两个目的，主要采取了以下两个手段：</p>
+<ul>
+<li>将整个一致性协议划分成明确且独立的3个子问题，即采取分解法。Raft将整个一致性协议划分为领导者选举、Log复制与安全性3个问题。</li>
+<li>将Paxos的P2P模式改造为Master-Slave模式。Paxos的复杂性很大原因是由于其完全的P2P模式造成的，即多个并发进程之间无主次关系，都具有同等地位。</li>
+</ul>
+<p>**Raft基本概念</p>
+<p>首先是服务器状态，在任意时刻，集群中的服务器只能处于以下3种状态之一：Leader、Follower和Candidate。正常情况下，集群中只有一个处于Leader状态的服务器充当领导者，由其来负责响应所有客户端请求，其他服务器都处于Follower状态。处于Follower状态的服务器都是被动接收RPC消息，从不会主动发送任何RPC消息。Candidate状态是Follower状态服务器准备发起新的领导者选举前需要转换到的状态，即Candidate状态是Follower向Leader状态转换的中间状态。</p>
+<p>![[file-20250910201124581.jpg]]</p>
+<p>Raft将整个系统执行时间划分为由若干个不同时间间隔长度的时间片段构成的序列，每个时间片段被称为一个Term，以递增的数字来作为这个Term的标识。每个Term由“选举期间”（Election）开始，在这个时间内若干处于Candidate状态的服务器试图竞争成为新的领导者。如果某个服务器赢得了选举，则在这个Term接下来的时间里充当新的领导者。</p>
+<p>![[file-20250910201216917.jpg]]</p>
+<p>**Raft一致性协议</p>
+<ul>
+<li><strong>领导者选举</strong>：Raft采用心跳机制来触发领导者选举过程。当整个系统启动时，所有服务器处于Follower状态，除非服务器接收到处于Leader或者Candidate状态服务器发出的RPC命令，否则其一直维持这个状态不变。Leader通过周期性地向其他服务器发送心跳来宣告并保持其领导者地位。<br>  在开始选举前，Follower增加其Term编号并转入Candidate状态。然后其向集群内所有其他服务器发出RequestVote RPC消息，之后一直处于Candidate状态，除非以下情况之一发生。<ul>
+<li>赢得了本次选举</li>
+<li>另外一个服务器S宣称并确认自己是新的领导者；</li>
+<li>经过一定时间后，仍然没有新的领导者产生</li>
+</ul>
+</li>
+<li><strong>Log复制</strong>：当选出领导者后，之后所有客户端请求都由领导者来负责响应。领导者接收到客户端的操作命令后，将其作为新项目追加到Log尾部，然后向集群内所有其他服务器发出AppendEntries RPC请求，这引发其他服务器复制新的操作命令。当其他服务器安全复制了新的操作命令后，领导者将这个操作命令应用到内部状态机，并将执行结果返回给客户端。<br>  ![[file-20250910201547474.jpg|400]]</li>
+<li><strong>安全性</strong>：以上两个步骤，在一般情形下Raft已经可以正常运行，但是目前Raft还无法做到完全的安全性保证，即无法保证每个服务器的状态机都能够按照相同顺序执行相同操作命令。为了达到真正的安全性，Raft增加了如下两个约束条件。<ul>
+<li>限制了哪些服务器可以被选举成为领导者，其要求只有其Log包含了所有已经提交的操作命令的那些服务器才有权被选举为新的领导者</li>
+<li>限制了哪些操作命令的提交可以被认为是真正的提交。对于新领导者来说，只有它自己已经提交过当前Term的操作命令才被认为是真正提交。</li>
+</ul>
+</li>
+</ul>
+<h1 id="第3章——大数据常用的算法与数据结构"><a href="#第3章——大数据常用的算法与数据结构" class="headerlink" title="第3章——大数据常用的算法与数据结构"></a>第3章——大数据常用的算法与数据结构</h1><h2 id="布隆过滤器"><a href="#布隆过滤器" class="headerlink" title="布隆过滤器"></a>布隆过滤器</h2><p>Bloom Filter（为了表达方便，后文简称BF）就是常说的布隆过滤器，是由Howard Bloom在1970年提出的二进制向量数据结构，它具有很好的空间和时间效率，尤其是空间效率极高，BF常常被用来检测某个元素是否是巨量数据集合中的成员。</p>
+<h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><p>BF可以高效地表征集合数据，其使用长度为m的位数组来存储集合信息，同时使用k个相互独立的哈希函数将数据映射到位数组空间。</p>
+<p>基本思想：</p>
+<p>首先，将长度为m的位数组元素全部置为0。对于集合S中的某个成员a，分别使用k个哈希函数对其计算，如果hi(a)&#x3D;x(1≤i≤k,1≤x≤m)，则将位数组的第x位置为1。</p>
+<p>当查询某个成员a 是否在集合S中出现时，使用相同的k个哈希函数计算，如果其对应位数组中的w位（w≤k）都为1，则判断成员a属于集合S，只要w位中有任意一位为0，则判断成员a不属于集合S</p>
+<h3 id="误判率及相关计算"><a href="#误判率及相关计算" class="headerlink" title="误判率及相关计算"></a>误判率及相关计算</h3><p>如果某个成员不在集合中，有可能BF会得出其在集合中的结论。</p>
+<p>![[file-20250916194423371.jpg | 400]]</p>
+<p>BF会产生误判，但是<strong>不会发生漏判</strong>（False Negative）的情况，即如果某个成员确实属于集合，那么BF一定能够给出正确判断。<strong>在的肯定在，不在的不一定不在</strong></p>
+<p>影响误判率的因素：包括集合大小n、哈希函数的个数k、 和位数组大小m。![[file-20250916194659885.jpg]]</p>
+<h3 id="改进：计数Bloom-filter"><a href="#改进：计数Bloom-filter" class="headerlink" title="改进：计数Bloom filter"></a>改进：计数Bloom filter</h3><p>基本的BF在使用时有个缺点：无法删除集合成员，只能增加成员并对其查询</p>
+<p>计数BF的思路：基本信息单元由多个比特位来表示，一般情况采取3或4比特位为单元。这样，将集合成员加入位数组时，根据k个哈希函数计算，此时对应位置的信息单元由多个比特位构成，所以将原先的数值加1即可。查询集合成员时，只要对应位置的信息单元都不为0即可认为该成员属于集合。而删除成员，只要将对应位置的计数减1即可。</p>
+<p>存在计数溢出的可能</p>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><p>因为BF的极高空间利用率，其在各个领域获得了非常广泛的使用，尤其是数据量极大且容忍一定误判率的场合。</p>
+<p>在BigTable中，BF对于读操作的效率提升有巨大帮助。BigTable中很多数据记录存储在磁盘的多个SSTable文件中，为了完成一次读操作，需要依次在这些SSTable中查找指定的Key，因为是磁盘操作且涉及多个文件，所以会对读操作效率有极大影响。BigTable将SSTable文件中包含的数据记录Key形成BF结构并将其放入内存，这样就能极高地提高查询速度，对于改善读操作有巨大的帮助作用。</p>
+<h2 id="SkipList"><a href="#SkipList" class="headerlink" title="SkipList"></a>SkipList</h2><p>SkipList由William Pugh于1990年提出，这是一种可替代平衡树的数据结构。其插入、删除、查找数据的时间复杂度都是O(log(N))</p>
+<p><strong>核心思路</strong>：</p>
+<ul>
+<li>传统有序链表<br>![[file-20250916195612225.jpg]]</li>
+<li>增加指针后的有序链表<br>![[file-20250916195653158.jpg]]<br>多跳几次：<br>![[file-20250916195659542.jpg]]</li>
+</ul>
+<p>SkipList<strong>依赖随机数</strong>来以一定概率保持数据的平衡，具体而言，就是<strong>在插入节点的时候，随机决定</strong>该节点应该有多少个指向后续节点的指针，有几个指针就称这个节点是几层的（Level）。</p>
+<p>插入过程：<br>![[file-20250916195931890.jpg]]</p>
+<h2 id="LSM树"><a href="#LSM树" class="headerlink" title="LSM树"></a>LSM树</h2><p>LSM树（Log-structured Merge-tree）的本质是将大量的随机写操作转换成批量的序列写，这样可以极大地提升磁盘数据写入速度，所以LSM树非常适合对写操作效率有高要求的应用场景。</p>
+<p>LevelDB静态结构：<br>![[file-20250916200147293.jpg | 500]]</p>
+<p>构成LevelDB静态结构的包括6个主要部分：内存中的MemTable和Immutable MemTable以及磁盘上的几种主要文件：Current文件、manifest文件、log文件以及SSTable文件。</p>
+<ul>
+<li><strong>写入</strong>：LevelDB的log文件和MemTable与BigTable论文中介绍的是一致的，当应用写入一条Key：Value记录的时候，LevelDB会先往log文件里写入，成功后将记录插进MemTable中，这样基本就算完成了写入操作，因为一次写入操作只涉及一次磁盘顺序写和一次内存写入，<strong>而且MemTable采用了维护有序记录快速插入查找的SkipList数据结构</strong>，所以说LSM树是一种高速写入数据结构的主要原因。</li>
+<li><strong>到处</strong>：当MemTable插入的数据占用内存到了一个界限后，需要将内存的记录导出到外存文件中，LevelDB会生成新的log文件和MemTable，原先的MemTable就成为Immutable MemTable，顾名思义，就是说这个MemTable的内容是不可更改的，只能读不能写入或者删除。新到来的数据被记入新的log文件和MemTable，LevelDB后台调度会将Immutable MemTable的数据导出到磁盘，形成一个新的SSTable文件。（SSTable有层次，故叫做LevelDB）</li>
+<li><strong>记录</strong>：SSTable中的文件是主键有序的，也就是说，在文件中小key记录排在大key记录之前，各个Level的SSTable都是如此。manifest记载了SSTable各个文件的管理信息，比如属于哪个Level、文件名称、最小key和最大key各自是多少。![[file-20250916201110792.jpg | 400]]</li>
+<li><strong>合并</strong>：3种类型的Compaction，分别是minor、major和full。所谓minor Compaction，就是把MemTable中的数据导出到SSTable文件中，major Compaction就是合并不同层级的SSTable文件，而full Compaction就是将所有SSTable进行合并。<ul>
+<li><strong>minor</strong>：当MemTable中记录数量到了一定程度会转换为Immutable MemTable，此时不能往其中写入记录，只能从中读取KV内容。Immutable MemTable其实是一个SkipList多层级队列，其中的记录是根据key有序排列的。所以这个minor Compaction实现起来也很简单，就是按照Immutable MemTable中记录由小到大遍历，并依次写入一个Level 0的新建SSTable文件中，写完后建立文件的index数据，这样就完成了一次minor Compaction。</li>
+<li><strong>major</strong>：当某个Level下的SSTable文件数目超过一定设置值后，LevelDB会从这个Level的SSTable中选择一个文件（Level&gt;0），将其和高一层级的Level+1的SSTable文件合并，这就是major Compaction。对多个文件采用多路归并排序的方式，依次找出其中最小的key记录，也就是对多个文件中的所有记录重新进行排序。之后采取一定的标准判断这个key是否还需要保存，如果判断没有保存价值，那么直接抛掉，如果觉得还需要继续保存，那么就将其写入Level L+1层中新生成的SSTable文件中</li>
+</ul>
+</li>
+</ul>
+<p>由内存中的MemTable和磁盘上的各级SSTable文件就形成了LSM树。<br>LSM树的本质，即将大量随机写转换为批量的序列写。</p>
+<h2 id="Merkle哈希树"><a href="#Merkle哈希树" class="headerlink" title="Merkle哈希树"></a>Merkle哈希树</h2><p>Merkle哈希树由Ralph Merkle于1979年发明。Merkle树最初用于高效Lamport签名验证，后来被广泛应用在分布式领域，主要用来在海量数据下快速定位少量变化的数据内容</p>
+<h3 id="Merkle树基本原理"><a href="#Merkle树基本原理" class="headerlink" title="Merkle树基本原理"></a>Merkle树基本原理</h3><p>![[file-20250917210229248.jpg]]<br>子节点是每个数据项或者一批数据项（数据块）对应的哈希值，中间节点则保存对其所有子节点哈希值再次进行哈希运算后的值，依次由下往上类推，直到根节点，其保存的Top Hash代表整棵树的哈希值，也就是所有数据的整体哈希值。具体使用的时候，既可以像例子中一样是一个二叉树，也可以是多叉树。</p>
+<p>Merkle树常用于快速侦测部分数据正常或者异常的变动。当某个底层数据发生变化时，其对应Merkle树的子节点哈希值会跟着变化，子节点的父节点哈希值也随之变化。</p>
+<p>通过Merkle树，可以在O(log(n))时间内<strong>快速定位变化</strong>的数据内容。</p>
+<h3 id="Dynamo中的应用"><a href="#Dynamo中的应用" class="headerlink" title="Dynamo中的应用"></a>Dynamo中的应用</h3><p>Dynamo结合Merkle树和Gossip协议来对副本数据进行同步。</p>
+<p>Dynamo可以快速定位到数据副本不同内容，且只须同步两者的差异部分即可实现副本数据同步，这样有效地减少了网络传输数据量，增加了数据同步效率。</p>
+<h3 id="比特币中的应用"><a href="#比特币中的应用" class="headerlink" title="比特币中的应用"></a>比特币中的应用</h3><p>比特币中，主要使用Merkle树来对交易进行验证，以此来判断某个交易是否是合法交易。</p>
+<p>通过引入Merkle树和上述的链表结构，比特币采用少量计算及比较操作即可完成交易的验证过程。</p>
+<h2 id="Snappy和LZSS算法"><a href="#Snappy和LZSS算法" class="headerlink" title="Snappy和LZSS算法"></a>Snappy和LZSS算法</h2><p>Snappy是Google开源出的高效数据压缩与解压缩算法库，其目标并非是最高的数据压缩率，而是在合理的压缩率基础上追求尽可能快的压缩和解压缩速度。</p>
+<ul>
+<li>其压缩和解压缩速度极快，可以在单核处理器上达到250MB&#x2F;s的压缩效率和500MB&#x2F;s的解压缩效率。</li>
+<li>Snappy相比其他压缩方案占用CPU时间更少。</li>
+</ul>
+<p>Snappy是基于LZSS算法的</p>
+<h3 id="LZSS算法"><a href="#LZSS算法" class="headerlink" title="LZSS算法"></a>LZSS算法</h3><p>LZ77是一种动态词典编码（Dictionary Coding）</p>
+<p><strong>基本思路</strong>：文本中的词用它在词典中表示位置的号码代替的无损数据压缩方法，一般分为静态词典方法和动态词典方法两种。采用静态词典编码技术时，编码器需要事先构造词典，解码器要事先知道词典。采用动态辞典编码技术时，编码器将从被压缩的文本中自动导出词典，解码器解码时边解码边构造解码词典。</p>
+<p>动态词典编码的基本思路：p替代了abc<br>![[file-20250917211111486.jpg | 500]]</p>
+<p><strong>LZ77算法</strong>：描述了一种基于滑动窗口缓存的技术，该缓存用于保存最近刚刚处理的文本，而动态词典就是由滑动窗口内的文本构造出来的。</p>
+<p>LZ77是动态词典编码方法的开创者，后来所有动态词典编码压缩方法都是基于LZ77进行改造和优<br>化的，比如我们熟知的GZip、WinZip、RAR、Compress等都采用了LZ系列算法。</p>
+<p>LZ77的压缩算法使用了滑动窗口和前向缓冲区的概念：</p>
+<ul>
+<li>滑动窗口：前面处理过的若干源字符</li>
+<li>前向缓冲区：包含了输入数据流中将要处理的所有后续字符。<br>![[file-20250917211500784.jpg | 500]]</li>
+</ul>
+<p>LZSS对LZ77做出了改进：增加了最小匹配长度限制，当匹配字符串小于指定的最小匹配限制时，并不进行压缩输出，而是仍然滑动窗口右移一个字符。实例如下：</p>
+<p>![[file-20250917211546710.jpg | 500]]</p>
+<h3 id="Snappy"><a href="#Snappy" class="headerlink" title="Snappy"></a>Snappy</h3><p>Snappy在整体框架上基本遵循LZSS的压缩编码与解码方案。首先，Snappy设定最小匹配长度为4，即只有匹配长度大于等于4的字符串才进行压缩，相应地，其设定哈希表内的字符串片段固定长度也为4。</p>
+<p>Snappy做了一些相对独特的优化。比如其在压缩数据时，将整个数据切割成32KB大小的数据块分别进行压缩，数据块之间独立无关联，这样两个字节即可表示匹配字符串的相对位置。</p>
+<h2 id="Cuckoo哈希"><a href="#Cuckoo哈希" class="headerlink" title="Cuckoo哈希"></a>Cuckoo哈希</h2><p>Cuckoo哈希由Rasmus Pagh和Flemming Friche Rodler于2001年提出，使用它可以有效解决哈希冲突（Hash Collisions）问题。Cuckoo哈希具有很多优良特性，比如可以在O（1）时间复杂度查找和删除数据，可以在常数时间内插入数据等。其有大约50%的哈希空间利用率。</p>
+<h3 id="基本原理-1"><a href="#基本原理-1" class="headerlink" title="基本原理"></a>基本原理</h3><p>Cuckoo哈希同时使用两个不同的哈希函数H1(x )和H 2(x )。当插入数据x时，同时计算H1(x)和H2(x)，如果对应的哈希空间中任意一个桶（Bucket）为空，则可以将x插入相应位置；如果两者都不空，则选择一个桶，将已经占据这个位置的值y踢出去，由x来占据这个位置。y继续重新计算。</p>
+<p>可能会无限循环，需要设定最大替换次数。</p>
+<p>对于查找操作来说，只需要查找两个哈希函数映射到的哈希空间对应位置，要么存在要么不存在，是唯一确定的，所以可以在O(1)时间内完成。与传统的哈希方式相比较，Cuckoo哈希省去了当哈希冲突时进行冲突解决的过程，所以查找效率非常高。</p>
+<h1 id="第4章——集群资源管理与调度"><a href="#第4章——集群资源管理与调度" class="headerlink" title="第4章——集群资源管理与调度"></a>第4章——集群资源管理与调度</h1><p><strong>静态资源划分</strong>：将集群中的所有资源做出静态划分，将划分后的固定的硬件资源指定给固定的计算框架使用，各个框架之间各行其是，互不干扰。资源的整体利用率不高，经常会出现集群中有些计算系统资源不足</p>
+<p><strong>发展趋势</strong>：在集群硬件层之上抽象出一个功能独立的集群资源管理系统，将所有可用资源当作一个整体来进行管理，并对其他所有计算任务提供统一的资源管理与调度框架和接口，计算任务按需向其申请资源，使用完毕释放给资源管理系统。</p>
+<p><strong>优势</strong>：</p>
+<ul>
+<li>集群整体资源利用率高</li>
+<li>可增加数据共享能力</li>
+<li>支持多类型计算框架和多版本计算框架</li>
+</ul>
+<h2 id="资源管理抽象模型"><a href="#资源管理抽象模型" class="headerlink" title="资源管理抽象模型"></a>资源管理抽象模型</h2><h3 id="概念模型"><a href="#概念模型" class="headerlink" title="概念模型"></a>概念模型</h3><p>从概念上讲，资源管理与调度系统的主要目的是将集群中的各种资源通过一定策略分配给用户提交到系统里的各种任务，常见的资源主要包括内存、CUP、网络资源与磁盘I&#x2F;O资源4类。</p>
+<p>三要素：资源组织模型、调度策略和任务组织模型</p>
+<ul>
+<li><strong>资源组织模型</strong>：将集群中当前可用的各种资源采用一定的方式组织起来，以方便后续的资源分配过程。</li>
+<li><strong>调度策略</strong>：以一定方式将资源分配给提交到系统的任务，常见的调度策略包括FIFO、公平调度、能力调度、延迟调度等</li>
+<li><strong>任务组织模型</strong>：将多用户提交的多任务通过一定方式组织起来，以方便后续资源分配。<br>![[file-20250922141748994.jpg | 500]]</li>
+</ul>
+<h3 id="通用架构"><a href="#通用架构" class="headerlink" title="通用架构"></a>通用架构</h3><ul>
+<li><p><strong>节点管理器</strong>：集群中每台机器上会配置节点管理器，其主要职责是不断地向资源收集器汇报目前本机资源使用状况，并负责容器的管理工作。当某个任务被分配到本节点执行时，节点管理器负责将其纳入某个容器执行并对该容器进行资源隔离，以避免不同容器内任务的相互干扰。</p>
+</li>
+<li><p><strong>通用调度器</strong>：由资源收集器和资源调度策略构成，同时管理资源池和工作队列数据结构。资源收集器不断地从集群内各个节点收集和更新资源状态信息，并将其最新状况反映到资源池中，资源池列出了目前可用的系统资源。资源调度策略是具体决定如何将资源池中的可用资源分配给工作队列的方法，常见的策略包括FIFO、公平调度策略和能力调度策略等。资源调度策略模块往往是可插拔的。<br>![[file-20250922141938153.jpg | 500]]</p>
+</li>
+</ul>
+<h2 id="调度系统设计的基本问题"><a href="#调度系统设计的基本问题" class="headerlink" title="调度系统设计的基本问题"></a>调度系统设计的基本问题</h2><h3 id="资源异质性与工作负载异质性"><a href="#资源异质性与工作负载异质性" class="headerlink" title="资源异质性与工作负载异质性"></a>资源异质性与工作负载异质性</h3><p>异质性往往指的是组成元素构成的多元性和相互之间较大的差异性。</p>
+<ul>
+<li><strong>资源异质性</strong>：比如数据中心的机器很难保证采用完全相同的配置，总会有些机器高配置，拥有大量的内存和计算以及存储资源，也会有很多低配硬件。在做资源分配的时候，必须要考虑这种硬件的资源差异性，一般通过将资源分配单位细粒度划分为较小单元来解决这个问题。</li>
+<li><strong>工作负载异质性</strong>：各种服务和功能特性各异，对资源的需求差异也很大。比如对外服务强调高可用性以及资源的充分优先保障，而后台运行的批处理作业往往是由很多短任务构成的，所以需要调度决策过程要尽可能快，等等。</li>
+</ul>
+<h3 id="数据局部性"><a href="#数据局部性" class="headerlink" title="数据局部性"></a>数据局部性</h3><p><strong>大数据基本设计原则</strong>：计算任务推送到数据所在地进行而不是反过来。因为海量数据分布在大规模集群的不同机器中，如果移动数据会产生大量低效的数据网络传输开销</p>
+<p>在资源管理与调度语境下，有3种类型的数据局部性：节点局部性（Node Locality）、机架局部性（Rack Locality）和全局局部性（Global Locality）</p>
+<ul>
+<li><strong>节点局部性</strong>：是指可以将计算任务分配到数据所在的机器节点，这是数据局部性最优的一种情形，因为完成计算无须任何数据传输。</li>
+<li><strong>机架局部性</strong>：指的是虽然计算任务和所需数据分属两个不同的计算节点，但是这两个节点在同一个机架中，这也是效率较高的一种数据局部性，因为机架内机器节点间网络传输速度要明显高于机架间网络传输速度。</li>
+<li><strong>全局局部性</strong>：其他的情况都属于，此时需要跨机架进行网络传输，会产生较大的网络传输开销。</li>
+</ul>
+<p>节点局部性&gt;机架局部性&gt;全局局部性</p>
+<h3 id="抢占式调度与非抢占式调度"><a href="#抢占式调度与非抢占式调度" class="headerlink" title="抢占式调度与非抢占式调度"></a>抢占式调度与非抢占式调度</h3><ul>
+<li><strong>抢占式调度</strong>：对于某个计算任务来说，如果空闲资源不足或者出现不同任务共同竞争同一资源，调度系统可以从比当前计算任务优先级低的其他任务中获取已分配资源，而被抢占资源的计算任务则需出让资源停止计算。</li>
+<li><strong>非抢占式调度</strong>：只允许从空闲资源中进行分配，如果当前空闲资源不足，则须等待其他任务释放资源后才能继续向前推进。</li>
+</ul>
+<h3 id="资源分配粒度"><a href="#资源分配粒度" class="headerlink" title="资源分配粒度"></a>资源分配粒度</h3><p>大数据场景下的计算任务往往由两层结构构成：作业级（Job）和任务级（Task）。一个作业由多个并发的任务构成，任务之间的依赖关系往往形成有向无环图（DAG），典型的MapReduce任务则是一种比较特殊的DAG关系。</p>
+<ul>
+<li>一种极端的情况是需要将作业的所有所需资源一次性分配完成，这常被称为“群体分配”（Gang Scheduler）或者“全分或不分”（All-or-Nothing）策略。MPI任务就是一种典型的需要采纳群体分配策略的任务类型。</li>
+<li>另外一种分配粒度是采取增量满足式分配策略，即对于某个作业来说，只要分配部分资源就能启动一些任务开始运行，随着空闲资源的不断出现，可以逐步增量式分配给作业其他任务以维持作业不断地向后推进，以MapReduce为代表的批处理任务一般采用增量满足式分配策略。</li>
+<li>有一种特殊的增量满足式分配策略被称作“资源储备”（Resource Hoarding）策略。这是指只有分配到一定量的资源作业才能启动，但是在未获得足够资源的时候，作业可以先持有目前已分配的资源，并等待其他作业释放资源，这样从调度系统不断获取新资源并进行储备和累积，直到分配到的资源量达到最低标准后开始运行。</li>
+</ul>
+<h3 id="饿死与死锁问题"><a href="#饿死与死锁问题" class="headerlink" title="饿死与死锁问题"></a>饿死与死锁问题</h3><ul>
+<li>“<strong>饿死</strong>”现象：这个计算任务持续长时间无法获得开始执行所需的最少资源量，导致一直处于等待执行的状态。比如在资源紧张的情形下，有些低优先级的任务始终无法获得资源分配机会</li>
+<li><strong>死锁问题</strong>：是由于资源调度不当导致整个调度系统无法继续正常执行。</li>
+</ul>
+<p>调度系统出现死锁必然表现为某些作业处于“饿死”状态，但是有计算任务处于“饿死”情形并不一定意味着调度系统处于死锁状态。</p>
+<h3 id="资源隔离方法"><a href="#资源隔离方法" class="headerlink" title="资源隔离方法"></a>资源隔离方法</h3><p>目前对于资源隔离最常用的手段是Linux容器（Linux Container，LXC），YARN和Mesos都采用了这种方式来实现资源隔离。</p>
+<p><strong>LXC</strong>是一种轻量级的内核虚拟化技术，可以用来进行资源和进程运行的隔离，通过LXC可以在一台物理主机上隔离出多个相互隔离的容器，目前有开源版本。LXC在资源管理方面依赖于Linux内核的cgroups子系统，cgroups子系统是Linux内核提供的一个基于进程组的资源管理的框架，可以为特定的进程组限定可以使用的资源。</p>
+<h2 id="资源管理与调度系统范型"><a href="#资源管理与调度系统范型" class="headerlink" title="资源管理与调度系统范型"></a>资源管理与调度系统范型</h2><p>3种资源管理与调度系统范型：集中式调度器、两级调度器与状态共享调度器</p>
+<p>![[file-20250922143954531.jpg]]</p>
+<h3 id="集中式调度器"><a href="#集中式调度器" class="headerlink" title="集中式调度器"></a>集中式调度器</h3><p>集中式调度器在整个系统中只运行一个全局的中央调度器实例，所有之上的框架或者计算任务的资源请求全部经由中央调度器来满足，因此，整个调度系统缺乏并发性且所有调度逻辑全部由中央调度器来实现。</p>
+<ul>
+<li><strong>单路径调度器</strong>：指不论计算任务是何种类型，都采取统一的调度策略来进行资源管理与调度，这种类型调度器在高性能计算系统（HPC）中非常常见，比如Maui以及Moab等系统都采用此种方式。</li>
+<li><strong>多路径调度器</strong>：可以支持多种调度策略，比如针对批处理类任务采取某种调度策略，对于在线服务类任务采取另外一种调度策略等。</li>
+</ul>
+<p>集中式调度器实现逻辑复杂，系统可扩展性差，支持不同类型的调度策略缺乏灵活性。</p>
+<h3 id="两级调度器"><a href="#两级调度器" class="headerlink" title="两级调度器"></a>两级调度器</h3><p>两级调度器将整个系统的调度工作划分为两个级别：中央调度器和框架调度器。</p>
+<ul>
+<li><strong>中央调度器</strong>：可以看到集群中所有机器的可用资源并管理其状态，它可以按照一定策略将集群中的所有资源分配给各个计算框架，中央调度器级别的资源调度是一种粗粒度的资源调度方式。</li>
+<li><strong>框架调度器</strong>：各个计算框架在接收到所需资源后，可以根据自身计算任务的特性，使用自身的调度策略来进一步细粒度地分配从中央调度器获得的各种资源。</li>
+</ul>
+<p>只有中央调度器能够观察到所有集群资源的状态，而每个框架并无全局资源概念，只能看到由中央调度器分配给自己的资源。<br>Mesos、YARN和Hadoop On Demand系统是3个典型的两级调度器系统。</p>
+<p>两级调度器由于在计算框架层面存在第二级资源调度，而这可以提供一种比较天然的并发性，所以整体调度性能较好，也适合大规模集群下的多任务高负载计算情形，具有较好的可扩展性。</p>
+<h3 id="状态共享调度器"><a href="#状态共享调度器" class="headerlink" title="状态共享调度器"></a>状态共享调度器</h3><p>在这种调度范型中，每个<strong>计算框架可以看到整个集群中的所有资源</strong>，并采用<strong>相互竞争</strong>的方式去获取自己所需的资源，根据自身特性采取不同的具体资源调度策略，同时系统采用了乐观并发控制手段解决不同框架在资源竞争过程中出现的需求冲突。</p>
+<p>与两级调度器对照可以看出，其实两者的根本区别在于中央调度器功能强弱不同。</p>
+<p>两级调度器依赖中央调度器来进行第一次资源分配，而Omega则严重弱化中央调度器的功能，只是维护一份可恢复的集群资源状态信息主副本，这份数据被称作“单元状态”（Cell State）。</p>
+<p>果两个不同框架竞争同一份资源，因其决策过程都是各自在自己的私有数据上做出的，并通过原子事务进行提交，系统保证此种情形下只有一个竞争胜出者，而失败者可以后续继续重新申请资源，所以这是一种<strong>类似于MVCC</strong>的乐观并发控制手段，可以增加系统的整体并发性能。</p>
+<p>状态共享调度器将两级调度器的中央调度器功<strong>能弱化成了维护持久化可恢复的集群资源状态信息</strong>，只要所有框架具有关于相互之间优先级高低可比的共识，就可以采取自由竞争的方式实现抢占式整体资源管理与调度。</p>
+<ul>
+<li>集中式调度器比较适合小规模集群下的资源调度与管理</li>
+<li>两级调度器比较适合负载同质的大规模集群应用场景</li>
+<li>状态共享调度器则更适合负载异质性较强且资源冲突不多的大规模集群应用场景。</li>
+</ul>
+<h2 id="资源调度策略"><a href="#资源调度策略" class="headerlink" title="资源调度策略"></a>资源调度策略</h2><h3 id="FIFO调度策略"><a href="#FIFO调度策略" class="headerlink" title="FIFO调度策略"></a>FIFO调度策略</h3><p>FIFO策略是最简单的资源调度策略，提交的作业按照提交时间先后顺序或者根据优先级次序将其放入线性队列相应位置，在资源调度时按照队列先后顺序，先进先出地进行调度与资源分配。</p>
+<p>FIFO是Hadoop默认的调度策略，很明显这种策略过于简单，在多用户场景下，新加入的作业很容易出现长时间等待调度的现象。</p>
+<h3 id="公平调度器"><a href="#公平调度器" class="headerlink" title="公平调度器"></a>公平调度器</h3><p>公平调度器是Facebook为Hadoop开发的多用户多作业调度器。其将用户的任务分配到多个资源池（Pool），每个资源池设定资源分配最低保障和最高上限，管理员也可以指定资源池的优先级，优先级高的资源池会被分配更多的资源，当一个资源池资源有剩余时，可以临时将剩余资源共享给其他资源池。</p>
+<p>调度过程：</p>
+<ul>
+<li>根据每个资源池的最小资源保障量，将系统中的部分资源分配给各个资源池。</li>
+<li>根据资源池的指定优先级将剩余资源按照比例分配给各个资源池。</li>
+<li>在各个资源池中，按照作业优先级或者根据公平策略将资源分配给各个作业。</li>
+</ul>
+<p>公平调度器和能力调度器都是Hadoop常用的调度策略，与能力调度器相比，公平调度器有两个明显的区别：</p>
+<ul>
+<li>公平调度器支持抢占式调度，即如果某个资源池长时间未能被分配到公平共享量的资源，则调度器可以杀死过多分配资源的资源池中的任务，以空出资源供这个资源池使用。</li>
+<li>公平调度器更强调作业间的公平性。在每个资源池中，公平调度器默认使用公平策略来实现资源分配</li>
+</ul>
+<h3 id="能力调度器"><a href="#能力调度器" class="headerlink" title="能力调度器"></a>能力调度器</h3><p>能力调度器是Yahoo为Hadoop开发的多用户调度器，适合用户量众多的应用场景，与公平调度器相比，其更强调资源在用户之间而非作业之间的公平性。</p>
+<p>它将用户和任务组织成多个队列，每个队列可以设定资源最低保障和使用上限，当一个队列的资源有剩余时，可以将剩余资源暂时分享给其他队列。调度器在调度时，优先将资源分配给资源使用率最低的队列（即队列已使用资源量占分配给队列的资源量比例最小的队列）；在队列内部，则按照作业优先级的先后顺序遵循FIFO策略进行调度。</p>
+<h3 id="延迟调度策略"><a href="#延迟调度策略" class="headerlink" title="延迟调度策略"></a>延迟调度策略</h3><p>延迟调度策略不是一个独立的调度方式，往往会作为其他调度策略的辅助措施来增加调度的数据局部性，以此来增加任务执行效率。</p>
+<p>对于当前被调度到要被分配资源的任务i，如果当前资源不满足数据局部性，那么可以暂时放弃分配公平性，任务i不接受当前资源，而是等待后续的资源分配；当前资源可以跳过任务i分配给其他待调度任务j，如果任务i在被跳过k次后仍然等不到满足局部性的资源，则放弃数据局部性，被迫接受当前资源来启动任务执行。</p>
+<h3 id="主资源公平调度策略"><a href="#主资源公平调度策略" class="headerlink" title="主资源公平调度策略"></a>主资源公平调度策略</h3><p>主资源公平调度策略（简称DRF）是Mesos中央调度器采用的公平调度策略，也是最大最小公平算法的一个具体体现。最大最小公平算法的基本思想是：最大化目前分配到最少资源量的用户或<br>者任务的资源量。这个算法常常用来对单个资源进行公平分配，而DRF则将其扩展到了多个资源的公平分配场景下。</p>
+<h2 id="Mesos"><a href="#Mesos" class="headerlink" title="Mesos"></a>Mesos</h2><p>Mesos是美国加州大学伯克利分校AMPLab实验室推出的资源管理与调度系统，从其范型来讲是一个典型的两级调度器。</p>
+<p>Mesos的整体架构如图所示，其采用了典型的“主-从”架构。中央调度器由多个主控服务器（Master）构成，通过ZooKeeper可以保证当正在工作的主控服务器出现故障时，备用主控服务器（Standby Master）可以快速将管理工作接替过来，以此增加整个调度系统的健壮性。</p>
+<p>![[file-20250922151029334.jpg | 500]]</p>
+<p>分配资源过程：</p>
+<ul>
+<li>首先，1号从节点（Slave 1）向主控服务器汇报其有4个CUP和4 GB内存资源可用，主控服务器触发资源分配模块，由其分配策略告知主控服务器应该将所有资源分配给框架1（步骤1）。在步骤2，Mesos将这份资源封装为“资源供应”并将其传给框架1的调度器。框架1的调度器运行二级调度策略，将这份资源分配给两个任务，其中任务1分配了2个CPU和1GB内存，任务2分配了1个CUP和2GB内存（步骤3）</li>
+<li>Mesos将这两个任务分配给1号从节点，由从节点实际分配这些资源给对应任务并启动执行器执行任务，同时从节点还提供任务运行的资源隔离管理（步骤4）。因为1号从节点提供的资源还有剩余，Mesos中央调度器还可以继续将其分配给框架2。通过这种方式，Mesos实现了一个典型的两级调度器。</li>
+</ul>
+<p>![[file-20250922151139957.jpg | 500]]</p>
+<p>Mesos比较适合不同框架任务同质化场景，尤其是大部分都是短作业的情景（比如Hadoop等批处理任务），因为从上述描述可知，Mesos是不支持抢占式调度的，资源分配出去后只能等待任务运行结束后自行释放，如果是大量短作业，那么资源释放速度较快，这样总有新资源可分配，对于后续的任务来说可以较快获得资源，避免长时间等待。</p>
+<h2 id="YARN"><a href="#YARN" class="headerlink" title="YARN"></a>YARN</h2><p>YARN是Hadoop 2.0的重要组成部分，也被称作MRV2，其全称是“另一个资源协调器”（Yet Another Resource Negotiator），顾名思义，其是一个独立的资源管理系统。</p>
+<p>MRV2与MRV1相比，最大的改变就是抽象出YARN这个独立资源调度系统。在MRV1中，所有任务的资源管理以及生命期管理都由全局唯一的JobTracker来负责，造成了JobTracker功能繁复，成为整个Hadoop系统的瓶颈，严重限制了系统的可扩展性，之前报道MRV1系统最大能支持的集群规模为4 000台服务器。</p>
+<p>YARN同Mesos一样，是个典型的两级调度器，其中RM类似于Mesos中的主控服务器，充当中央调度器功能。每个任务的AM类似于Mesos中的二级调度器。AM负责向RM申请作业所需资源，并在作业的众多任务中进行资源分配与协调。</p>
+<p>YARN与Mesos都有很大的共性，但是两者之间也有明显的区别，比如YARN的中央调度器支持“抢占式调度”以及AM可以在向RM申请资源时提出明确的数据局部性条件等。</p>
+<p><strong>整体架构</strong>：其最主要的构件包括：唯一的资源管理器（RM）、每个作业一个的“应用服务器”（AM）以及每个机器一个的“节点管理器”（Node Manager，NM）。</p>
+<p>![[file-20250922152130039.jpg | 500]]</p>
+<ul>
+<li>RM：负责全局的资源管理工作，其内部主要功能部件包括：调度器、AM服务器（AMService&#x2F;ApplicationMasters，AMS）、Client-RM接口以及RM-NM接口。YARN的RM支持“抢占式调度”，当集群资源稀缺时，RM可以通过协议命令AM释放指定的资源。另外，AM在资源请求信息内也可以明确指明数据局部性偏好。</li>
+<li>AM：负责向RM申请启动任务所需的资源，同时协调作业内各个任务的运行过程。尽管其功能有特殊性，但是其运行过程也像普通的任务一样运行在某台机器的容器内。</li>
+<li>NM：是YARN中在每台机器上都部署的节点管理器，主要负责机器内容器资源的管理，比如容器间的依赖关系、监控容器执行以及为容器提供资源隔离等各种服务等。</li>
+</ul>
+<p>执行过程：<br>（1）用户通过客户端向YARN提交作业。<br>（2）RM通过调度器申请资源，用于启动运行作业的AM；如果申请到，则AMS负责通知节点管理器在相应容器内启动执行AM。<br>（3）AM负责将作业划分为若干任务，并向RM请求启动任务所需的资源；RM接收到请求后，通过调度器分配资源，找到合适的容器后，将这些资源信息返回给AM。<br>（4）AM根据资源信息，在任务间优化资源分配策略，确定后直接与资源所在的节点管理器联系，在对应的容器中启动任务，节点管理器负责容器的资源隔离。<br>（5）AM在部分任务执行完成后逐步向RM释放所占资源。</p>
+<p>![[file-20250922152759724.jpg | 400]]</p>
+<p>YARN是一个典型的两级调度器，RM担当中央调度器功能，支持“抢占式调度”，AM担当二级调度器的功能。与Mesos比较，由于Hadoop的广泛流行，再加上YARN代表了Hadoop的未来发展趋势，所以相比而言更活跃，发展前景更乐观。</p>
+<h1 id="第5章——分布式协调系统"><a href="#第5章——分布式协调系统" class="headerlink" title="第5章——分布式协调系统"></a>第5章——分布式协调系统</h1><h2 id="Chubby锁服务"><a href="#Chubby锁服务" class="headerlink" title="Chubby锁服务"></a>Chubby锁服务</h2><p>Chubby是Google公司研发的针对分布式系统协调管理的粗粒度锁服务，一个Chubby实例大约可以负责1万台4核CPU机器相互之间对资源的协同管理。这种锁服务的主要功能是让众多客户端程序进行相互之间的同步，并对系统环境或者资源达成一致认知。</p>
+<p>锁服务：通过对数据加锁的方式来实现各种分布式环境下的资源协调问题。</p>
+<p>Chubby是一种“粗粒度”锁，所谓“粗粒度”指的是锁的持有时间比较长，反之如果锁的持有时间较短（秒级别）则被称为细粒度锁</p>
+<p><strong>设计哲学</strong>：强调协调系统的可靠性与高可用性及语义易于理解，而不追求处理读／写请求的高吞吐量及在协调系统内存储大量数据。</p>
+<p><strong>理论基础</strong>：Paxos一致性协议，Paxos是在完全分布环境下，不同客户端能够通过交互通信并投票，对于某个决定达成一致的算法</p>
+<h3 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h3><p>由客户端链接的库程序和多个“Chubby单元”构成，一般一个数据中心部署一套“Chubby单元”。每个“Chubby单元”通常包含5台服务器，通过Paxos协议选举的方式推举其中一台作为“主控服务器”，所有读／写操作都由主控服务器完成，其他4台作为备份服务器，在内存中维护和主控服务器完全一致的树形结构</p>
+<p>![[file-20250923195504240.jpg | 500]]</p>
+<ul>
+<li>“主控服务器”由所有服务器选举推出，有“任期”的，此即“主控服务器租约”（Master Lease），当主控服务器“任期”期满后，系统会再次投票选举出新的“主控服务器”，如果无故障等异常情况发生，一般情况下系统还是尽量将租约交给原先的“主控服务器”</li>
+<li>客户端通过嵌入的库程序，利用RPC通信来和服务器进行交互，对Chubby的读／写请求都由“主控服务器”来负责。</li>
+</ul>
+<h3 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h3><p>Chubby类似于文件系统的目录和文件管理系统，并在此基础上提供针对目录和文件的锁服务。</p>
+<p>Chubby的文件主要存储一些管理信息或者基础数据，Chubby要求对文件内容一次性地全部读完或者写入，这是为了尽可能地抑制客户端程序写入大量数据到文件中，因为Chubby的目的不是数据存储，而是对资源的同步管理，所以不推荐在文件中保存大量数据。</p>
+<p>Chubby还提供了文件内容或者目录更改后的通知机制，客户端可以订阅某个文件或目录，当文件内容和子目录发生变化或者一些系统环境发生变化时，Chubby会主动通知这些订阅该文件或目录的客户端，以使得这种信息变化得以及时传播。</p>
+<p>![[file-20250923195842521.jpg | 500]]<br>Chubby在这个树形目录结构中提供了很多管理功能，比如针对某个目录或者文件的加锁服务，针对目录或者文件的访问权限控制，文件内容存取以及事件通知机制。通过这种结构，可以有效实现分布式系统中的同步协同和资源管理功能。</p>
+<h3 id="会话与KeepAlive机制"><a href="#会话与KeepAlive机制" class="headerlink" title="会话与KeepAlive机制"></a>会话与KeepAlive机制</h3><p>这里的会话（Session）指的是客户端和主控服务器之间建立的联系通道，而会话的维持是由周期性进行握手的KeepAlive机制保证的，即通过两者之间不断的KeepAlive通信来延续会话。</p>
+<p>每次会话也有相应的租约，在租约时间段内服务器保证不会单方面将会话终止。</p>
+<p>会话机制工作过程：客户端向主控服务器发出KeepAlive消息（一个RPC调用），服务器在接收到KeepAlive消息后，阻塞这个RPC调用，直到客户端原先的租约接近过期为止。</p>
+<h3 id="客户端缓存"><a href="#客户端缓存" class="headerlink" title="客户端缓存"></a>客户端缓存</h3><p>为了减少客户端和服务器之间的通信量，Chubby允许客户端在本地缓存部分服务器数据，而由Chubby来保证缓存数据和服务器端数据完全一致。</p>
+<h3 id="ZooKeeper"><a href="#ZooKeeper" class="headerlink" title="ZooKeeper"></a>ZooKeeper</h3><p>ZooKeeper是Yahoo开发并开源出的一套可扩展高吞吐分布式协调系统，目前已经在各种NoSQL数据库及诸多开源软件中获得广泛使用。正确地使用ZooKeeper可以很方便地解决各种分布式系统的管理协调问题，本节主要介绍这一协调系统的设计架构及相应的使用场景。</p>
+<h3 id="体系结构"><a href="#体系结构" class="headerlink" title="体系结构"></a>体系结构</h3><p>ZooKeeper是一个高吞吐的分布式协调系统，同一时刻可以同时响应上万个客户端请求。ZooKeeper服务由若干台服务器构成，每台服务器内存中维护相同的类似于文件系统的树形数据结构，其中的一台通过ZAB原子广播协议选举作为主控服务器，其他的作为从属服务器。客户端可以通过TCP协议连接任意一台服务器，如果客户端是读操作请求，则任意一个服务器都可以直接响应请求；如果是更新数据操作（写数据或者更新数据），则只能由主控服务器来协调更新操作；如果客户端连接的是从属服务器，则从属服务器会将更新数据请求转发到主控服务器，由其完成更新操作。</p>
+<p>![[file-20250923200647825.jpg | 500]]</p>
+<p>主控服务器将所有更新操作序列化，利用ZAB协议将数据更新请求通知所有从属服务器，ZAB保证更新操作的一致性及顺序性。</p>
+<p>ZooKeeper的任意一台服务器都可以响应客户端的读操作，这是为何其吞吐量高的主要原因。</p>
+<p>Chubby在这点上与ZooKeeper不同，所有读／写操作都由主控服务器完成，从属服务器只是为了提高整个协调系统的可用性，即主控服务器发生故障后能够在从属服务器中快速选举出新的主控服务器。</p>
+<ul>
+<li><strong>潜在问题</strong>：客户端可能会读到过期数据</li>
+<li><strong>解决方案</strong>：在ZooKeeper的接口API函数中提供了Sync操作，应用可以根据需要在读数据前调用该操作，其含义是：接收到Sync命令的从属服务器从主控服务器同步状态信息，保证两者完全一致。这样如果在读操作前调用Sync操作，则可以保证客户端一定可以读取到最新状态的数据。</li>
+</ul>
+<p>ZooKeeper通过“重放日志（Replay log）”结合“模糊快照（Fuzzy Snapshot）”来对服务器故障进行容错。</p>
+<ul>
+<li>“重放日志”：在将更新操作体现在内存数据之前先写入外存日志中避免数据丢失；</li>
+<li>“模糊快照”：在周期性对内存数据做数据快照时，并不对内存数据加锁，而是用深度遍历的方式将内存中的树形结构转入外存快照数据中</li>
+</ul>
+<h3 id="数据模型-1"><a href="#数据模型-1" class="headerlink" title="数据模型"></a>数据模型</h3><p>与Chubby一样，ZooKeeper的内存数据模型类似于传统的文件系统模式，由树形的层级目录结构构成，其中的节点被称作Znode。Znode可以是文件，也可以是目录，如果是目录的话还可以有子目录。如果是文件的话，一般需要整体完成读／写操作的小文件，这与Chubby一样是出于避免应用将协调系统当作存储系统来用。</p>
+<p>![[file-20250923201038244.jpg | 300]]<br>Znode节点有两种类型：</p>
+<ul>
+<li>持久节点不论客户端会话情况，一直存在，只有当客户端显式调用删除操作才会消失。</li>
+<li>临时节点不同，会在客户端会话结束或者发生故障的时候被ZooKeeper系统自动清除。</li>
+</ul>
+<h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><p>ZooKeeper提供了简单的操作原语供应用使用，这些操作原语类似于文件系统的调用接口，含义很清楚。</p>
+<p>sync操作的语义：其含义是通知客户端连接到的那个ZooKeeper服务器，将其内存数据库内容从其他服务器同步到最新状态，这是为了避免读到过期数据。</p>
+<h3 id="ZooKeeper的典型应用场景"><a href="#ZooKeeper的典型应用场景" class="headerlink" title="ZooKeeper的典型应用场景"></a>ZooKeeper的典型应用场景</h3><h4 id="1．领导者选举（Leader-Election）"><a href="#1．领导者选举（Leader-Election）" class="headerlink" title="1．领导者选举（Leader Election）"></a>1．领导者选举（Leader Election）</h4><p>分布式系统中一种经典的体系结构是主从结构（Master-Slave），主控服务器负责全局管理控制工作，而从节点负责具体的任务计算或者数据存储管理工作。</p>
+<p>为了防止单点失效，往往会采取一主一备或者一主多备，当主控服务器发生故障后，由某台备机接管主控服务器功能成为新的主控机，而这一般被称为领导者选举，ZooKeeper是解决这类问题的常见解决方案。</p>
+<p>ZooKeeper在实现领导者选举时，将临时节点Zl设置为领导者专用节点，节点内容中存储领导者的地址信息及其他辅助信息。每个进程（或者机器）执行以下逻辑实现领导者选举过程。</p>
+<p>进程p读取Zl内容并设置观察标识，如果读取操作成功，说明目前已有领导者并可从读取结果中获得领导者相关信息；如果读取失败，说明目前无领导者，则进程p试图自己创建该节点（临时节点方式），并将自己的相关信息写入。如果创建并写入成功则p成为领导者，其他非领导者因为设置了观察标识，所以ZooKeeper会通知所有非领导者说领导者发生了变化，非领导者可以读取Zl内容获取最新领导者信息。</p>
+<h4 id="2．配置管理（Configuration-Management）"><a href="#2．配置管理（Configuration-Management）" class="headerlink" title="2．配置管理（Configuration Management）"></a>2．配置管理（Configuration Management）</h4><p>ZooKeeper可以用来进行配置信息的动态管理,配置文件存储在ZooKeeper的某个节点Zc中，分布式系统中的客户端进程在启动时从Zc 中读取配置信息，并设置观察标记。若配置文件内容在以后被改变，客户端进程会接收到Zc 的变化通知，可以再次读取Zc 节点内容以捕获变化点并同时再次设置观察标记，这样以后每次配置文件的变化客户端都可以及时收到通知。</p>
+<p>![[file-20250923202014501.jpg | 400]]</p>
+<h4 id="3．组成员管理（Group-Membership）"><a href="#3．组成员管理（Group-Membership）" class="headerlink" title="3．组成员管理（Group Membership）"></a>3．组成员管理（Group Membership）</h4><p>组成员管理的任务目标是动态监控一个组内成员的变化情况，比如有成员加入群组或者离开群组。一个典型的应用场景，比如工作服务器（Worker）的动态添加与故障发现，如果整个系统工作负载太大，可以新增工作服务器来进行负载均衡，而主控服务器如何自动发现新加入的机器则是组成员管理问题；</p>
+<p>ZooKeeper可以利用临时节点来进行组成员管理.</p>
+<h4 id="4．任务分配"><a href="#4．任务分配" class="headerlink" title="4．任务分配"></a>4．任务分配</h4><p>在分布式环境下，将不同的任务负载分别分配到多台可用服务器也是一个比较常见的问题。使用ZooKeeper可以比较方便地实施这一过程<br>![[file-20250923202134282.jpg | 400]]<br>对于监控进程来说，可以创建任务队列管理节点tasks，所有新进入系统的任务都可以在tasks节点下创建子节点，监控进程观察tasks节点的变化。</p>
+<h4 id="5．锁管理（Locks）"><a href="#5．锁管理（Locks）" class="headerlink" title="5．锁管理（Locks）"></a>5．锁管理（Locks）</h4><p>可以利用其提供的原语构造锁服务功能。可以用ZooKeeper实现读／写锁、排他锁。</p>
+<h4 id="6．双向路障同步（Double-Barrier）"><a href="#6．双向路障同步（Double-Barrier）" class="headerlink" title="6．双向路障同步（Double Barrier）"></a>6．双向路障同步（Double Barrier）</h4><p>所谓路障同步，是指多个并发进程都要到达某个同步点后再继续向后推进，图计算中的BSP模型就是一个典型的路障同步算法，只有所有并发进程的上一轮计算都完全到达同步点后才能开始下一轮计算。</p>
+<p>ZooKeeper可以用来进行并发进程的双向路障同步。</p>
+<h2 id="ZooKeeper的实际应用"><a href="#ZooKeeper的实际应用" class="headerlink" title="ZooKeeper的实际应用"></a>ZooKeeper的实际应用</h2><ul>
+<li>ZooKeeper在HBase的使用场景包括主控服务器选举与主备切换，作为配置管理在ZooKeeper中存储系统启动信息，发现新的子表服务器及侦测子表服务器是否依然存活等。</li>
+<li>LinkedIn的Pub-Sub消息系统Kafka在以下场景使用ZooKeeper：自动发现新添加的消息服务器（Broker）和消息消费者（Consumer）；在消息服务器间进行自动负载均衡；在ZooKeeper里保存消费者和消息队列的映射关系及消费者当前消费信息在消息队列的位置等。</li>
+</ul>
+<h1 id="第6章——分布式通信"><a href="#第6章——分布式通信" class="headerlink" title="第6章——分布式通信"></a>第6章——分布式通信</h1><p>从各种大数据系统中抽象归纳出3种常见的通信机制：序列化与远程过程调用、消息队列和多播通信。</p>
+<ul>
+<li>序列化与远程过程调用的重点是网络中位于不同机器上进程之间的交互；</li>
+<li>消息队列的重点是子系统之间的消息可靠传递；</li>
+<li>多播通信是以Gossip协议为主，讲解P2P网络环境下如何实现信息的高效多播传输。</li>
+</ul>
+<h2 id="序列化与远程过程调用框架"><a href="#序列化与远程过程调用框架" class="headerlink" title="序列化与远程过程调用框架"></a>序列化与远程过程调用框架</h2><p><strong>远程过程调用</strong>：允许程序调用位于网络中其他机器上的进程，当机器A上的进程调用机器B上的进程时，A上的调用进程被挂起，而B上的被调用进程开始执行，调用方可以通过参数将信息传递给被调用方，然后通过B上的进程返回的结果得到所需的信息。</p>
+<p>一般RPC框架会融合数据<strong>序列化与反序列化</strong>功能，以实现高效的数据存取与通信。很多应用直接使用JSON或者XML来作为数据通信的格式。<br>![[file-20250924203202439.jpg]]<br>通用的序列化与RPC框架都支持以下特性：接口描述语言（Interface Description Language，IDL）、高性能、数据版本支持以及二进制数据格式。</p>
+<h3 id="Protocol-Buffer与Thrift"><a href="#Protocol-Buffer与Thrift" class="headerlink" title="Protocol Buffer与Thrift"></a>Protocol Buffer与Thrift</h3><ul>
+<li>PB是在Google内部广泛使用的序列化与RPC框架，是几乎所有Google服务的黏合剂，支持C++、Java、Python和JavaScript这4种语言，随着系统开源，目前也支持很多其他语言的第三方插件。与JSON、XML及Thrift等相比，<strong>PB对数据的压缩率是最高的。</strong></li>
+<li>Thrift则是Facebook开源出的序列化与RPC框架，在Facebook内部也得到了广泛的使用。支持十几种常见编程语言，同时也直接提供RPC调用框架服务。因为RPC功能以及IDL语言比PB表达能力更强（Thrift支持List&#x2F;Set&#x2F;Map复杂数据结构，PB不支持），所以Thrift的使用场景更丰富。比如Hadoop&#x2F;HBase。</li>
+</ul>
+<p>使用流程方面大致相同。其流程一般如下：</p>
+<ul>
+<li>使用IDL定义消息体以及PRC函数调用接口。顾名思义，IDL是与具体编程语言无关的接口描述语言，使用它可以定义调用方和被调用方都一致遵循的数据结构与接口。</li>
+<li>使用工具根据上步的IDL定义文件生成指定编程语言的代码</li>
+<li>可在应用程序中链接使用上一步生成的代码。对于RPC功能来说，调用方和被调用方同时引入后即可实现透明网络访问，如果调用方和被调用方采取不同的语言，只要分别根据IDL定义文件生成不同语言库即可实现两者的编码语言解耦。</li>
+</ul>
+<h3 id="Avro"><a href="#Avro" class="headerlink" title="Avro"></a>Avro</h3><p>Avro是Apache开源的序列化与RPC框架，使用在Hadoop的数据存储与内部通信中。Avro使用JSON作为IDL定义语言，可以灵活地定义数据Schema及RPC通信协议，提供了简洁快速的二进制数据格式，并能和动态语言进行集成。</p>
+<p>Avro的IDL语言不仅支持常见的基本数据类型，也能够支持Record、Array、Map等复杂数据类型，所以有很强的数据描述能力。</p>
+<p>数据Schema使用JSON描述并存放在数据文件的起始部分，数据以二进制形式存储，这样进行数据序列化和反序列化时速度很快且占用额外存储空间很少。</p>
+<p>数据内容可以采用二进制格式或者JSON格式，一般采用二进制格式，因为其更小、传输效率更高，当调试应用时可以采用JSON格式，主要便于观察数据的正确性。</p>
+<p>独特之处：</p>
+<ul>
+<li>其支持动态语言集成；</li>
+<li>其数据Schema独立于数据并在序列化时置于数据之首；</li>
+<li>其IDL使用JSON表达，所以无须额外定制IDL解析器。</li>
+</ul>
+<h2 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h2><h3 id="常见的消息队列系统"><a href="#常见的消息队列系统" class="headerlink" title="常见的消息队列系统"></a>常见的消息队列系统</h3><p>前常见的消息队列中间件产品包括ActiveMQ、ZeroMQ、RabbitMQ和Kafka等。实际测试表明，连续并发发送1KB大小的消息，从性能的角度看，ZeroMQ性能最优，可达10万TPS（Transaction Per Second，每秒事务处理量）以上；Kafka次之，可达4万TPS左右；RabbitMQ再次，大约1万TPS左右；ActiveMQ最次，性能大约在6 000 TPS左右。</p>
+<p>一般这些消息中间件都支持两种模式的队列：消息队列模式及Pub-Sub模式：</p>
+<ul>
+<li><p><strong>消息队列模式</strong>：即消息生产者将消息存入队列，消息消费者从队列消费消息；</p>
+</li>
+<li><p><strong>Pub-Sub模式</strong>：则是消息生产者将消息发布到指定主题的队列中，而消息消费者订阅指定主题的队列消息，当订阅的主题有新消息时，消息消费者可以通过拉取（Pull）或者消息中间件通过推送（Push）的方式将消息消费掉。</p>
+</li>
+<li><p>ActiveMQ和RabbitMQ相对来说算是重量级系统，其遵循AMQP协议，具有较强的功能和相对广泛的适用场景，但也因此导致其性能较低和扩展性较差。</p>
+</li>
+<li><p>ZeroMQ相对特殊，也是其中最轻量级的系统，严格来讲，其是介于会话层之上应用层之下的网络通信库，适用于高并发低延迟的场景，比如金融行业数据传输；但是其不支持消息持久化</p>
+</li>
+<li><p>Kafka算是轻量级的消息系统，同时其提供了消息持久化保证，支持消息“至少送达一次”语义，在性能方面表现优异，除此之外，其在高可用性及可扩展性方面也很出色。</p>
+</li>
+</ul>
+<h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><p>Kafka是Linkedin开源的采用<strong>Pub-Sub机制</strong>的分布式消息系统，其具有极高的消息吞吐量，较强的可扩展性和高可用性，消息传递低延迟，能够对消息队列进行持久化保存，且支持消息传递的“至少送达一次”语义。</p>
+<p>可以用来作为通用的消息系统、即时Log收集、用户行为实时收集以及机器状态监控等。</p>
+<h4 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h4><p>主要由3种类型角色构成：消息生产者（Producer）、代理服务器（Broker）和消息消费者（Consumer）</p>
+<ul>
+<li>消息生产者产生指定Topic（主题）的消息并将其传入代理服务器集群</li>
+<li>代理服务器集群在磁盘存储维护各种Topic的消息队列</li>
+<li>订阅了某个Topic的消息消费者从代理服务器集群中拉取（Pull）出新产生的消息并对其进行处理。<br>![[file-20250924204323417.jpg | 400]]</li>
+</ul>
+<p>在Kafka内部，支持对Topic进行数据分片（Partition），每个数据分片是有序的、不可更改的尾部追加消息队列，队列内的每个消息被分配本数据分片内唯一的消息ID。队列内的每个消息被分配本数据分片内唯一的消息ID（被称为“Offset”）。<br>![[file-20250924204504138.jpg | 500]]</p>
+<p>与很多消息系统将消费者目前读取到队列中哪个消息这种管理信息存储在代理服务器端不同，<strong>Kafka将这个信息交由消息消费者各自保存</strong>，这样明显简化了设计。</p>
+<p>除消费者读取到哪个消息外，Kafka的很多其他管理信息都存放在ZooKeeper而非服务器中，通过这种方式，代理服务器成为完全无状态的，无须记载任何状态信息，这样对于消息系统的容错性以及可扩展性都有很大好处。</p>
+<p>Kafka使用ZooKeeper保存的管理信息和实现的功能包括：</p>
+<ul>
+<li>侦测代理服务器和消息消费者的动态加入和删除</li>
+<li>当动态加入或者删除代理服务器以及消息消费者后对消息系统进行负载均衡</li>
+<li>维护消费者和消息Topic以及数据分片的相互关系，并保存消费者当前读取消息的Offset</li>
+<li>数据副本管理信息</li>
+</ul>
+<h4 id="ISR副本管理机制"><a href="#ISR副本管理机制" class="headerlink" title="ISR副本管理机制"></a>ISR副本管理机制</h4><p>Kafka通过消息副本机制提供了高可用的消息服务，其副本管理单位不是Topic消息队列，而是Topic的数据分片（Partition）。</p>
+<p>在配置文件里可以指定数据分片的副本个数，在多个副本里，其中一个作为主副本（Leader），其他作为次级副本（Slave）。所有针对这个数据分片的消息读／写请求都由主副本来负责响应，次级副本只是以主副本数据消费者的方式从主副本同步数据；当主副本发生故障时，Kafka将其中某个次级副本提升为主副本，以此来达到整个消息系统的高可用性。</p>
+<p>Kafka并未使用类似Zab或者Paxos协议的多数投票机制来保证主备数据的一致性，而是提出了一种被称为ISR（In-Sync Replicas）的机制来保证数据一致性。只允许1个副本容错过于脆弱，所以至少要支持2个副本容错，即至少要维护5个数据副本，但是这要求在消息写入的时候同时同步5个数据，明显效率太低。这就是为何要引入ISR机制的主要原因。</p>
+<p>ISR的运行机制如下：<br>将所有次级副本数据分到两个集合，其中一个被称为ISR集合，这个集合备份数据的特点是即时和主副本数据保持一致，而另外一个集合的备份数据允许其消息队列落后于主副本的数据。在做主备切换时，只允许从ISR集合中选择候选主副本，这样即可保证切换后新的主副本数据状态和老的主副本保持一致。在数据分片进行消息写入时，只有ISR集合内所有备份都写成功才能认为这次写入操作成功。在具体实现时，Kafka利用ZooKeeper来保存每个ISR集合的信息，当ISR集合内成员变化时，相关构件也便于通知。通过这种方式，如果设定ISR集合大小为f+1，那么可以最多允许f个副本故障，而对于多数投票机制来说，则需要2f+1个副本才能达到相同的容错性。</p>
+<h4 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h4><p>Kafka能够高效处理大批量消息的一个重要原因就是将读／写操作尽可能转换为顺序读／写，比如类似于Log文件方式的文件尾部追加写。另外，Kafka涉及将文件内容通过网络进行传输，为了提升效率，Kafka采用了Linux操作系统的SendFile调用。</p>
+<p>正常情况下将文件内容通过网络传输所经过的数据通道涉及4次数据复制和2个系统调用。如果使用SendFile，则可以避免多次数据复制，操作系统可以直接将数据从内核页缓存中复制到网卡缓存，这样可以大大加快整个过程的速度。</p>
+<h2 id="应用层多播通信"><a href="#应用层多播通信" class="headerlink" title="应用层多播通信"></a>应用层多播通信</h2><p>多播通信：是如何将数据通知到网络中多个接收方</p>
+<p>Gossip协议就是常用的应用层多播通信协议，与其他多播协议相比，其在信息传递的强壮性和传播效率这两方面有较好的折中效果，使得其在大数据领域广泛使用</p>
+<h3 id="Gossip协议"><a href="#Gossip协议" class="headerlink" title="Gossip协议"></a>Gossip协议</h3><p>“Gossip”的原意是谣言或者小道消息，之所以被称为“Gossip协议”，也是因其信息传播机制和小道消息在人群中的传播方式非常类似。</p>
+<p>Gossip协议在大数据系统中得到广泛使用。比如：Dynamo及其模仿者Cassandra、Riak等系统使用Gossip协议来进行故障检测、集群成员管理或者副本数据修复。</p>
+<h4 id="信息传播模型"><a href="#信息传播模型" class="headerlink" title="信息传播模型"></a>信息传播模型</h4><p>Gossip协议用来尽快地将本地更新数据通知到网络中的所有其他节点。其具体更新模型又可以<br>分为3种：全部通知模型（Best Effort或Direct Mail）、反熵模型（Anti-Entropy）和散布谣言模型（Rumor Mongering）。其中反熵模型是最常用的。</p>
+<ul>
+<li>全部通知模型如此传播：当某个节点有更新消息，则立即通知所有其他节点；其他节点在接收到通知后，判断接收到的消息是否比本地消息要新（可以通过时间戳或者版本信息来判断），如果是的话则更新本地数据，否则不采取任何行为。</li>
+<li>反熵模型是最常用的“Gossip协议”，比如Dynamo就用其来进行故障检测。之所以称之为“反熵”，因为我们知道“熵”是信息论里用来衡量系统混乱无序程度的指标，熵越大说明系统越无序、包含的有用信息含量越少；而“反熵”则反其道而行，因为更新的信息经过一定轮数（Round）的传播后，集群内所有节点都会获得全局最新信息，所以系统变得越来越有序，这就是“反熵”的物理含义。（<strong>随机选择</strong>）</li>
+<li>散布谣言模型和反熵模型相比，增加了传播停止判断。其流程如下：如果节点P更新数据，则随机选择节点Q交换信息；如果节点Q已经被其他节点通知更新了，那么节点P则增加其不再主动通知其他节点的概率，到了一定程度，比如不再通知其他节点的概率达到一定值，则节点P停止通知行为。</li>
+</ul>
+<h4 id="应用：Cassandra集群管理"><a href="#应用：Cassandra集群管理" class="headerlink" title="应用：Cassandra集群管理"></a>应用：Cassandra集群管理</h4><p>Cassandra是P2P的列式数据库集群，其采用了BigTable的数据模型，底层则采用了类似Dynamo的实现机制。因为P2P架构无中心管理节点，所以对于集群管理，比如对是否新加入了机器节点，是否有机器宕机等机器状态信息的维护不可能依赖主控节点来完成。在这种场景下，Cassandra使用Gossip协议来维护集群中机器节点状态信息，这样每个节点都可以最终一致获得整个集群其他节点的全局状态。</p>
+<h1 id="第7章——数据通道"><a href="#第7章——数据通道" class="headerlink" title="第7章——数据通道"></a>第7章——数据通道</h1><h2 id="Log数据收集"><a href="#Log数据收集" class="headerlink" title="Log数据收集"></a>Log数据收集</h2><p>Log数据收集系统的设计关注点：</p>
+<ul>
+<li><strong>低延迟</strong>： 从Log数据产生到能够对其分析，希望尽可能快地完成收集过程。</li>
+<li><strong>可扩展性</strong>：Log收集有个特点就是待收集数据的广泛分布性，所以这对Log收集系统的可扩展性有一定要求，因为动态增减服务器及相关服务对于互联网运维来说是常态，Log收集系统应该相应地易扩展、易部署。</li>
+<li><strong>容错性</strong>： 同样因为Log收集涉及大量服务器，而这意味着随时有可能发生机器故障，在此约束条件下，如何保证Log收集系统的容错性，不丢失应该收集的数据就是一个必要的要求。</li>
+</ul>
+<h3 id="Chukwa"><a href="#Chukwa" class="headerlink" title="Chukwa"></a>Chukwa</h3><p>Chukwa是用于针对大规模分布式系统Log收集与分析用途的Apache开源项目，其建立在Hadoop之上。</p>
+<p>Chukwa的基本策略是首先收集大量单机的Log增量文件，将其汇总后形成大文件，之后再利用MR任务来对其进行加工处理。Chukwa和其他类似系统不同的地方在于不仅仅定位于数据收集，也在后端集成数据分析和可视化界面。</p>
+<ul>
+<li>每台机器节点都部署Chukwa代理程序（Agent），其负责收集应用产生的Log数据并通过HTTP协议传给Chukwa收集器（Collectors）。一般一个收集器负责收集数百个代理程序传来的数据，如果代理程序对应的收集器发生故障，代理程序可以检查收集器列表并从中选择另外一个收集器来发送数据，这样即可实现一定程度的容错。</li>
+<li>收集器负责将汇总的数据写入HDFS文件中，这些文件被称为DataSink文件。DataSink文件保存的是最原始的Log信息，当其大小达到一定程度，收集器则关闭该文件，随后产生的新数据将被写入新生成的DataSink文件中。</li>
+<li>ArchiveBuilder进一步合并DataSink文件并做些排序以及去重的工作。Demux是MR程序，负责对原始Log数据进行解析抽取，将原始无结构记录转换为结构化或者半结构化的数据（Chukwa Records）。对于结构化Log数据，可以直接展现给用户，也可以利用MR程序对其进行进一步分析，还可以通过MDL构件将其导入关系数据库中使用SQL语句进行查询。<br>![[file-20250925093854062.jpg | 500]]</li>
+</ul>
+<p>整体效率不太高，主要是MR任务的启动开销及中间数据和结果数据多次磁盘读／写造成的。</p>
+<h3 id="Scribe"><a href="#Scribe" class="headerlink" title="Scribe"></a>Scribe</h3><p>Scribe是Facebook开源的分布式日志收集系统，其可以从集群中的机器节点收集汇总Log信息并送达中央数据存储区（HDFS或者NFS），之后可以对其进行进一步的分析处理。Scribe具备高扩展性和高容错能力。</p>
+<ul>
+<li>应用程序作为Thrift客户端来和Scribe服务器通信，将本地Log信息及其信息分类发送到Scribe服务器。使用Thrift的好处是显而易见的，它允许应用程序使用多种语言来做Log收集，具备较大灵活性。</li>
+<li>Scribe服务器可以是单机也可以是集群，其内部维护了消息队列，队列内容即各个客户端 发送的信息。Scribe服务器后端可以将队列内容消费传达中央存储区（HDFS、NFS或者另外的Scribe服务器），如果中央存储区不可用，Scribe将信息先存入本地磁盘，待其可用时再转发过去，这样整个系统就具备较好的容错能力。</li>
+</ul>
+<p>![[file-20250925094112176.jpg | 500]]</p>
+<h2 id="数据总线"><a href="#数据总线" class="headerlink" title="数据总线"></a>数据总线</h2><p>数据总线的作用就是能够形成数据变化通知通道，当集中存储的数据源（往往是关系型数据库）的数据发生变化时，能尽快通知对数据变化敏感的相关应用或者系统构件，使得它们能尽快捕获这种数据变化。<br>设计数据总线系统时要关注以下3个特性。</p>
+<ul>
+<li>近实时性：因为很多应用希望能尽可能快地捕获数据变化，所以这种变化通知机制越快越好。</li>
+<li>数据回溯能力：应用可以重新获取指定时刻的历史数据变化情况。</li>
+<li>主题订阅能力：数据总线最好能够支持应用灵活地订阅其关心的数据变化情况。</li>
+</ul>
+<p>有两种不同的实现思路：应用双写（Dual Write）或者数据库日志挖掘。<br>![[file-20251010185947253.jpg | 400]]</p>
+<ul>
+<li>“应用双写”：指应用将数据变化同时写入数据库以及某个Pub-Sub消息系统中，关注数据变化的应用可以订阅Pub-Sub消息系统中自己关心的主题，以此来获得数据通知，即数据库的归数据库，应用的归消息系统。</li>
+<li>数据库日志挖掘：应用先将数据变更写入数据库，数据总线从数据库的日志中挖掘出数据变化信息，然后通知给关心数据变化的各类应用。<ul>
+<li><strong>Databus</strong>：为了加快数据通知速度，Databus采用了内存数据中继器（Relay），中继器本质上是个环状的内存缓冲区，之所以设计成环状，是考虑内存大小有限，只能保存一定量的最新更新，所以当更新数据超出缓冲区大小时，相对旧的数据会被新数据覆盖。</li>
+<li><strong>Wormhole</strong>：其将数据库数据变化信息高效地通知感兴趣的相关应用。目前Wormhole已经成为Facebook整体工程架构中的重要一环，每日通过Wormhole传达的数据变化消息高达10亿条之多。</li>
+</ul>
+</li>
+</ul>
+<h2 id="数据导入-导出"><a href="#数据导入-导出" class="headerlink" title="数据导入&#x2F;导出"></a>数据导入&#x2F;导出</h2><p>Sqoop是专门在Hadoop和其他关系型数据库或者NoSQL数据库之间进行相互之间数据导入和导出的开源工具。在其内部实现时，具体的导入／导出工作是通过可以连接并操作数据库的MR任务完成的。<br>![[file-20251010191103194.jpg | 500]]</p>
+<p>Sqoop1中只提供了命令行工具，而Sqoop2则将Sqoop抽离为独立的服务，并新增了Web Browser操作界面以及Rest调用接口。同时，Sqoop1只能以JDBC方式连接数据库，而Sqoop2不仅可以支持更多连接方式，在封装连接器（Connector）时也更加简易便捷。另外，Sqoop1只支持对Hadoop数据的安全认证（Kerberos），而Sqoop2则增加了对外部数据库的认证支持。</p>
+<p>Sqoop是在Hadoop和其他数据存储方式之间进行数据导入／导出的便捷工具，可以极大地提高此类工作的效率。</p>
+<h1 id="第8章-分布式文件系统"><a href="#第8章-分布式文件系统" class="headerlink" title="第8章 分布式文件系统"></a>第8章 分布式文件系统</h1><h2 id="Google文件系统"><a href="#Google文件系统" class="headerlink" title="Google文件系统"></a>Google文件系统</h2><p>FS是其他相关技术的基石，因为GFS提供了海量非结构化信息的存储平台，并提供了数据的冗余备份、成千台服务器的自动负载均衡以及失效服务器检测等各种完备的分布式存储功能。</p>
+<h3 id="设计原则"><a href="#设计原则" class="headerlink" title="设计原则"></a>设计原则</h3><ul>
+<li>冗余备份、自动检测机器是否还在有效提供服务、故障机器的自动恢复</li>
+<li>针对这种大文件的读／写操作做出优化</li>
+<li>系统中存在大量的“追加写”操作，即将新增内容追加到已有文件的末尾，已经写入的内容一般不做更改，很少有文件的“随机写”行为</li>
+</ul>
+<h3 id="整体架构-1"><a href="#整体架构-1" class="headerlink" title="整体架构"></a>整体架构</h3><p>![[file-20251029201231991.jpg | 500]]<br>GFS文件系统主要由3个组成部分构成：唯一的“主控服务器”（Master）、众多的“Chunk服务器”和“GFS客户端”。“主控服务器”主要做管理工作，“Chunk服务器”负责实际的数据存储并响应“GFS客户端”的读／写请求。</p>
+<ul>
+<li>GFS命名空间由众多的目录和GFS文件构成，一个GFS文件由众多固定大小的Chunk构成，而每个Chunk又由更小粒度的Block构成，Chunk是GFS中基本的存储单元，而Block是基本的读取单元。</li>
+</ul>
+<p>![[file-20251029201555539.jpg | 500]]</p>
+<h3 id="主控服务器"><a href="#主控服务器" class="headerlink" title="主控服务器"></a>主控服务器</h3><p>主控服务器主要从事系统元数据存储管理以及整个分布式系统的管理，比如负载均衡，数据在存储服务器之间迁移，检测新加入的机器以及失效机器等工作。</p>
+<p>维持整个系统正常运转需要3类元数据。</p>
+<ul>
+<li>GFS命名空间和Chunk命名空间</li>
+<li>从文件到其所属Chunk之间的映射关系</li>
+<li>每个Chunk在哪台“Chunk服务器”存储的信息</li>
+</ul>
+<p>为了避免单一“主控服务器”可能存在的单点失效问题，GFS采用了增加另外一台“影子服务器”（Shadow）的方式，当“主控服务器”出现故障无法提供服务时，可由影子服务器接替“主控服务器”行使对应的管理功能。</p>
+<h3 id="系统交互行为"><a href="#系统交互行为" class="headerlink" title="系统交互行为"></a>系统交互行为</h3><p>为了方便管理，GFS对于多个相互备份的Chunk，从中选出一个作为“主备份”，其他的被称作“次级备份”，由“主备份”决定“次级备份”的数据写入顺序</p>
+<p>![[file-20251029202339323.jpg | 400]]</p>
+<ul>
+<li>GFS客户端首先和“主控服务器”通信，获知哪些“Chunk服务器”存储了要写入的Chunk，包括“主备份”和两个“次级备份”的地址数据。</li>
+<li>之后，GFS客户端将要写入的数据推送给3个备份Chunk，备份Chunk首先将这些待写入的数据放在缓存中</li>
+<li>然后通知GFS客户端是否接收成功，如果所有的备份都接收数据成功，GFS客户端通知“主备份”可以执行写入操作。</li>
+</ul>
+<h3 id="Colossus"><a href="#Colossus" class="headerlink" title="Colossus"></a>Colossus</h3><p>Colossus是Google的下一代GFS分布式文件系统，尚未有公开文献讲述其技术细节，从零星公开资料中可以看到其对GFS的改进集中在以下几个方面。</p>
+<ul>
+<li>将单一主控服务器改造为多主控服务器构成的集群，将所有管理数据进行数据分片后分配到不同的主控服务器中，这样整个分布式文件系统的水平扩展性得到了极大增强，使得系统可以容纳更多数量的文件。</li>
+<li>Colossus使用了Reed-Solomon纠删码算法来实现这一点，这样可以在提供相同服务情形下大大减少硬件成本。</li>
+<li>Colossus增加了客户端的灵活性，使得客户端可以管理备份数据的存储地点</li>
+</ul>
+<h2 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h2><p>从Hadoop 2.0开始提出高可用方案（High Availability，HA）和NameNode联盟（NameNode Federation）。其中HA是为了解决单点失效问题，而NameNode联盟则是为了解决整个系统的水平扩展问题。</p>
+<h3 id="HDFS整体架构"><a href="#HDFS整体架构" class="headerlink" title="HDFS整体架构"></a>HDFS整体架构</h3><p>![[file-20251031145834448.jpg | 500]]</p>
+<ul>
+<li>NameNode：负责管理整个分布式文件系统的元数据，包括文件目录树结构、文件到数据块Block的映射关系、Block副本及其存储位置等各种管理数据。这些数据保持在内存中，同时在磁盘保存两个元数据管理文件：fsimage和editlog；负责DataNode的状态监控，两者通过短时间间隔的心跳来传递管理信息和数据信息。</li>
+<li>Secondary NameNode：定期从NameNode拉取fsimage和editlog文件并对这两个文件进行合并，减轻NameNode的工作压力，NameNode本身并不做这种合并操作。所以本质上Secondary NameNode是个提供检查点功能服务的服务器。</li>
+<li>DataNode：负责数据块的实际存储和读／写工作</li>
+<li>客户端：和NameNode联系获取所需读／写文件的元数据，实际的数据读／写都是和DataNode直接通信完成的。</li>
+</ul>
+<h3 id="HA方案"><a href="#HA方案" class="headerlink" title="HA方案"></a>HA方案</h3><p>为了避免“主控服务器”的单点失效问题，Hadoop 2.0给出了一个解决方案。“主控服务器”由Active NameNode（简称ANN）和Standby NameNode（简称SNN）一主一从两台服务器构成，ANN是当前响应客户端请求的服务器，SNN作为冷备份或者热备份机，在ANN发生故障时接管客户端请求并由SNN转换为ANN。</p>
+<p>![[file-20251104140305579.jpg | 450]]</p>
+<p>一致性保证：</p>
+<ul>
+<li>使用第三方共享存储（NAS+NFS）来保存目录文件等命名空间元数据（editlog），ANN将元数据的更改信息写入第三方存储，SNN从第三方存储不断获取更新的元数据并体现在内存元数据中，以此来达到两者的数据一致性。很多第三方存储自带很强的冗余与容错机制，所以其可靠性要比单台服务器强得多。</li>
+<li>所有DataNode同时将心跳信息发送给ANN和SNN。由于NN中的Block Map信息并不存储在命名空间元数据中，而是在NN启动时从各个DataNode获得的，为了能够使得故障切换时新ANN避免这一耗时行为，所以DataNode同时将信息发送给ANN和SNN。</li>
+</ul>
+<p>一键切换的保障：</p>
+<ul>
+<li>以上措施只能保证SNN的元数据和ANN保持一致，但是还不能够实现故障自动切换，为了达到这一点，HA解决方案采用了独立于NN之外的故障切换控制器（Failover Controller，FC）</li>
+<li>FC用于监控NN服务器的硬件、操作系统及NN本身等各种健康状况信息，并不断地向ZooKeeper写入心跳信息，ZooKeeper在此用作“领导者选举”，当ANN发生故障时，ZooKeeper重新选举SNN作为“主控服务器”，FC通知SNN从备份机转换为主控机。在Hadoop系统刚启动时，两台服务器都是SNN，通过ZooKeeper选举使得某台服务器成为ANN。<br>采取独立于NN的FC：</li>
+<li>因为NN在做垃圾回收（GC）的时候很可能在较长时间（10秒左右）内整个系统无响应，所以无法向ZooKeeper正常写入心跳信息</li>
+<li>在设计原则上应该将监控程序和被监控程序进行分离而非绑定在一起。</li>
+</ul>
+<p>脑裂问题：整个系统中同时有两个或者多个活跃的“主控服务器”<br>预防措施：</p>
+<ul>
+<li>第三方共享存储： 需要保证在任一时刻，只有一个NN能够写入。</li>
+<li>DataNode： 需要保证只有一个NN发出与管理数据副本有关的删除命令。</li>
+<li>客户端： 需要保证同一时刻只能有一个NN能够对客户端请求发出正确响应。</li>
+</ul>
+<p>还是存在缺点：</p>
+<ul>
+<li>第三方存储仍然存在单点失效可能</li>
+<li>需要在多处进行隔离措施以防止脑裂现象出现</li>
+</ul>
+<p>Cloudera在其Hadoop发行版中提供了基于QJM（Quorum Journal Manager）的HA方案：<br>![[file-20251104141839945.jpg | 300]]</p>
+<p>利用Paxos协议在多台备份机之间选举“主控服务器”的经典应用：QJM在2F +1个JournalNode中存储NN的editlog，每次写入操作如果有F 台服务器返回成功即可认为成功写入，通过Paxos协议保证数据的一致性，QJM最多可以容忍F 个JournalNode同时发生故障而系统仍然可以正常运行。</p>
+<p>此方案的优势：</p>
+<ul>
+<li>彻底解决了单点失效问题，且可容忍最大故障JournalNode个数可通过配置进行管理。</li>
+<li>无须配置额外的第三方存储设备，这对于目前流行的采用普通商用服务器构建大规模集群的模式来说，减少了整个系统的复杂度和维护成本。</li>
+<li>无须防脑裂而单独在多处采用隔离措施，因为QJM本身内置了该功能</li>
+</ul>
+<h3 id="NameNode联盟"><a href="#NameNode联盟" class="headerlink" title="NameNode联盟"></a>NameNode联盟</h3><p>Hadoop 1.x 中的HDFS由于采取单一NN的架构，会导致系统具有如下缺陷：</p>
+<ul>
+<li>命名空间可扩展性差：机器物理内存的大小限制了整个HDFS能够容纳文件的最大个数</li>
+<li>性能可扩展性差：单一NN导致所有请求都由一台服务器响应，容易达到机器吞吐极限，造成系统整体性能的提升无法做到水平扩展</li>
+<li>隔离性差：单一NN的架构无法在租户之间进行隔离，会造成不可避免的相互影响</li>
+</ul>
+<p>从Hadoop 2.0开始，HDFS通过NameNode联盟的方式来解决上述问题</p>
+<p>核心思想：将一个大的命名空间切割成若干子命名空间，每个子命名空间由单独的NN来负责管理，NN之间独立，相互之间无须做任何协调工作。所有的DataNode被多个NN共享，仍然充当实际数据块的存储场所。而子命名空间和DataNode之间则由数据块管理 层作为中介建立映射关系，数据块管理层由若干数据块池（Pool）构成，每个数据块唯一属于某个固定的数据块池，而一个子命名空间可以对应多个数据块池。</p>
+<p>![[file-20251104143934958.jpg | 350]]</p>
+<h2 id="HayStack存储系统"><a href="#HayStack存储系统" class="headerlink" title="HayStack存储系统"></a>HayStack存储系统</h2><p>HayStack是Facebook公司设计开发的一种“对象存储系统”</p>
+<p>“对象”（Blob数据）往往是指满足一定性质的媒体类型，类似于图片数据的存储有其自身特点，典型的特征是：一次写入，多次读取，从不更改，很少删除。</p>
+<p>为了减少系统读取压力，对于海量的静态数据请求，一般会考虑使用CDN来缓存热门请求，这样大量请求由CDN系统就可以满足。HayStack存储系统的初衷是作为CDN系统的补充，即热门请求由CDN系统负责，长尾的图片数据请求由HayStack系统负责。</p>
+<p>HayStack在设计时，从两个方面来考虑减少“元数据”的总体数量：一方面是由多个图片数据拼接成一个数据文件，这样就可以减少用于管理数据的数量；另一方面，由于一个图片的“元数据”包含多个属性信息，故HayStack考虑将文件系统中的“元数据”属性减少，只保留必需的属性。</p>
+<h3 id="HayStack整体架构"><a href="#HayStack整体架构" class="headerlink" title="HayStack整体架构"></a>HayStack整体架构</h3><ul>
+<li>物理卷：存储多个图片数据对应的某个文件，一般一个“物理卷”文件大小为100GB</li>
+<li>逻辑卷：不同机器上的若干“物理卷”共同构成一个“逻辑卷”</li>
+</ul>
+<p>![[file-20251104145009455.jpg | 400]]</p>
+<p>HayStack由3个部分构成：HayStack目录服务、HayStack缓存系统和HayStack存储系统。<br>![[file-20251104145131701.jpg | 400]]</p>
+<h3 id="目录服务"><a href="#目录服务" class="headerlink" title="目录服务"></a>目录服务</h3><p>采用数据库实现的，提供多种功能：</p>
+<ul>
+<li>“目录服务”保存了从“逻辑卷”到“物理卷”的映射关系表，这样在用户上传图片和读取图片时可以找到正确的文件。</li>
+<li>提供了HayStack存储系统的负载均衡功能，保证图片写入和读取在不同机器之 间负载是相当的，不至于出现机器之间忙闲不均的状况。</li>
+<li>决定是将用户请求直接提交给缓存系统还是提交给CDN，以此来对这两者接收到的请求量进行均衡。</li>
+</ul>
+<h3 id="HayStack缓存"><a href="#HayStack缓存" class="headerlink" title="HayStack缓存"></a>HayStack缓存</h3><p>HayStack缓存从功能上讲是与CDN一致的，缓存接收到的访问请求可能来自CDN，也可能直接来自用户浏览器请求。在其内部实现，HayStack采用哈希表的方式存储图片ID和其对应的数据，如果在缓存内没有找到图片，则从HayStack存储系统中读取图片，并加入缓存中，之后将图片内容传给CDN或者直接传递给用户。</p>
+<h3 id="HayStack存储系统的实现"><a href="#HayStack存储系统的实现" class="headerlink" title="HayStack存储系统的实现"></a>HayStack存储系统的实现</h3><p>![[file-20251104145833765.jpg]]</p>
+<p>对于每个“物理卷”文件，由一个“超级块”和图片数据组成。每个图片的信息被称为一个Needle，具体包含图片属性信息，其中比较重要的属性信息包括图片唯一标记Key和辅助Key、删除标记位、图片大小以及图片数据，除此之外还包含一些管理属性以及数据校验属性。</p>
+<p>存取过程：</p>
+<ul>
+<li><strong>读取图片</strong>：HayStack缓存系统会向存储系统提供图片的“逻辑卷”ID编号以及图片ID（由Key和辅助Key构成），当存储系统接收到请求后，会在内存中的“物理卷”映射表中查找图片ID，如果找到，则根据映射表保存的信息可以获取其在对应“物理卷”中的文件起始位置 和文件大小</li>
+<li><strong>上传图片</strong>：HayStack存储系统根据Web服务器传过来的图片“逻辑卷”ID编号以及图片ID和图片数据，将这个图片信息追加到对应的“物理卷”文件末尾，同时在内存的映射表中增加相应的映射信息。</li>
+<li><strong>上传更改图片</strong>：当作一个新的图片追加到“物理卷”的文件末尾，不过这个图片的ID是不变的。</li>
+<li><strong>删除某张图片</strong>：只要在内存映射表和“物理卷”中在相应的“删除标记位置”上做出标记即可。系统会在适当的时机回收这些被删除的图片数据空间。</li>
+</ul>
+<h2 id="文件存储布局"><a href="#文件存储布局" class="headerlink" title="文件存储布局"></a>文件存储布局</h2><p>底层文件存储布局对于将数据加载入数据仓库的效率、响应用户查询的速度，以及对于底层存储架构磁盘空间利用率的提升都有直接且重要的影响。</p>
+<p>常见的文件存储布局有行式存储、列式存储及混合式存储3种类别，目前的大数据分析系统中，列式和混合式存储方案因为其特殊优点被广泛使用，其中RCFile、ORCFile及Parquet等代表性的方案被广泛集成到各种大数据分析系统的底层架构中。</p>
+<h3 id="行式存储"><a href="#行式存储" class="headerlink" title="行式存储"></a>行式存储</h3><p>行式存储广泛使用在主流关系型数据库及HDFS文件系统中，每条记录的各个字段连续存储在一起，而对于文件中的各个记录也是连续存储在数据块中的。<br>![[file-20251104151014798.jpg | 500]]<br>明显缺陷：</p>
+<ul>
+<li>对于很多SQL查询来说，其所需读取的记录可能只涉及整个记录所有字段中的部分。要将整个记录全部读出后才能读取到所需的字段；</li>
+<li>对于记录的所有字段只能统一采用同一种压缩算法，这样的压缩模式导致数据压缩率不高，所以磁盘利用率不是很高。<br>优势：</li>
+<li>按行遍历或者查找数据，此时较适合使用此种存储布局，因为行数据连续存储，所以能够一次性地将所有字段的内容读出</li>
+</ul>
+<h3 id="列式存储"><a href="#列式存储" class="headerlink" title="列式存储"></a>列式存储</h3><p>列式存储布局在实际存储数据时，按照列对所有记录进行垂直划分，将同一列的内容连续存放在一起。在各种应用场景中，记录数据的格式有简单的和复杂的两种。</p>
+<ul>
+<li><strong>列族方式：</strong></li>
+</ul>
+<p>典型的列式存储布局是按照记录的不同列，对数据表进行垂直划分，同一列的所有数据连续存储在一起。一方面对于上层的大数据分析系统来说，如果SQL查询只涉及记录的个别列，则只需读取对应的列内容即可；另一方面可以针对每列数据的类型采取具有针对性的数据压缩算法。</p>
+<p>缺陷：经典的MR任务往往需要遍历每条数据记录，并处理记录的各个字段或者多个字段，为了拼合出完整记录内容，可能需要大量的网络传输才行，很明显这样效率会比较低下</p>
+<p><strong>列族</strong>：将记录的列进行分组，将经常一起使用的列分为一组，这样即使是按照列式来存储数据的，也可以将经常联合使用的列数据存储在一个数据块中，避免不必要的网络传输来获取多列数据，对于某些场景会较大提高系统性能</p>
+<p>![[file-20251104170158393.jpg | 300]]</p>
+<p>BigTable和HBase的底层GFS或者HDFS存储布局就是采用上述列族方式。</p>
+<ul>
+<li><strong>Dremel的列存储方式</strong></li>
+</ul>
+<p>Google开发的针对海量数据进行交互式查询与数据分析应用场景的大数据分析系统，利用Dremel，可以对存储在数以千计GFS或者BigTable服务器上的海量数据进行秒级别的SQL查询，其能处理的数据量之大以及处理效率之高给人留下了深刻印象，而其中很关键的一点就是针对复杂嵌套数据的列式存储。</p>
+<p>复杂嵌套式数据类型进行形式化定义：![[file-20251104170902491.jpg | 300]]<br>其中的τ 可以是原子型或者记录型结构，所谓原子型是指整数型、浮点数型或者字符串型等基础类型。如上定义可见，每个记录可以由若干字段（Field）构成，第i 个字段有其名称Ai 及其字段内容，字段内容可带有描述符<em>或者？，描述符</em>代表可重复（Repeated）</p>
+<ul>
+<li><strong>混合式存储方式</strong></li>
+</ul>
+<p>混合式存储布局融合了行式和列式存储各自的优点，首先其将记录表按照行进行分组，若干行划分为一组，而对于每组内的所有记录，在实际存储时按照列将同一列内容连续存储在一起。</p>
+<p>典型的混合式存储方案包括RCFile、ORCFile和Parquet。其中，RCFile和ORCFile已经集成进入Hive系统，而Parquet则是Twitter模仿Dremel的列式存储开发并开源出的文件布局方案，因其效率极高而受到广泛关注。</p>
+<ul>
+<li>RCFile<br>首先将记录表内的记录按照行划分为行组（Row Group），HDFS每个数据块可以包含多个行组数据。对于每个行组，存储3类信息：Sync是行组同步标识，用于识别是否是数据块中一个新的行组开始；元数据（Metadata Header）则记录了这个行组包含多少记录，每列占用空间大小等数据；另外一类是实际数据，在数据块中按照列式存储。<br>![[file-20251104171757431.jpg | 450]]</li>
+<li>ORCFile<br>ORCFile是一种针对RCFile提出的优化的文件存储布局方案,包含若干数据行组，每个数据行组被称为数据带（Stripe），文件尾（File Footer）记录文件中所有数据带的元信息，比如有多少个数据带，每个数据带包含的记录个数及每列采用何种 数据压缩算法等信息，同时也记录每列的统计信息，比如该列的最大值、最小值等。附录（Postscript）中记载了压缩算法的参数信息。</li>
+</ul>
+<p>![[file-20251104171848103.jpg | 300]]</p>
+<ul>
+<li>Parquet<br>Parquet是Twitter参照Dremel的列式存储方案开发的针对Hadoop的混合式文件布局方案，目前已有开源版本。一个HDFS文件由若干行组构成，每个行组的各个列形成一个列数据块（Column Chunk），而每个列数据块又被细分为若干个数据页（Page），每个数据页内连续存放列数据，每个列数据则采取类似Dremel的重复层、定义层和列数据项来存储相关信息。而在文件尾 （Footer）则存储了关于行组、列数据块及数据页的元数据。</li>
+</ul>
+<p>![[file-20251104172030860.jpg | 450]]</p>
+<h2 id="纠删码"><a href="#纠删码" class="headerlink" title="纠删码"></a>纠删码</h2><p>对于热点数据，在大规模存储系统中仍然保留3个备份，而对于冷数据，则只保留1份数据，通过纠删码来保证数据的可靠性。之所以不对所有数据都采用纠删码的方式，是因为备份数据除了能够增加数据的可用性外，还可以提升数据的并发读取效率，所以对于热点数据用多备份的方式比较合适。</p>
+<p><strong>纠删码</strong>：通过对原始数据进行校验并保留校验数据，以增加冗余的方式来保证数据的可恢复性。极大距离可分码一种非常常用的纠删码，其将数据文件切割为等长的n个数据块，并根据这n个数据生成m个冗余的校验信息，这样使得n+m块数据中即使任意m块数据损失，也可以通过剩下的n块数据对m块损失的数据进行重构，以此来完成数据容错功能。</p>
+<p>介绍两种：</p>
+<ul>
+<li>Reed-Solomon：最典型的MDS编码，目前在Google的Colossus以及Facebook的HDFS-RAID都已经引入这种编码</li>
+<li>局部可修复编码：并非MDS编码，这是针对RS编码在分布式存储中面临的问题而在最近提出的一种编码，微软的AWS云存储系统及Facebook的Xorbas系统都采用了这种编码。</li>
+</ul>
+<h3 id="Reed-Solomon编码"><a href="#Reed-Solomon编码" class="headerlink" title="Reed-Solomon编码"></a>Reed-Solomon编码</h3><p>目前Google在Colossus以及Facebook在HDFS-RAID中都已经实现并部署了RS编码来减少存储成本。</p>
+<p>n&#x3D;8，m&#x3D;2配置下的RS编码示意图，对于8块原始数据，两个函数F1 和F2以这些数据块数据作为输入，生成对应的校验数据块C1和C2 ，这种配置可以容忍10块数据中任意损失2块数据而不会造成数据丢失。<br>![[file-20251104192952726.jpg | 300]]<br>已知n 个数据字d1，d2，…，dn分别存储在不同的存储设备上，需要根据这些数据字计算m个校验字c1，c2，…，cm，使得n+m个数据字可以容忍最多m个数据损失。</p>
+<p>编码涉及3个问题：<br>1．使用Vandermonde矩阵（Vandermonde Matrix）计算原始数据的校验字。<br>2．使用高斯消元法（Gaussian Elimination）从数据错误中恢复原始数据。<br>3．在有限域（Galois Fields）上进行快速计算。</p>
+<h3 id="LRC编码"><a href="#LRC编码" class="headerlink" title="LRC编码"></a>LRC编码</h3><p>RC编码的缺点：<br>如果将一个文件划分成10个数据块，即使只有其中一个数据块损毁，也需要其他所有数据块来共同恢复这个损毁的数据块。在分布式网络环境下，数据块往往存储在不同机器节点，这意味着即使单台存储机器发生故障，为了恢复少量数据块，需要大量的网络传输和磁盘I&#x2F;O才能够将其进行恢复。</p>
+<p>LRC的提出就是为了解决这一难题，所以LRC面临的问题是：能否在可靠性与RS编码大致相同的情况下，减少恢复损毁数据所需的数据块数量。</p>
+<p><strong>块局部性</strong>：对于某个纠删码来说，要对一个数据块编码，最多需要多少其他的数据块。<br><strong>最小码距</strong>：对于切割成n块的文件，最少损毁多少块数据文件就不可恢复了。</p>
+<p>用XorBas中实现的(10, 6, 5)LRC编码来对LRC进行具体说明，这里(10, 6, 5)配置的含义是：通过LRC编码，对于10块原始数据，生成6块校验数据，其编码的最小码距是5。</p>
+<p>LRC本质上是在RS编码基础上通过增加数据冗余来换取校验数据的局部性。</p>
+<h3 id="HDFS-RAID架构"><a href="#HDFS-RAID架构" class="headerlink" title="HDFS-RAID架构"></a>HDFS-RAID架构</h3><p>HDFS-RAID是Facebook开源的在HDFS上引入(10,4)RS编码的文件系统，一般称为DRFS（Distributed Raid File system）。DRFS中的文件被切割成数据带（Stripe），每个数据带由若干个数据块（Block）构成。对于每个数据带，DRFS根据原始数据块计算其对应的校验数据块并分别存储。</p>
+<p>HDFS-RAID的系统架构中最主要的是RaidNode和BlockFixer，其对应的功能如下。</p>
+<ul>
+<li>RaidNode：对DRFS中的文件建立和维护对应的校验数据文件</li>
+<li>BlockFixer：与RaidNode运行在同一机器上的独立进程。它周期性地扫描文件系统，从已经经过RS编码的文件中识别出那些损毁的，对于这些损毁数据块，也是通过MR程序，获得其所在数据带其他数据块文件和校验文件，之后对损毁数据块进行恢复的。</li>
+</ul>
+<h1 id="第9章-内存KV数据库"><a href="#第9章-内存KV数据库" class="headerlink" title="第9章 内存KV数据库"></a>第9章 内存KV数据库</h1><ul>
+<li>在大规模存储环境下，为了数据的高可用性，往往会将同一个数据保存3份，这对于以外存存储数据为主的系统来说不是障碍，因为其存储成本较低</li>
+<li>对于内存来说则是个问题，毕竟相对外存和SSD来说，内存的成本还是比较高的。<ul>
+<li>忽略成本提高可用性，与外存存储系统一样，在内存里对数据进行备份</li>
+<li>只在内存保留一份数据，数据备份放在磁盘或者SSD中</li>
+</ul>
+</li>
+</ul>
+<p>RAMCloud采取了第2种策略，Redis和Membase采取了第1种策略。</p>
+<h2 id="RAMCloud"><a href="#RAMCloud" class="headerlink" title="RAMCloud"></a>RAMCloud</h2><p>斯坦福大学提出的大规模集群下的纯内存KV数据库系统，最大的特点是读／写效率高，其设计目标是在数千台服务器规模下读取小对象速度能够达到5～10纳秒，这种速度是目前常规数据中心存储方案性能的50～1000倍。</p>
+<p>只在服务器内存放置一份原始数据，同时将数据备份存储在集群其他服务器的外存中，以此达到数据的持久化与安全性并兼顾整体存储成本。</p>
+<h3 id="整体架构-2"><a href="#整体架构-2" class="headerlink" title="整体架构"></a>整体架构</h3><p>![[file-20251106194602589.jpg | 500]]<br>存储服务器由高速网络连接，每台存储服务器包含两个构件：Master和Backup。Master负责内存KV数据的存储并响应客户端读／写请求，Backup负责在外存存储管理其他服务器节点内存数据的数据备份。</p>
+<p>协调器：记载集群中的一些配置信息，比如各个存储服务器的IP地址等，另外还负责维护存储对象和存储服务器的映射关系，即某个存储对象是放在哪台服务器的。</p>
+<h3 id="数据副本管理与数据恢复"><a href="#数据副本管理与数据恢复" class="headerlink" title="数据副本管理与数据恢复"></a>数据副本管理与数据恢复</h3><p>RAMCloud在内存和外存存储数据时都统一采用了LSM树方案，其对应的Log结构被切割为8MB大小的数据片段（Segment）。</p>
+<p>![[file-20251106195240362.jpg | 450]]</p>
+<ul>
+<li>当RAMCloud接收到写数据请求时，首先将其追加进入内存中的Log结构中，然后更新哈希表以记载记录在内存中的存储位置，这里之所以会需要哈希表，是因为内存数据采取LSM树结构后，是由若干个Log片段构成的，所以需要记载记录所在Log片段的位置信息。</li>
+<li>之后，RAMCloud的主数据服务器将新数据转发给其他备份服务器，备份服务器将新数据追加到内存中Log片段后即通知主数据服务器返回</li>
+</ul>
+<h2 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h2><p>著名的内存KV数据库，在工业界获得了广泛使用。其不仅支持基本数据类型，也支持列表、集合等复杂数据结构，所以有较强的表达能力，同时有非常高的单机读／写效率。</p>
+<p>![[file-20251106195846729.jpg | 300]]</p>
+<p>系统中唯一的Master负责数据的读／写操作，可以有多个Slave来保存数据副本，副本数据只能读不能做数据更新操作。</p>
+<ul>
+<li>当Slave初次启动时，从Master获取数据，在数据复制过程中，Master是非阻塞的，即同时可以支持读／写操作。</li>
+<li>Master采用快照加增量的异步方式完成数据复制过程，首先在时刻T将内存数据写入本地快照文件，同时在内存记录从T时刻起新增的数据操作，当快照文件生成结束后，Master将文件传给Slave，Slave先保存为本地文件，然后将其加载入内存</li>
+<li>Master将T时刻后的数据变更操作以命令流的形式传给Slave，Slave顺序执行命令流，这样就达到数据和Master保持同步。</li>
+</ul>
+<p>Redis的主从复制采用异步方式，Master发生故障可能会导致数据丢失。</p>
+<p>使用Keepalived结合虚拟IP来实现Redis的HA方案。Keepalived是软件路由系统，主要的目的是为应用系统提供简洁强壮的负载均衡方案和通用高可用方案。使用Keepalived实现Redis高可用方案思路如下。</p>
+<ul>
+<li>首先，在两台服务器（或者多台，机制类似）分别安装Redis并设置成一主一备。</li>
+<li>其次，Keepalived配置虚拟IP和两台Redis服务器IP的映射关系，这样，对外统一采用虚拟IP，而虚拟IP和真实IP的映射关系及故障切换由Keepalived来负责。当Redis服务器都正常时，数据请求由Master负责，Salve只需从Master同步数据；当Master发生故障时，Slave接管数据请求，同时关闭主从复制功能以避免Master再次启动后Slave数据被清掉；当发生故障的Master恢复正常后，首先从Slave同步数据以获得最新的数据情况，然后关闭主从复制功能并恢复Master身份，与此同时Slave恢复其Slave身份。这种方式可以在某种程度上提供高可用方案</li>
+</ul>
+<h1 id="第10章-列式数据库"><a href="#第10章-列式数据库" class="headerlink" title="第10章 列式数据库"></a>第10章 列式数据库</h1><h2 id="BigTable"><a href="#BigTable" class="headerlink" title="BigTable"></a>BigTable</h2><h3 id="BigTable的数据模型"><a href="#BigTable的数据模型" class="headerlink" title="BigTable的数据模型"></a>BigTable的数据模型</h3><p>BigTable本质上是一个三维的映射表，其最基础的存储单元是由（行主键、列主键、时间）三维主键（Key）所定位的。</p>
+<p>![[file-20251107181351589.jpg | 500]]<br>BigTable中的列主键包含两级，其中第一级被称为“列家族”（Column Families），第二级被称为“列描述符”（Qualifier），两者共同组成一个列的主键，即：列主键&#x3D;“列家族：列描述符”</p>
+<p>BigTable内可以保留同一信息随着时间变化的不同版本，这个不同版本由“时间”维度来进行表达。<br>![[file-20251107181725643.jpg | 400]]</p>
+<h3 id="BigTable的整体结构"><a href="#BigTable的整体结构" class="headerlink" title="BigTable的整体结构"></a>BigTable的整体结构</h3><p>BigTable的整体结构示意图：</p>
+<ul>
+<li>“子表服务器”主要负责子表的数据存储和管理，同时需要响应客户端程序的读／写请求，其负责管理的子表以GFS文件的形式存在，BigTable内部将这种文件称之为SSTable，一个子表就是由“子表服务器”磁盘中存储的若干个SSTable文件组成的。</li>
+<li>“主控服务器”负责整个系统的管理工作，包括子表的分配、子表服务器的负载均衡、子表服务器失效检测等。</li>
+<li>“客户端程序”则是具体应用的接口程序，直接和“子表服务器”进行交互通信，来读／写某个子表对应的数据。</li>
+</ul>
+<p>![[file-20251107181920571.jpg | 400]]</p>
+<h3 id="BigTable的管理数据"><a href="#BigTable的管理数据" class="headerlink" title="BigTable的管理数据"></a>BigTable的管理数据</h3><p>利用Chubby系统和一个被称为“元数据表”（MetaData Table）的特殊表格来共同维护系统管理数据：</p>
+<ul>
+<li>“元数据表”是BigTable中一个起着特殊作用的表，这个表格的每一行记载了整个BigTable中某个具体子表存储在哪台“子表服务器”上等管理信息</li>
+<li>“元数据表”中其他子表的每一行，则记录了BigTable中应用程序生成的表格（用户表）的某个子表的管理数据。其中，每一行以“用户表表名”和在这个子表内存储的最后一个“行主键”共同构成“元数据表”内此条记录的“行主键”，在记录行的数据里则存储了这个子表对应的“子表服务器”等其他管理信息。而Chubby中某个特殊文件则指出了“Root子表”所在的“子表服务器”地址。<br>![[file-20251107182218134.jpg | 500]]</li>
+</ul>
+<h3 id="主控服务器-1"><a href="#主控服务器-1" class="headerlink" title="主控服务器"></a>主控服务器</h3><p>“主控服务器”的启动流程：<br>![[file-20251107182311029.jpg | 500]]</p>
+<ul>
+<li>当“主控服务器”启动时，首先在Chubby中获得一个Master锁，这样可以阻止其他“主控服务器”再次启动，避免整个系统中出现多个管理节点。</li>
+<li>主控服务器读取Servers目录，从该目录下的文件可以获得每个子表服务器的地址信息。获得地址信息后，在之后的管理过程中，“主控服务器”就可以直接和“子表服务器”进行通信。</li>
+<li>在启动时，“主控服务器”和“子表服务器”通信，获知每个“子表服务器”存储了哪些子表并记录在内存管理数据中。</li>
+<li>“主控服务器”从Chubby的root节点可以读取MetaData元数据，这里记载了系统中所有子表的信息；</li>
+<li>通过MetaData和“子表服务器”反馈的信息，两者对比，可能会发现有一部分子表在MetaData中，但是没有“子表服务器”负责存储，说明这些子表是未获得分配的内容，所以将这些子表信息加入一个“未分配子表”集合中，之后会在适当的时机，将这些“未分配子表”分配给负载较轻的“子表服务器”。</li>
+</ul>
+<h3 id="子表服务器"><a href="#子表服务器" class="headerlink" title="子表服务器"></a>子表服务器</h3><p>“子表服务器”是BigTable系统中用来存储和管理子表数据的，从具体功能来讲，子表服务器支持以下功能。</p>
+<ul>
+<li>存储管理子表数据，包括子表存储、子表恢复、子表分裂、子表合并等。</li>
+<li>响应客户端程序对子表的读、写请求。</li>
+</ul>
+<ol>
+<li><p>更新子表数据：<br> 当“子表服务器”接收到数据更新请求时，首先将更新命令记入CommitLog文件中，之后将更新数据写入内存的MemTable结构中，当MemTable里容纳的数据超过设定大小时，将内容输出到GFS文件系统中，形成一个新的SSTable文件。一个具体的子表数据就是由若干个陆续从MemTable产生的SSTable文件构成的。从这里可以看出，BigTable的子表服务器对数据管理是个典型的LSM树结构。<br> ![[file-20251107182816083.jpg | 500]]<br> ![[file-20251107182904699.jpg|400]]</p>
+</li>
+<li><p>读取子表数据<br> 一个子表是由内存中的MemTable和GFS中存储的若干SSTable文件构成的。在MemTable和SSTable中存储的数据都是按照“行主键”的字母顺序排序的，所以很容易将这些文件看作一个按照“行主键”排好序的整体序列结构，而读取操作就是首先查找数据的存储位置，如果找到则读出数据。由于SSTable是在GFS文件系统中，为了增快查找速度，BigTable除了“块索引”外，还引入了“布隆过滤器（Bloom Filter）”算法，这种算法只占用少量内存，就可以快速判断某个SSTable文件是否包含要读取数据的“主键”，这样对于很多读操作而言，避免了在磁盘中查找，加快了读取速度。<br> ![[file-20251107183130818.jpg | 500]]</p>
+</li>
+<li><p>SSTable合并<br> 如果SSTable数量过多，会影响系统读取效率，所以“子表服务器”会周期性地对子表的SSTable和MemTable进行合并。根据合并规模的差异，存在3种不同类型的合并策略：微合并（Minor Compaction）、部分合并（Merging Compaction）以及主合并（Major Compaction）<br> ![[file-20251107183400379.jpg| 500]]</p>
+</li>
+<li><p>子表恢复<br> 当死机的“子表服务器”重新启动后，会从“元数据子表”（MetaData）中读取管理信息，包括“子表服务器”负责管理的子表对应哪些SSTable文件，以及CommitLog对应的恢复点（Redo Point）根据CommitLog恢复点，“子表服务器”可以找到CommitLog对应位置，恢复从这个位置之后的所有更新行为到MemTable中，这样就完成了MemTable的重建工作。从“元数据子表”中读取到对应的SSTable文件后，“子表服务器”将对应的SSTable的块索引读入内存，这样就能够完全恢复到死机前的状态。<br> ![[file-20251107183853559.jpg | 500]]</p>
+</li>
+</ol>
+<p>BigTable作为对海量数据存取可以实时响应的大规模存储系统，其很多设计思路对后续的NoSQL系统具有很大的影响。最典型的是Apache HBase，可以将其看作BigTable的开源版本，目前已广泛应用在各种大数据实时存取场景中。</p>
+<h2 id="PNUTS存储系统"><a href="#PNUTS存储系统" class="headerlink" title="PNUTS存储系统"></a>PNUTS存储系统</h2><p>PNUTS是Yahoo公司构建的提供在线数据服务的列式云存储系统，与其他的海量云存储系统相似，PNUTS采取了弱一致性模型，以这种宽松的一致性模型为代价，换取系统更好的可扩展性、高可用性以及强容错性。</p>
+<h3 id="PNUTS的整体架构"><a href="#PNUTS的整体架构" class="headerlink" title="PNUTS的整体架构"></a>PNUTS的整体架构</h3><p>PNUTS支持数据的多数据中心部署，每个数据中心被称为一个“区域”（Region），每个区域所部署的系统都是完全相同的，每条记录在每个区域都有相应的备份。每个区域内主要包含3个基本单元：“子表控制器”、“数据路由器”和“存储单元”，其中“存储单元”负责实际数据的存储，其他两个部分起到数据管理的作用，“消息代理”则横跨多个区域，主要负责数据在不同区域的更新与同步。</p>
+<p>![[file-20251107184629945.jpg | 700]]</p>
+<h3 id="存储单元"><a href="#存储单元" class="headerlink" title="存储单元"></a>存储单元</h3><p>“存储单元”负责实际数据的存储，对于每个二维数据表格，若干条记录组成一个“子表”（Tablet），每个“存储单元”负责存储几百个不同的“子表”，在具体某个区域内，只保留一份“子表”，数据的冗余存储是通过不同区域备份来实现的，即每条记录在每个区域都有一个备份。</p>
+<p>子表划分方式：</p>
+<ul>
+<li>“有序划分”，就是按照记录主键排序，然后将连续的一段记录划分成一个子表，每个子表内的记录主键仍然是有序的</li>
+<li>哈希划分基本思路与Dynamo系统的“一致性哈希”数据划分方式类似，即对所有记录的主键进行哈希计算，将所有哈希值看作一个闭环，将这个闭环切割，形成了不同的子表</li>
+</ul>
+<h3 id="子表控制器与数据路由器"><a href="#子表控制器与数据路由器" class="headerlink" title="子表控制器与数据路由器"></a>子表控制器与数据路由器</h3><p>数据路由器负责查找某条记录所在存储单元的位置，当客户端程序要对某个记录进行读／写时，会询问数据路由器应该和哪个存储单元通信，数据路由器在内存保留记录主键所在存储单元的映射表，通过查找映射表，告知客户端存储单元地址。<br>![[file-20251107184828312.jpg | 500]]</p>
+<h3 id="雅虎消息代理"><a href="#雅虎消息代理" class="headerlink" title="雅虎消息代理"></a>雅虎消息代理</h3><p>雅虎消息代理负责数据的更新与同步，来保持记录数据的一致性。雅虎消息代理采取“发布／订阅”的消息队列方式，并且横跨不同数据中心，以保持不同数据中心的数据一致<br>![[file-20251107184907649.jpg | 600]]<br>只要“主记录”完成更新操作并发布消息成功，即可以认为更新操作成功完成，之后的数据一致性由“雅虎消息代理”来保证.</p>
+<h3 id="数据一致性"><a href="#数据一致性" class="headerlink" title="数据一致性"></a>数据一致性</h3><p>PNUTS采取了记录级别的时间轴一致性，前文讲述过，所有更新操作都由“主记录”来完成，“雅虎消息代理”负责按照相同的更新顺序来更新所有其他“备份记录”。<br>![[file-20251107185043983.jpg | 700]]</p>
+<h2 id="Spanner"><a href="#Spanner" class="headerlink" title="Spanner"></a>Spanner</h2><p>Spanner是Google开发的可在全球范围部署的具有极强可扩展性的列式数据库系统，其可以将千亿规模的数据自动部署到世界范围数百个数据中心中的百万台服务器中，通过细粒度的数据备份机制极大地提高了数据的可用性以及地理分布上的数据局部性。Spanner具备数据中心级别的容灾能力，即使整个数据中心完全遭到破坏也可以保证数据的可用性。除此之外，Spanner还具备接近于传统数据库关系型模型的半结构化数据模型定义、类SQL查询语言以及完善的事务支持等特性。</p>
+<p>Spanner还具备传统分布式数据库系统所不具备的优点：其可提供外部一致（Externally Consistent）的读／写能力，以及跨数据库的全局一致性读能力。</p>
+<p><strong>通过TrueTime机制为分布式事务打上具有全局比较意义的时间戳</strong>，这个时间戳由于跨数据中心全局可比，所以可以将其作为事务序列化顺序（Serialization Order）的依据。</p>
+<p>Spanner是第一个能够在全局范围提供如下能力的分布式存储系统：<br>如果事务T1 的提交时间早于事务T2 的开始时间，那么T1 的提交时间戳要小于T2 的提交时间戳，即可以依据提交时间戳的大小顺序来将分布式事务全局序列化。</p>
+<p>整体架构：<br>一个Spanner部署被称为一个Universe，其由众多的Zones集合构成</p>
+<ul>
+<li>一个Zone类似于一套BigTable系统部署实例，数据可以跨数据中心进行备份。Zone是部署单位，可以整体从Universe中添加或者删除Zone，一个数据中心可以部署多个Zone。</li>
+<li>一个Zone由唯一的ZoneMaster、数量在一百到数千的SpanServer以及若干位置代理（Location Proxy）构成。<ul>
+<li>ZoneMaster负责向SpanServer分配其需要管理的数据，SpanServer负责响应客户端数据请求，位置代理为客户端程序进行数据路由来让其能够定位到对应的SpanServer。</li>
+</ul>
+</li>
+<li>一个Universe还包含Universe Master和一个Placement Driver，Universe Master是一个能够显示Zone 状态信息的控制台，Placement Driver负责数据在不同Zone之间进行自动迁移。</li>
+</ul>
+<p>![[file-20251120151559155.jpg | 400]]</p>
+<h3 id="SpanServer软件栈"><a href="#SpanServer软件栈" class="headerlink" title="SpanServer软件栈"></a><strong>SpanServer软件栈</strong></h3><p>一台SpanServer负责管理100～1000数量范围内的Tablet，Tablet类似于BigTable系统中的定义，不过与其不同的一点在于，SpanServer的Tablet为每个数据增加了时间戳。</p>
+<p>Tablet存储在被称为Colossus的第二代GFS系统之上。为了能够支持数据跨数据中心复制，SpanServer为每个Tablet构造一个单轮Paxos状态机（Single Paxos State Machine），每个状态机将其元数据和Log信息记入到对应的Tablet中。Paxos状态机用于维护数据副本之间的一致性，若干个副本Tablet组成一个Paxos组，其中一个副本作为领导者，所有写操作都由领导者的Paxos发起，而读操作则可以从任意一个副本中读出足够新的数据。</p>
+<p>![[file-20251120152048133.jpg | 400]]</p>
+<h3 id="数据模型-2"><a href="#数据模型-2" class="headerlink" title="数据模型"></a>数据模型</h3><p><strong>目录</strong>是Spanner进行数据复制与迁移的基本单位，一个Tablet往往由多个目录构成，目录内所有的记录主键有序，但是同一个Tablet内多个目录之间记录并不要求主键连续，这点是和BigTable中的Tablet有差异的地方</p>
+<p>一个Universe中可以有不同的数据库（Database），一个数据库可以由无限量的各种数据表（Table）构成，数据表与关系型数据库的数据模式类似，由数据行、数据行内的数据列以及数据版本构成。之所以说Spanner是半关系型数据模型而非纯关系型数据库，是因为其类似于NoSQL数据库，每行都需要有个明确指明的名字（Name），这个名字往往是由顺序的一个或多个主键数据列共同构成的。</p>
+<p>![[file-20251120152306500.jpg | 400]]</p>
+<h3 id="TrueTime"><a href="#TrueTime" class="headerlink" title="TrueTime"></a>TrueTime</h3><p>TrueTime的API如图所示，其中最核心的是<strong>TT.now()<strong>，其并非返回具体的时间点，而是</strong>返回一个时间区间</strong>TTinterval，TrueTime保证调用TT.now()的触发事件真实发生的时间一定落在这个时间区间之内，这种时间区间代表了时间表述的有界的不确定性。如果用t abs (e)表示事件e的绝对时间，那么TrueTime可以保证在事件e发生时刻调用TT.now()。另外两个API则是在TT.now()基础上封装而成的，代表了确定的时间先后关系。</p>
+<p>![[file-20251120152643397.jpg | 500]]</p>
+<p>TrueTime具体实现时综合了GPS和原子时钟来共同决定准确的时间，每个数据中心部署一些时间服务器（Time Master），其中一些机器通过GPS确定时间，另外一些通过原子时钟确定时间，其他所有机器都安装一个时间监控进程。时间服务器之间通过定时互询来修正各自的准确时间，以避免单台时间服务器的时间和真实时间偏离太远，时间监控进程定期从多个数据中心的多台时间服务器拉取它们各自的时间标准，通过一定算法保证每个服务器自己的时间落在真实时间的一定精度范围内。</p>
+<p>TrueTime提供了全局可比时间服务，再结合Paxos算法，Spanner可以提供读／写事务、只读事务以及快照读事务等各种分布式事务支持，并提供外部一致性读／写能力，这为上层应用开发带来了很大的灵活性和便利性。</p>
+<h1 id="第11章-大规模批处理系统"><a href="#第11章-大规模批处理系统" class="headerlink" title="第11章 大规模批处理系统"></a>第11章 大规模批处理系统</h1><h2 id="MapReduce计算模型与架构"><a href="#MapReduce计算模型与架构" class="headerlink" title="MapReduce计算模型与架构"></a>MapReduce计算模型与架构</h2><p>MapReduce分布式计算框架最初是由Google公司于2004年提出的，这不仅仅是一种分布式计算模型，同时也是一整套构建在大规模普通商业PC（成千台机器）之上的批处理计算框架。</p>
+<h3 id="计算模块"><a href="#计算模块" class="headerlink" title="计算模块"></a>计算模块</h3><p>对于某个计算任务来说，其输入是Key&#x2F;Value数据对，输出也以Key&#x2F;Value数据对方式表示：</p>
+<ul>
+<li>Map函数以Key&#x2F;Value数据对作为输入，将输入数据经过业务逻辑计算产生若干仍旧以Key&#x2F;Value形式表达的中间数据。MapReduce计算框架会自动将中间结果中具有相同Key值的记录聚合在一起，并将数据传送给Reduce函数内定义好的处理逻辑作为其输入值。</li>
+<li>Reduce函数接收到Map阶段传过来的某个Key值及其对应的若干Value值等中间数据，函数逻辑对这个Key对应的Value内容进行处理，一般是对其进行累加、过滤、转换等操作，生成Key&#x2F;Value形式的结果，这就是最终的业务计算结果。</li>
+</ul>
+<p>三个例子：<br>实例一：单词统计：<br>Map：Key值是某个网页的网页ID，对应的value是网页内容。Map操作对于每一个页面内容中依次出现的单词，产生中间数据&lt;w,1&gt;，代表了单词w在页面内容某个位置出现了一次<br>Reduce：Key值为某个单词，对应的Value为出现次数列表，通过遍历相同Key的次数列表并累加其出现次数，即可获得某个单词在网页集合中总共出现的次数。</p>
+<p>![[file-20251120160027802.jpg |350]]<br>实例二：链接反转</p>
+<p>![[file-20251120163822458.jpg | 350]]</p>
+<p>实例三：页面点击统计<br>![[file-20251120163929971.jpg | 350]]</p>
+<h3 id="系统架构-1"><a href="#系统架构-1" class="headerlink" title="系统架构"></a>系统架构</h3><ul>
+<li>Google的MapReduce框架<br>![[file-20251120164003448.jpg | 400]]</li>
+</ul>
+<p>Hadoop的MapReduce框架：<br>![[file-20251120164243215.jpg | 400]]</p>
+<ol>
+<li>MapReduce框架将应用的输入数据切分成M 个数据块，典型的数据块大小为64MB，然后可以启动位于集群中不同机器上的若干程序。</li>
+<li>Master负责为Worker分配具体的Map任务或者Reduce任务并做一些全局管理功能。整个应用有M 个Map任务和R 个Reduce任务，具体的M 和R 个数可以由应用开发者指定。</li>
+<li>被分配到Map任务的Worker读取对应的数据块内容，从数据块中解析出一个个Key&#x2F;Value记录数据并将其传给用户自定义的Map函数，Map函数输出的中间结果Key&#x2F;Value数据在内存中进行缓存。</li>
+<li>缓存的Map函数产生的中间结果周期性地被写入本地磁盘，每个Map函数的中间结果在写入磁盘前被分割函数（Partitioner）切割成R 份，R 是Reduce的个数。这里的分割函数一般是用Key对R 进行哈希取模，这样就将Map函数的中间数据分割成R 份对应每个Reduce函数所需的数据分片临时文件。Map函数完成对应数据块的处理后将其R 个临时文件位置通知Master，再由Master将其转交给Reduce任务的Worker。</li>
+<li>当某个Reduce任务Worker接收到Master的通知时，其通过RPC远程调用将Map任务产生的M 份属于自己的数据文件远程拉取（Pull）到本地。Reduce任务从Map任务获取中间数据时采用拉取方式而非由Map任务将中间数据推送（Push）给Reduce任务</li>
+<li>Reduce任务Worker遍历已经按照中间结果Key有序的数据，将同一个Key及其对应的多个Value传递给用户定义的Reduce函数，Reduce函数执行业务逻辑后将结果追加到这个Reduce任务对应的结果文件末尾。</li>
+<li>当所有Map和Reduce任务都成功执行完成时，Master便唤醒用户的应用程序，此时， MapReduce调用结束，进入用户代码执行空间。</li>
+<li>“Combiner操作”，即是在Map阶段执行的将中间数据中具有相同Key的Value值合并的过程，其业务逻辑一般和Reduce阶段的逻辑是相似的，和Reduce的区别无非是其在Map任务本地产生的局部数据上操作，而非像Reduce任务一样是在全局数据上操作而已。</li>
+</ol>
+<h3 id="MapReduce计算的特点及不足"><a href="#MapReduce计算的特点及不足" class="headerlink" title="MapReduce计算的特点及不足"></a>MapReduce计算的特点及不足</h3><ul>
+<li>优点：扩展、容错、简单</li>
+<li>缺点：无高层抽象数据操作语言、数据无Schema及索引、单节点效率低下、任务流描述方法单一等。<br>并不适合对时效性要求较高的应用场景：</li>
+<li>其Map和Reduce任务启动时间较长。</li>
+<li>在一次应用任务执行过程中，MapReduce计算模型存在多处的磁盘读／写及网络传输过程。</li>
+</ul>
+<h2 id="MapReduce计算模式"><a href="#MapReduce计算模式" class="headerlink" title="MapReduce计算模式"></a>MapReduce计算模式</h2><ul>
+<li>求和模式：<ul>
+<li>数值求和：统计计算包括简单计数、求最小值／最大值、求平均值／中位数等各种情况。</li>
+<li>记录求和：需要将非数值内容进行累加形成队列，一般应用中累加内容是对象的ID</li>
+</ul>
+</li>
+<li>求和模式：<ul>
+<li>简单过滤：根据一定条件从海量数据中筛选出满足条件的记录，比如对数据进行清理将无关数据清除、从大量数据中追踪感兴趣的记录、分布式Grep操作、记录随机抽样等。</li>
+<li>Top 10：从大量数据中，根据记录某个字段内容的大小取出其值最大的k 个记录</li>
+</ul>
+</li>
+<li>组织数据模式：<ul>
+<li>数据分片：将所有记录按照日期进行分类，将同一天的数据放到一起以进一步做后续数据分析</li>
+<li>全局排序：对于海量数据全局排序应用场景来说，可以充分利用MapReduce本身自带的排序特性来实现</li>
+</ul>
+</li>
+<li>Join模式：<ul>
+<li>Reduce-Side Join：解决数据集合Join操作的一种比较通用的方法，很多其他类型的Join操作也可以通过Reduce-Side Join来完成</li>
+<li>Map-Side Join：处理效率要高很多，因为其避免了Shuffle网络传输过程以及Reduce中的排序过程</li>
+</ul>
+</li>
+</ul>
+<h2 id="DAG计算模型"><a href="#DAG计算模型" class="headerlink" title="DAG计算模型"></a>DAG计算模型</h2><p>在大数据处理领域，DAG计算模型往往是指将计算任务在内部分解成为若干个子任务，这些子任务之间由逻辑关系或运行先后顺序等因素被构建成有向无环图结构。</p>
+<h3 id="DAG计算系统的三层结构"><a href="#DAG计算系统的三层结构" class="headerlink" title="DAG计算系统的三层结构"></a>DAG计算系统的三层结构</h3><p>由上到下三层结构：</p>
+<ul>
+<li>最上层是应用表达层，即通过一定手段将计算任务分解成由若干子任务形成的DAG结构，这层的核心是表达的便捷性，主要目的是方便应用开发者快速描述或者构建应用</li>
+<li>最下层是物理机集群，即由大量物理机器搭建的分布式计算环境，这是计算任务最终执行的场所。</li>
+<li>中间层是DAG执行引擎层，其主要目的是将上层以特殊方式表达的DAG计算任务通过转换和映射，将其部署到下层的物理机集群中来真正运行。</li>
+</ul>
+<h3 id="Dryad"><a href="#Dryad" class="headerlink" title="Dryad"></a>Dryad</h3><p>Dryad是微软的批处理DAG计算系统，其主要目的是为了便于开发者便捷地进行分布式任务处理，其是在大数据处理领域较早明确提出DAG计算模型的系统。</p>
+<p>整体架构：</p>
+<ul>
+<li>系统中的“任务管理器”（Job Manager，JM）负责将逻辑形式存在的DAG描述映射到物理集群机器中，起到任务调度器以及全局管理者的作用。</li>
+<li>命名服务器（Name Server，NS）负责维护集群中当前可用的机器资源，从命名服务器还可以查到机器在物理拓扑结构中的位置，这样便于JM在任务调度时考虑到数据局部性，尽可能地将计算推送到数据节点上</li>
+<li>集群中每台工作机上安装Daemon守护进程（图中标为D的即是），其作为JM在计算节点上的代理，负责具体子任务的执行和监控。Daemon进程在执行过程中和JM通信，来汇报执行进度以及数据处理完成情况<br>![[file-20251120183411927.jpg | 400]]<br>Dryad采用了由若干简单的DAG结构及其描述符的不断组合来构建复杂结构的方式。</li>
+</ul>
+<p>![[file-20251120183514392.jpg | 500]]</p>
+<ul>
+<li>A≥B：图A的输出节点和图B的输入节点间进行点对点的边连接</li>
+<li>A&gt;&gt;B：在A的输出节点和B的输入节点之间形成完全二分图</li>
+</ul>
+<p>Dryad的任务执行：<br>Dryad的JM将图节点的可执行代码分发到可用机器节点上，同时将该图节点涉及的输入和输出数据路径地址发送给相应的工作机，这样该工作机就可执行计算任务。调度程序跟踪DAG图中节点的执行状态和执行历史，如果JM调度程序崩溃，则整个任务失败。如果工作节点发生故障，调度程序会将图节点对应代码发送到其他可用节点重新执行图节点程序，以此来达到容错目的。</p>
+<p>Google的FlumeJava和Apache Tez也是比较著名的批处理DAG系统。</p>
+<h1 id="第12章-流式计算"><a href="#第12章-流式计算" class="headerlink" title="第12章 流式计算"></a>第12章 流式计算</h1><p>早期和当前的“流式计算”系统分别称为“连续查询处理类”和“可扩展数据流平台类”计算系统。</p>
+<ul>
+<li><strong>连续查询处理</strong>：一般用户输入SQL查询语句后，数据流按照时间先后顺序被切割成数据窗口，DSMS在连续流动的数据窗口中执行用户提交的SQL语句，并实时返回查询结果。</li>
+<li><strong>可扩展数据流平台类</strong>：出于模仿MapReduce计算框架的思路，即在对处理时效性有高要求的计算场景下，如何提供一个完善的计算框架，并暴露给用户少量的编程接口（对MR来说就是Map和Reduce处理逻辑接口），使得用户能够集中精力处理应用逻辑。</li>
+</ul>
+<p>优秀的流式计算系统应该具备以下特点：</p>
+<ul>
+<li>记录处理低延迟</li>
+<li>极佳的系统容错性</li>
+<li>极强的系统扩展能力</li>
+<li>灵活强大的应用逻辑表达能力</li>
+</ul>
+<h2 id="流式计算系统架构"><a href="#流式计算系统架构" class="headerlink" title="流式计算系统架构"></a>流式计算系统架构</h2><p>常见的流式计算系统架构分为两种：主从模式（Master-Slave）和P2P模式</p>
+<h3 id="主从架构"><a href="#主从架构" class="headerlink" title="主从架构"></a>主从架构</h3><p>Storm架构中存在两类节点：主控节点和工作节点</p>
+<ul>
+<li>分发计算代码、在机器间分配计算任务以及故障检测等管理功能，类似于Hadoop 1.0中的JobTracker的角色</li>
+<li>每台工作服务器上运行Supervisor，其监听Nimbus分配给自己的任务，并根据其要求启动或者停止相关的计算任务，一个Supervisor可以负责DAG图中的多个计算任务。</li>
+<li>ZooKeeper集群用来协调Nimbus和Supervisor之间的工作，同时，Storm将两者的状态信息存储在ZooKeeper集群上，这样Nimbus和Supervisor都成为无状态的服务，从而可以方便地进行故障恢复，无论哪个构件发生故障，都可以随时在另外一台机器上快速重新启动而不会丢失任何状态信息。<br>![[file-20251121171135747.jpg | 400]]</li>
+</ul>
+<h3 id="P2P架构"><a href="#P2P架构" class="headerlink" title="P2P架构"></a>P2P架构</h3><ul>
+<li>PE（Processing Element）是基本计算单元，属于DAG任务的计算节点，其接收到数据后触发用户应用逻辑对数据进行处理，并可能产生送向下游计算节点的衍生数据。</li>
+<li>通信层主要负责集群管理、自动容错以及逻辑宿主到物理节点的映射等功能，其可以自动侦测硬件故障，并做故障切换以及修正逻辑宿主和物理节点映射表。</li>
+</ul>
+<p>![[file-20251121171234264.jpg| 300]]</p>
+<h2 id="DAG拓扑结构"><a href="#DAG拓扑结构" class="headerlink" title="DAG拓扑结构"></a>DAG拓扑结构</h2><p>一般的流式计算任务都是由计算节点和流式数据构成的DAG有向无环图。DAG中的节点一般是完成一个计算任务所需要的各种处理功能，比如过滤、 数值累加、Join等具体计算功能，而流经各个计算节点的实时数据流构成了DAG中的各种有向边。<br>![[file-20251121171527109.jpg | 300]]</p>
+<ul>
+<li><strong>计算节点</strong>：<ul>
+<li>整个计算任务的数据输入节点，负责和外部其他系统进行交互，并将输入数据接入流式计算系统，Storm中将这类计算节点称为Spout</li>
+<li>完成计算任务的任务计算节点，在Storm中被称为Bolt，整个计算任务就是由若干此类节点通过流经计算节点的流式数据串接起来完成的。每个此类计算节点往往从上游节点接收数据流，对数据流进行特定的计算处理，然后产生衍生数据流，并分发到其下游的计算节点</li>
+</ul>
+</li>
+<li><strong>数据流</strong>：DAG拓扑结构中的边是由连续不断进入流式计算系统的数据构成的数据流，这对所有的流式计算系统都是一样的<ul>
+<li>Storm则将每条数据用数据元组（Data Tuple）来表示，虽然并未明确指明数据主键，但是实际可以将主键放在元组中特定的位置来对主键和其他内容进行区分，接收到数据的计算节点可以从元组对应的内容中读出所需的数据。</li>
+</ul>
+</li>
+<li><strong>拓扑结构</strong>：DAG结构中最常见的基本拓扑结构包含：流水线、乱序分组、定向分组和广播模式。<ul>
+<li>在现有的流式计算系统中，Storm是在图拓扑结构定义方面最灵活的，除了能够提供上述几种基本的拓扑连接方式，还提供了其他几种不常见的模式。</li>
+</ul>
+</li>
+</ul>
+<h2 id="送达保证"><a href="#送达保证" class="headerlink" title="送达保证"></a>送达保证</h2><p>如何保证流数据正确地从上游节点送达下游节点是非常重要的问题，这个问题的解决方案一般被称作数据的“送达保证机制”。</p>
+<p>定义如下三种送达可能：</p>
+<ul>
+<li>至少送达一次（At-Least Once Delivery）：即上游节点保证向下游节点送达一次或者多次相同的数据。</li>
+<li>至多送达一次（At-Most Once Delivery）：即上游节点不能保证将消息送达下游节点。如果流式计算系统容错机制不完善，存在丢失数据的情形，则一般属于这种类型的送达保证机制。</li>
+<li>恰好送达一次（Exact-Once Delivery）：即上游节点保证将流数据正确地送达下游节点且只正确送达一次，不会出现多次送达的情况。</li>
+</ul>
+<p>如果流式计算系统能够提供“恰好送达一次”语义，会为应用开发者提供很大便利，因为应用开发者可以假设无论发生什么状况，系统在数据传递方面没有任何问题，无须在应用层提供这种保证。</p>
+<p>Storm的送达保证机制：<br>通过“送达保证机制”和“事务拓扑”（Transaction Topology）联合完成的：</p>
+<ul>
+<li>“送达保证机制”能够实现“至少送达一次”语义</li>
+<li>而“事务拓扑”则保证不会出现多次送达的情形</li>
+</ul>
+<h2 id="状态持久化"><a href="#状态持久化" class="headerlink" title="状态持久化"></a>状态持久化</h2><p>和其他系统容错机制一样，流式计算系统中常见的系统容错有三种模式：备用服务、热备和检查点机制。</p>
+<ul>
+<li><strong>备用服务</strong>：计算任务的某个计算节点N在另外一台物理机上设置其对应的备份服务S，计算框架定时通过心跳或者ZooKeeper来及时捕获服务状态，当节点N发生故障时，启动备份服务S来接替计算节点N的功能。适合计算节点属于无状态（Stateless）类型的服务</li>
+<li><strong>热备</strong>：热备机制的计算节点N和其备用节点S同时运行相同的功能，上游节点将数据流同时发往下游的计算节点N及其备用节点S，当计算节点N发生故障时对系统无任何影响，因为备用节点S一直和节点N同时运行，所以即使是有状态的服务，两者也时刻保持着相同的状态信息。</li>
+<li><strong>检查点</strong>：为了能够在故障替换时恢复计算节点N的状态信息，计算节点N周期性地将其状态信息通过检查点的方式在其他地方进行备份，当计算框架侦测到计算节点N发生故障时，则启动备用节点S，并从Log中将对应的状态信息进行恢复</li>
+</ul>
+<p>目前主流的流式计算系统都采用检查点的容错机制，比如Storm、MillWheel和Samza都采用了这一机制。为了保证不会丢失任何状态信息，对于流经的每条数据，只要计算节点处理之后状态信息发生变化都需要进行状态信息备份。</p>
+<h1 id="第13章-交互式数据分析"><a href="#第13章-交互式数据分析" class="headerlink" title="第13章 交互式数据分析"></a>第13章 交互式数据分析</h1>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>Donate comment here.</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatpay.png" alt="Uncle Antonio WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/alipay.png" alt="Uncle Antonio Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%B9%A6%E7%B1%8D/" rel="tag"># 书籍</a>
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2025/08/01/%E6%8A%80%E6%9C%AF%E4%B9%A6%E7%B1%8D/%E7%AE%97%E6%B3%95%E5%9B%BE%E8%A7%A3/" rel="prev" title="算法图解">
+      <i class="fa fa-chevron-left"></i> 算法图解
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2025/08/17/%E6%8A%80%E6%9C%AF%E4%B9%A6%E7%B1%8D/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" rel="next" title="凤凰架构">
+      凤凰架构 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC0%E7%AB%A0%E2%80%94%E2%80%94%E5%BD%93%E8%B0%88%E8%AE%BA%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%97%B6%E6%88%91%E4%BB%AC%E5%9C%A8%E8%B0%88%E4%BB%80%E4%B9%88"><span class="nav-number">3.</span> <span class="nav-text">第0章——当谈论大数据时我们在谈什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">3.1.</span> <span class="nav-text">大数据是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E4%B9%8B%E7%BF%BC%EF%BC%9A%E6%8A%80%E6%9C%AF%E8%8C%83%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">3.2.</span> <span class="nav-text">大数据之翼：技术范型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%95%86%E4%B8%9A%E7%82%BC%E9%87%91%E6%9C%AF"><span class="nav-number">3.3.</span> <span class="nav-text">大数据商业炼金术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%9C%A8%E8%B7%AF%E4%B8%8A"><span class="nav-number">3.4.</span> <span class="nav-text">大数据在路上</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC1%E7%AB%A0%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%88%86%E7%89%87%E4%B8%8E%E8%B7%AF%E7%94%B1"><span class="nav-number">4.</span> <span class="nav-text">第1章——数据分片与路由</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.1.</span> <span class="nav-text">抽象模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%88%E5%B8%8C%E5%88%86%E7%89%87"><span class="nav-number">4.2.</span> <span class="nav-text">哈希分片</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Round-Robin"><span class="nav-number">4.2.1.</span> <span class="nav-text">Round Robin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%A1%B6"><span class="nav-number">4.2.2.</span> <span class="nav-text">虚拟桶</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E5%93%88%E5%B8%8C"><span class="nav-number">4.2.3.</span> <span class="nav-text">一致性哈希</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8C%83%E5%9B%B4%E5%88%86%E7%89%87"><span class="nav-number">4.2.4.</span> <span class="nav-text">范围分片</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC2%E7%AB%A0%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E5%A4%8D%E5%88%B6%E4%B8%8E%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE"><span class="nav-number">5.</span> <span class="nav-text">第2章——数据复制与一致性协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E5%88%99%E4%B8%8E%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5"><span class="nav-number">5.1.</span> <span class="nav-text">基本原则与设计理念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E6%95%99%E6%97%A8CAP%E4%B8%BB%E4%B9%89"><span class="nav-number">5.1.1.</span> <span class="nav-text">原教旨CAP主义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ACID%E5%8E%9F%E5%88%99"><span class="nav-number">5.1.2.</span> <span class="nav-text">ACID原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BASE%E5%8E%9F%E5%88%99"><span class="nav-number">5.1.3.</span> <span class="nav-text">BASE原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CAP-ACID-BASE%E4%B8%89%E8%80%85%E5%85%B3%E7%B3%BB"><span class="nav-number">5.1.4.</span> <span class="nav-text">CAP&#x2F;ACID&#x2F;BASE三者关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%82%E7%AD%89%E6%80%A7"><span class="nav-number">5.1.5.</span> <span class="nav-text">幂等性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E6%A8%A1%E5%9E%8B%E5%88%86%E7%B1%BB"><span class="nav-number">5.2.</span> <span class="nav-text">一致性模型分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%BA%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">5.2.1.</span> <span class="nav-text">强一致性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E7%BB%88%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">5.2.2.</span> <span class="nav-text">最终一致性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%A0%E6%9E%9C%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">5.2.3.</span> <span class="nav-text">因果一致性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E4%BD%A0%E6%89%80%E5%86%99%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">5.2.4.</span> <span class="nav-text">读你所写一致性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">5.2.5.</span> <span class="nav-text">会话一致性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E8%B0%83%E8%AF%BB%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">5.2.6.</span> <span class="nav-text">单调读一致性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E8%B0%83%E5%86%99%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">5.2.7.</span> <span class="nav-text">单调写一致性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%AF%E6%9C%AC%E6%9B%B4%E6%96%B0%E7%AD%96%E7%95%A5"><span class="nav-number">5.3.</span> <span class="nav-text">副本更新策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%97%B6%E6%9B%B4%E6%96%B0"><span class="nav-number">5.3.1.</span> <span class="nav-text">同时更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E4%BB%8E%E5%BC%8F%E6%9B%B4%E6%96%B0"><span class="nav-number">5.3.2.</span> <span class="nav-text">主从式更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E6%84%8F%E8%8A%82%E7%82%B9%E6%9B%B4%E6%96%B0"><span class="nav-number">5.3.3.</span> <span class="nav-text">任意节点更新</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE"><span class="nav-number">5.4.</span> <span class="nav-text">一致性协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4%E5%8D%8F%E8%AE%AE2PC"><span class="nav-number">5.4.1.</span> <span class="nav-text">两阶段提交协议2PC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E6%97%B6%E9%92%9F"><span class="nav-number">5.4.2.</span> <span class="nav-text">向量时钟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RWN%E5%8D%8F%E8%AE%AE"><span class="nav-number">5.4.3.</span> <span class="nav-text">RWN协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Paxos%E5%8D%8F%E8%AE%AE"><span class="nav-number">5.4.4.</span> <span class="nav-text">Paxos协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Raft%E5%8D%8F%E8%AE%AE"><span class="nav-number">5.4.5.</span> <span class="nav-text">Raft协议</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC3%E7%AB%A0%E2%80%94%E2%80%94%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B8%B8%E7%94%A8%E7%9A%84%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="nav-number">6.</span> <span class="nav-text">第3章——大数据常用的算法与数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%83%E9%9A%86%E8%BF%87%E6%BB%A4%E5%99%A8"><span class="nav-number">6.1.</span> <span class="nav-text">布隆过滤器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="nav-number">6.1.1.</span> <span class="nav-text">基本原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AF%E5%88%A4%E7%8E%87%E5%8F%8A%E7%9B%B8%E5%85%B3%E8%AE%A1%E7%AE%97"><span class="nav-number">6.1.2.</span> <span class="nav-text">误判率及相关计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%B9%E8%BF%9B%EF%BC%9A%E8%AE%A1%E6%95%B0Bloom-filter"><span class="nav-number">6.1.3.</span> <span class="nav-text">改进：计数Bloom filter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8"><span class="nav-number">6.1.4.</span> <span class="nav-text">应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SkipList"><span class="nav-number">6.2.</span> <span class="nav-text">SkipList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSM%E6%A0%91"><span class="nav-number">6.3.</span> <span class="nav-text">LSM树</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Merkle%E5%93%88%E5%B8%8C%E6%A0%91"><span class="nav-number">6.4.</span> <span class="nav-text">Merkle哈希树</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Merkle%E6%A0%91%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="nav-number">6.4.1.</span> <span class="nav-text">Merkle树基本原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dynamo%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">6.4.2.</span> <span class="nav-text">Dynamo中的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AF%94%E7%89%B9%E5%B8%81%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">6.4.3.</span> <span class="nav-text">比特币中的应用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Snappy%E5%92%8CLZSS%E7%AE%97%E6%B3%95"><span class="nav-number">6.5.</span> <span class="nav-text">Snappy和LZSS算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#LZSS%E7%AE%97%E6%B3%95"><span class="nav-number">6.5.1.</span> <span class="nav-text">LZSS算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Snappy"><span class="nav-number">6.5.2.</span> <span class="nav-text">Snappy</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cuckoo%E5%93%88%E5%B8%8C"><span class="nav-number">6.6.</span> <span class="nav-text">Cuckoo哈希</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86-1"><span class="nav-number">6.6.1.</span> <span class="nav-text">基本原理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC4%E7%AB%A0%E2%80%94%E2%80%94%E9%9B%86%E7%BE%A4%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E4%B8%8E%E8%B0%83%E5%BA%A6"><span class="nav-number">7.</span> <span class="nav-text">第4章——集群资源管理与调度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E6%8A%BD%E8%B1%A1%E6%A8%A1%E5%9E%8B"><span class="nav-number">7.1.</span> <span class="nav-text">资源管理抽象模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5%E6%A8%A1%E5%9E%8B"><span class="nav-number">7.1.1.</span> <span class="nav-text">概念模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%9A%E7%94%A8%E6%9E%B6%E6%9E%84"><span class="nav-number">7.1.2.</span> <span class="nav-text">通用架构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%9F%BA%E6%9C%AC%E9%97%AE%E9%A2%98"><span class="nav-number">7.2.</span> <span class="nav-text">调度系统设计的基本问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E5%BC%82%E8%B4%A8%E6%80%A7%E4%B8%8E%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E5%BC%82%E8%B4%A8%E6%80%A7"><span class="nav-number">7.2.1.</span> <span class="nav-text">资源异质性与工作负载异质性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%B1%80%E9%83%A8%E6%80%A7"><span class="nav-number">7.2.2.</span> <span class="nav-text">数据局部性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8A%A2%E5%8D%A0%E5%BC%8F%E8%B0%83%E5%BA%A6%E4%B8%8E%E9%9D%9E%E6%8A%A2%E5%8D%A0%E5%BC%8F%E8%B0%83%E5%BA%A6"><span class="nav-number">7.2.3.</span> <span class="nav-text">抢占式调度与非抢占式调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E5%88%86%E9%85%8D%E7%B2%92%E5%BA%A6"><span class="nav-number">7.2.4.</span> <span class="nav-text">资源分配粒度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A5%BF%E6%AD%BB%E4%B8%8E%E6%AD%BB%E9%94%81%E9%97%AE%E9%A2%98"><span class="nav-number">7.2.5.</span> <span class="nav-text">饿死与死锁问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E9%9A%94%E7%A6%BB%E6%96%B9%E6%B3%95"><span class="nav-number">7.2.6.</span> <span class="nav-text">资源隔离方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86%E4%B8%8E%E8%B0%83%E5%BA%A6%E7%B3%BB%E7%BB%9F%E8%8C%83%E5%9E%8B"><span class="nav-number">7.3.</span> <span class="nav-text">资源管理与调度系统范型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%86%E4%B8%AD%E5%BC%8F%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-number">7.3.1.</span> <span class="nav-text">集中式调度器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E7%BA%A7%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-number">7.3.2.</span> <span class="nav-text">两级调度器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E5%85%B1%E4%BA%AB%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-number">7.3.3.</span> <span class="nav-text">状态共享调度器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5"><span class="nav-number">7.4.</span> <span class="nav-text">资源调度策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FIFO%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5"><span class="nav-number">7.4.1.</span> <span class="nav-text">FIFO调度策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AC%E5%B9%B3%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-number">7.4.2.</span> <span class="nav-text">公平调度器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%BD%E5%8A%9B%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="nav-number">7.4.3.</span> <span class="nav-text">能力调度器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5"><span class="nav-number">7.4.4.</span> <span class="nav-text">延迟调度策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E8%B5%84%E6%BA%90%E5%85%AC%E5%B9%B3%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5"><span class="nav-number">7.4.5.</span> <span class="nav-text">主资源公平调度策略</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mesos"><span class="nav-number">7.5.</span> <span class="nav-text">Mesos</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#YARN"><span class="nav-number">7.6.</span> <span class="nav-text">YARN</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC5%E7%AB%A0%E2%80%94%E2%80%94%E5%88%86%E5%B8%83%E5%BC%8F%E5%8D%8F%E8%B0%83%E7%B3%BB%E7%BB%9F"><span class="nav-number">8.</span> <span class="nav-text">第5章——分布式协调系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Chubby%E9%94%81%E6%9C%8D%E5%8A%A1"><span class="nav-number">8.1.</span> <span class="nav-text">Chubby锁服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"><span class="nav-number">8.1.1.</span> <span class="nav-text">系统架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="nav-number">8.1.2.</span> <span class="nav-text">数据模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%9A%E8%AF%9D%E4%B8%8EKeepAlive%E6%9C%BA%E5%88%B6"><span class="nav-number">8.1.3.</span> <span class="nav-text">会话与KeepAlive机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%BC%93%E5%AD%98"><span class="nav-number">8.1.4.</span> <span class="nav-text">客户端缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZooKeeper"><span class="nav-number">8.1.5.</span> <span class="nav-text">ZooKeeper</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="nav-number">8.1.6.</span> <span class="nav-text">体系结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B-1"><span class="nav-number">8.1.7.</span> <span class="nav-text">数据模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API"><span class="nav-number">8.1.8.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZooKeeper%E7%9A%84%E5%85%B8%E5%9E%8B%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">8.1.9.</span> <span class="nav-text">ZooKeeper的典型应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%EF%BC%8E%E9%A2%86%E5%AF%BC%E8%80%85%E9%80%89%E4%B8%BE%EF%BC%88Leader-Election%EF%BC%89"><span class="nav-number">8.1.9.1.</span> <span class="nav-text">1．领导者选举（Leader Election）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%EF%BC%8E%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86%EF%BC%88Configuration-Management%EF%BC%89"><span class="nav-number">8.1.9.2.</span> <span class="nav-text">2．配置管理（Configuration Management）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%EF%BC%8E%E7%BB%84%E6%88%90%E5%91%98%E7%AE%A1%E7%90%86%EF%BC%88Group-Membership%EF%BC%89"><span class="nav-number">8.1.9.3.</span> <span class="nav-text">3．组成员管理（Group Membership）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4%EF%BC%8E%E4%BB%BB%E5%8A%A1%E5%88%86%E9%85%8D"><span class="nav-number">8.1.9.4.</span> <span class="nav-text">4．任务分配</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5%EF%BC%8E%E9%94%81%E7%AE%A1%E7%90%86%EF%BC%88Locks%EF%BC%89"><span class="nav-number">8.1.9.5.</span> <span class="nav-text">5．锁管理（Locks）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6%EF%BC%8E%E5%8F%8C%E5%90%91%E8%B7%AF%E9%9A%9C%E5%90%8C%E6%AD%A5%EF%BC%88Double-Barrier%EF%BC%89"><span class="nav-number">8.1.9.6.</span> <span class="nav-text">6．双向路障同步（Double Barrier）</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZooKeeper%E7%9A%84%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8"><span class="nav-number">8.2.</span> <span class="nav-text">ZooKeeper的实际应用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC6%E7%AB%A0%E2%80%94%E2%80%94%E5%88%86%E5%B8%83%E5%BC%8F%E9%80%9A%E4%BF%A1"><span class="nav-number">9.</span> <span class="nav-text">第6章——分布式通信</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E8%BF%9C%E7%A8%8B%E8%BF%87%E7%A8%8B%E8%B0%83%E7%94%A8%E6%A1%86%E6%9E%B6"><span class="nav-number">9.1.</span> <span class="nav-text">序列化与远程过程调用框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Protocol-Buffer%E4%B8%8EThrift"><span class="nav-number">9.1.1.</span> <span class="nav-text">Protocol Buffer与Thrift</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Avro"><span class="nav-number">9.1.2.</span> <span class="nav-text">Avro</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">9.2.</span> <span class="nav-text">消息队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%B3%BB%E7%BB%9F"><span class="nav-number">9.2.1.</span> <span class="nav-text">常见的消息队列系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kafka"><span class="nav-number">9.2.2.</span> <span class="nav-text">Kafka</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-number">9.2.2.1.</span> <span class="nav-text">整体架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ISR%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86%E6%9C%BA%E5%88%B6"><span class="nav-number">9.2.2.2.</span> <span class="nav-text">ISR副本管理机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="nav-number">9.2.2.3.</span> <span class="nav-text">性能优化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%B1%82%E5%A4%9A%E6%92%AD%E9%80%9A%E4%BF%A1"><span class="nav-number">9.3.</span> <span class="nav-text">应用层多播通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Gossip%E5%8D%8F%E8%AE%AE"><span class="nav-number">9.3.1.</span> <span class="nav-text">Gossip协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%A1%E6%81%AF%E4%BC%A0%E6%92%AD%E6%A8%A1%E5%9E%8B"><span class="nav-number">9.3.1.1.</span> <span class="nav-text">信息传播模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%EF%BC%9ACassandra%E9%9B%86%E7%BE%A4%E7%AE%A1%E7%90%86"><span class="nav-number">9.3.1.2.</span> <span class="nav-text">应用：Cassandra集群管理</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC7%E7%AB%A0%E2%80%94%E2%80%94%E6%95%B0%E6%8D%AE%E9%80%9A%E9%81%93"><span class="nav-number">10.</span> <span class="nav-text">第7章——数据通道</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Log%E6%95%B0%E6%8D%AE%E6%94%B6%E9%9B%86"><span class="nav-number">10.1.</span> <span class="nav-text">Log数据收集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Chukwa"><span class="nav-number">10.1.1.</span> <span class="nav-text">Chukwa</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Scribe"><span class="nav-number">10.1.2.</span> <span class="nav-text">Scribe</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%80%BB%E7%BA%BF"><span class="nav-number">10.2.</span> <span class="nav-text">数据总线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5-%E5%AF%BC%E5%87%BA"><span class="nav-number">10.3.</span> <span class="nav-text">数据导入&#x2F;导出</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC8%E7%AB%A0-%E5%88%86%E5%B8%83%E5%BC%8F%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">11.</span> <span class="nav-text">第8章 分布式文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Google%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="nav-number">11.1.</span> <span class="nav-text">Google文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">11.1.1.</span> <span class="nav-text">设计原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84-1"><span class="nav-number">11.1.2.</span> <span class="nav-text">整体架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E6%8E%A7%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">11.1.3.</span> <span class="nav-text">主控服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E4%BA%A4%E4%BA%92%E8%A1%8C%E4%B8%BA"><span class="nav-number">11.1.4.</span> <span class="nav-text">系统交互行为</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Colossus"><span class="nav-number">11.1.5.</span> <span class="nav-text">Colossus</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS"><span class="nav-number">11.2.</span> <span class="nav-text">HDFS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HDFS%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-number">11.2.1.</span> <span class="nav-text">HDFS整体架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HA%E6%96%B9%E6%A1%88"><span class="nav-number">11.2.2.</span> <span class="nav-text">HA方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#NameNode%E8%81%94%E7%9B%9F"><span class="nav-number">11.2.3.</span> <span class="nav-text">NameNode联盟</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HayStack%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F"><span class="nav-number">11.3.</span> <span class="nav-text">HayStack存储系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HayStack%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-number">11.3.1.</span> <span class="nav-text">HayStack整体架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95%E6%9C%8D%E5%8A%A1"><span class="nav-number">11.3.2.</span> <span class="nav-text">目录服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HayStack%E7%BC%93%E5%AD%98"><span class="nav-number">11.3.3.</span> <span class="nav-text">HayStack缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HayStack%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">11.3.4.</span> <span class="nav-text">HayStack存储系统的实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E5%B8%83%E5%B1%80"><span class="nav-number">11.4.</span> <span class="nav-text">文件存储布局</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%8C%E5%BC%8F%E5%AD%98%E5%82%A8"><span class="nav-number">11.4.1.</span> <span class="nav-text">行式存储</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%97%E5%BC%8F%E5%AD%98%E5%82%A8"><span class="nav-number">11.4.2.</span> <span class="nav-text">列式存储</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%A0%E5%88%A0%E7%A0%81"><span class="nav-number">11.5.</span> <span class="nav-text">纠删码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Reed-Solomon%E7%BC%96%E7%A0%81"><span class="nav-number">11.5.1.</span> <span class="nav-text">Reed-Solomon编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LRC%E7%BC%96%E7%A0%81"><span class="nav-number">11.5.2.</span> <span class="nav-text">LRC编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HDFS-RAID%E6%9E%B6%E6%9E%84"><span class="nav-number">11.5.3.</span> <span class="nav-text">HDFS-RAID架构</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC9%E7%AB%A0-%E5%86%85%E5%AD%98KV%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">12.</span> <span class="nav-text">第9章 内存KV数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RAMCloud"><span class="nav-number">12.1.</span> <span class="nav-text">RAMCloud</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84-2"><span class="nav-number">12.1.1.</span> <span class="nav-text">整体架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%89%AF%E6%9C%AC%E7%AE%A1%E7%90%86%E4%B8%8E%E6%95%B0%E6%8D%AE%E6%81%A2%E5%A4%8D"><span class="nav-number">12.1.2.</span> <span class="nav-text">数据副本管理与数据恢复</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis"><span class="nav-number">12.2.</span> <span class="nav-text">Redis</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC10%E7%AB%A0-%E5%88%97%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">13.</span> <span class="nav-text">第10章 列式数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BigTable"><span class="nav-number">13.1.</span> <span class="nav-text">BigTable</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BigTable%E7%9A%84%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="nav-number">13.1.1.</span> <span class="nav-text">BigTable的数据模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BigTable%E7%9A%84%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84"><span class="nav-number">13.1.2.</span> <span class="nav-text">BigTable的整体结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BigTable%E7%9A%84%E7%AE%A1%E7%90%86%E6%95%B0%E6%8D%AE"><span class="nav-number">13.1.3.</span> <span class="nav-text">BigTable的管理数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E6%8E%A7%E6%9C%8D%E5%8A%A1%E5%99%A8-1"><span class="nav-number">13.1.4.</span> <span class="nav-text">主控服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%90%E8%A1%A8%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">13.1.5.</span> <span class="nav-text">子表服务器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PNUTS%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F"><span class="nav-number">13.2.</span> <span class="nav-text">PNUTS存储系统</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PNUTS%E7%9A%84%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="nav-number">13.2.1.</span> <span class="nav-text">PNUTS的整体架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%8D%95%E5%85%83"><span class="nav-number">13.2.2.</span> <span class="nav-text">存储单元</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%90%E8%A1%A8%E6%8E%A7%E5%88%B6%E5%99%A8%E4%B8%8E%E6%95%B0%E6%8D%AE%E8%B7%AF%E7%94%B1%E5%99%A8"><span class="nav-number">13.2.3.</span> <span class="nav-text">子表控制器与数据路由器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9B%85%E8%99%8E%E6%B6%88%E6%81%AF%E4%BB%A3%E7%90%86"><span class="nav-number">13.2.4.</span> <span class="nav-text">雅虎消息代理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">13.2.5.</span> <span class="nav-text">数据一致性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spanner"><span class="nav-number">13.3.</span> <span class="nav-text">Spanner</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SpanServer%E8%BD%AF%E4%BB%B6%E6%A0%88"><span class="nav-number">13.3.1.</span> <span class="nav-text">SpanServer软件栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B-2"><span class="nav-number">13.3.2.</span> <span class="nav-text">数据模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TrueTime"><span class="nav-number">13.3.3.</span> <span class="nav-text">TrueTime</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC11%E7%AB%A0-%E5%A4%A7%E8%A7%84%E6%A8%A1%E6%89%B9%E5%A4%84%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="nav-number">14.</span> <span class="nav-text">第11章 大规模批处理系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MapReduce%E8%AE%A1%E7%AE%97%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9E%B6%E6%9E%84"><span class="nav-number">14.1.</span> <span class="nav-text">MapReduce计算模型与架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E6%A8%A1%E5%9D%97"><span class="nav-number">14.1.1.</span> <span class="nav-text">计算模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84-1"><span class="nav-number">14.1.2.</span> <span class="nav-text">系统架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MapReduce%E8%AE%A1%E7%AE%97%E7%9A%84%E7%89%B9%E7%82%B9%E5%8F%8A%E4%B8%8D%E8%B6%B3"><span class="nav-number">14.1.3.</span> <span class="nav-text">MapReduce计算的特点及不足</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MapReduce%E8%AE%A1%E7%AE%97%E6%A8%A1%E5%BC%8F"><span class="nav-number">14.2.</span> <span class="nav-text">MapReduce计算模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DAG%E8%AE%A1%E7%AE%97%E6%A8%A1%E5%9E%8B"><span class="nav-number">14.3.</span> <span class="nav-text">DAG计算模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DAG%E8%AE%A1%E7%AE%97%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%B8%89%E5%B1%82%E7%BB%93%E6%9E%84"><span class="nav-number">14.3.1.</span> <span class="nav-text">DAG计算系统的三层结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dryad"><span class="nav-number">14.3.2.</span> <span class="nav-text">Dryad</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC12%E7%AB%A0-%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97"><span class="nav-number">15.</span> <span class="nav-text">第12章 流式计算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E5%BC%8F%E8%AE%A1%E7%AE%97%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"><span class="nav-number">15.1.</span> <span class="nav-text">流式计算系统架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BB%E4%BB%8E%E6%9E%B6%E6%9E%84"><span class="nav-number">15.1.1.</span> <span class="nav-text">主从架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P2P%E6%9E%B6%E6%9E%84"><span class="nav-number">15.1.2.</span> <span class="nav-text">P2P架构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DAG%E6%8B%93%E6%89%91%E7%BB%93%E6%9E%84"><span class="nav-number">15.2.</span> <span class="nav-text">DAG拓扑结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%81%E8%BE%BE%E4%BF%9D%E8%AF%81"><span class="nav-number">15.3.</span> <span class="nav-text">送达保证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">15.4.</span> <span class="nav-text">状态持久化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC13%E7%AB%A0-%E4%BA%A4%E4%BA%92%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="nav-number">16.</span> <span class="nav-text">第13章 交互式数据分析</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Uncle Antonio"
+      src="/images/icon.JPG">
+  <p class="site-author-name" itemprop="name">Uncle Antonio</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">categories</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/UncleAntonio67" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;UncleAntonio67" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/antoniolq@163.com" title="E-Mail → antoniolq@163.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://yoursite.com/" title="http:&#x2F;&#x2F;yoursite.com" rel="noopener" target="_blank">Title</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Uncle Antonio</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="/lib/three/three.min.js"></script>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

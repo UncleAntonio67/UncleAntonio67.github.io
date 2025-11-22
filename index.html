@@ -175,7 +175,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2025/08/17/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/994.%20%E8%85%90%E7%83%82%E7%9A%84%E6%A9%98%E5%AD%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/icon.JPG">
@@ -189,7 +189,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/2025/08/17/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/" class="post-title-link" itemprop="url">凤凰架构</a>
+            <a href="/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/994.%20%E8%85%90%E7%83%82%E7%9A%84%E6%A9%98%E5%AD%90/" class="post-title-link" itemprop="url">Untitled</a>
         </h2>
 
         <div class="post-meta">
@@ -198,19 +198,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2025-08-17 13:50:00 / Modified: 14:19:11" itemprop="dateCreated datePublished" datetime="2025-08-17T13:50:00+08:00">2025-08-17</time>
+              <time title="Created: 2025-11-22 22:50:52" itemprop="dateCreated datePublished" datetime="2025-11-22T22:50:52+08:00">2025-11-22</time>
             </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">读书笔记</span></a>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
                 </span>
-            </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-11-13 23:02:12" itemprop="dateModified" datetime="2025-11-13T23:02:12+08:00">2025-11-13</time>
+              </span>
 
           
 
@@ -223,1266 +220,799 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>作者：周志华<br>阅读日期：20250611——20250630<br>学习网站：<a target="_blank" rel="noopener" href="https://icyfenix.cn/">https://icyfenix.cn/</a></p>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
-<p><strong>墨菲定律</strong><br>Anything that can go wrong will go wrong.<br>   如果事情可能出错就总会出错。</p>
-</blockquote>
-<h2 id="可靠的系统："><a href="#可靠的系统：" class="headerlink" title="可靠的系统："></a>可靠的系统：</h2><p>冯诺伊曼《自复制自动机》，如何用不可靠的不见构建可靠的系统；每一个部件都可以看作一只不死鸟（Phoenix），能够涅槃重生。</p>
-<h2 id="架构的演进："><a href="#架构的演进：" class="headerlink" title="架构的演进："></a>架构的演进：</h2><p>大型机（Mainframe）——&gt;原始分布式（Distributed）——&gt;大型单体（Monolithic）——&gt;面向服务（Service-Oriented）——&gt;微服务（Microservices）——&gt;服务网格（Service Mesh）——&gt;无服务（Serverless）</p>
-<blockquote>
-<p>只要在整体架构设计有恰当的、自动化的错误熔断、服务淘汰和重建的机制，在系统外部来观察，整体上仍然有可能表现出稳定和健壮的服务能力。</p>
-</blockquote>
-<h2 id="🚣凤凰架构"><a href="#🚣凤凰架构" class="headerlink" title="🚣凤凰架构"></a>🚣凤凰架构</h2><h1 id="探索起步"><a href="#探索起步" class="headerlink" title="探索起步"></a>探索起步</h1><h2 id="章节一览"><a href="#章节一览" class="headerlink" title="章节一览"></a>章节一览</h2><ol>
-<li>演进中的架构——介绍服务架构演进史</li>
-<li>架构师的视角——架构设计解决方案及标准</li>
-<li>分布式的基石——分布式生态的一些列问题的解决方案</li>
-<li>不可变基础设施——云原生基础设施不可变性</li>
-<li>技术方法论——分布式、微服务、架构相关务虚话题</li>
-</ol>
-<h1 id="演进中的架构"><a href="#演进中的架构" class="headerlink" title="演进中的架构"></a>演进中的架构</h1><h2 id="原始分布式时代"><a href="#原始分布式时代" class="headerlink" title="原始分布式时代"></a>原始分布式时代</h2><blockquote>
-<p><strong>UNIX 的分布式设计哲学</strong><br>保持接口与实现的简单性，比系统的任何其他属性，包括准确性、一致性和完整性，都来得更加重要。</p>
-</blockquote>
-<p>20世纪70年代末期到80年代初，计算机经历了从大型机为主向微型机为主的蜕变，科研设备转变为娱乐设备。但是当前微型机的处理器、内存都很有限，于是开始寻找多台计算机共同协作支撑系统运行的解决方案。</p>
-<p>产生了一系列的中间成果，牵引了后续架构的演化架构：</p>
-<ul>
-<li>网络运算架构（惠普公司提供）——–远程服务调用雏形</li>
-<li>AFS文件系统（卡内基梅隆大学提出）——-分布式文件系统雏形</li>
-<li>Kerberos协议（麻省理工学院提出）——–服务认证和访问控制的基础</li>
-</ul>
-<p>OSF制订”分布式运算环境“（DCE）的分布式技术体系，这次尝试最大的收获就是对 RPC、DFS 等概念的开创，以及得到了一个价值千金的教训：<strong>某个功能能够进行分布式，并不意味着它就应该进行分布式，强行追求透明的分布式操作，只会自寻苦果。</strong></p>
-<p>20世纪80年代，摩尔定律发挥作用，算力提升速度惊人，逐步开始转向大型单体。</p>
-<p>🖊为突破算力，由大型机开展向原始分布式发展，原始分布式是现代分布式诸多技术的雏形，也给出了重要教训。 后续算力逐渐提升，开展专项大型单体应用</p>
-<h2 id="单体系统时代"><a href="#单体系统时代" class="headerlink" title="单体系统时代"></a>单体系统时代</h2><blockquote>
-<p><strong>单体架构（Monolithic）</strong><br>“单体”只是表明系统中主要的过程调用都是进程内调用，不会发生进程间通信，仅此而已。</p>
-</blockquote>
-<p>单体并非”反派角色“，对于小型系统，单体易于开发、测试、部署，是效率最高的一种架构风格。它的不足，必须是基于软件性能需求超过了单机，才有讨论的价值。</p>
-<p>单体架构并非意味着不进行拆分，其纵向可以进行分层架构设计，横向也可以按需求进行模块拆分。<strong>其真正的缺陷在于拆分之后的隔离和自治能力伤的欠缺</strong> 。无法隔离，即午发单独停止、更新、升级，可维护性没有优势，程序升级、修改缺陷都往往需要制定专门的停机更新计划。</p>
-<p>微服务取代单体系统成为潮流趋势的根本原因：<strong>单体系统很难兼容”Phoenix的特性“</strong>。本质上是一种观念转变”追求尽量不出错”，到正视“出错是必然“。</p>
-<p>🖊为了允许程序出错，让其获得隔离、自治等能力，单体应用逐步开始转向分布式架构，最早兴盛的即面向服务架构（SOA）</p>
-<h2 id="SOA时代"><a href="#SOA时代" class="headerlink" title="SOA时代"></a>SOA时代</h2><blockquote>
-<p><strong>SOA 架构（Service-Oriented Architecture）</strong><br>面向服务的架构是一次具体地、系统性地成功解决分布式服务主要问题的架构模式。</p>
-</blockquote>
-<p>单体系统拆分较有代表性的架构模式：</p>
-<ul>
-<li><strong>烟囱式架构</strong>：孤岛式信息系统，独立拆分、老死不相往来的架构，不贴近实际需求</li>
-<li><strong>微内核架构</strong>：插件式架构，一个核心系统，其它业务系统以插件形式存在，适合桌面及Web应用。各插件不会直接交互是大前提</li>
-<li><strong>事件驱动架构</strong>：子系统建立一套事件队列管道，外部消息发给管道，子系统按需消费，消费者高度解耦且能通过管道交互。</li>
-</ul>
-<p>当演化至事件驱动架构， SOAP 协议诞生，SOA开始登上软件架构舞台🎙。</p>
-<p>SOA由Gartner在1994年提出，2006年成立联盟制定标准，微服务的诸多思想、概念都在SOA中可以看到，它更加系统、更加具体：</p>
-<ul>
-<li>更具体：有标准、有原则、有协议，包括ESB（总线）、SDO（数据访问）、SCA（数据服务）等等</li>
-<li>更系统：目标是一揽子解决掉全部问题</li>
-</ul>
-<p><strong>边缘化的原因</strong>：过于严格的规范定义带来过度的复杂性</p>
-<p>🖊SOA终究是阳春白雪，回顾过去，不忘“透明”的初心</p>
-<h2 id="微服务时代"><a href="#微服务时代" class="headerlink" title="微服务时代"></a>微服务时代</h2><blockquote>
-<p><strong>微服务架构（Microservices）</strong><br>微服务是一种通过多个小型服务组合来构建单个应用的架构风格，这些服务围绕业务能力而非特定的技术标准来构建。各个服务可以采用不同的编程语言，不同的数据存储技术，运行在不同的进程之中。服务采取轻量级的通信机制和自动化的部署机制实现通信与运维。</p>
-</blockquote>
-<p>2005年由Rodgers博士提出，2014年崛起，Martin Fowler 与 James Lewis给出微服务的概念：<br><strong>微服务是一种通过多个小型服务组合来构建单个应用的架构风格，这些服务围绕业务能力而非特定的技术标准来构建。各个服务可以采用不同的编程语言，不同的数据存储技术，运行在不同的进程之中。服务采取轻量级的通信机制和自动化的部署机制实现通信与运维。</strong></p>
-<p>九个核心的业务与技术特征：</p>
-<ol>
-<li>围绕业务能力建设：团队和产品的结构</li>
-<li>分散治理：谁家的孩子谁来管</li>
-<li>服务来实现独立自治的组件：服务远程调用提供功能</li>
-<li>产品化思维：全生命周期的持续改进、提升</li>
-<li>数据去中心化：数据领域分散管理</li>
-<li>强终端弱管道：能力集中在终端</li>
-<li>容错性设计：可出错也可靠</li>
-<li>演进式设计：服务可淘汰</li>
-<li>基础设施自动化：CI&#x2F;CD</li>
-</ol>
-<p><strong>微服务不是 SOA 的变体或衍生品</strong></p>
-<ul>
-<li>摒弃约定和规定</li>
-<li>分布式服务的问题没有统一的解决方案，八仙过海各显神通</li>
-</ul>
-<p>有什么问题、引什么工具<br>SpringCloud 胶水式的工具集，进一步屏蔽了源自于具体工具、框架的复杂性，降低了在不同工具、框架之间切换的成本</p>
-<h2 id="后微服务时代"><a href="#后微服务时代" class="headerlink" title="后微服务时代"></a>后微服务时代</h2><blockquote>
-<p><strong>后微服务时代（Cloud Native）</strong><br>从软件层面独力应对微服务架构问题，发展到软、硬一体，合力应对架构问题的时代，此即为“后微服务时代”。</p>
-</blockquote>
-<p>注册发现、跟踪治理、负载均衡、传输通信这些问题一定需要软件系统来解决吗？<br>可以考虑通过基础设施来解决，被业界广泛认可、普遍采用的通过虚拟化基础设施去解决分布式架构问题的开端，应该要从 2017 年<strong>Kubernetes</strong> 赢得容器战争的胜利开始算起。<br>同一个分布式服务的问题在传统 Spring Cloud 中提供的应用层面的解决方案与在 Kubernetes 中提供的基础设施层面的解决方案：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Kubernetes</th>
-<th>Spring Cloud</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>弹性伸缩</td>
-<td>Autoscaling</td>
-<td>N&#x2F;A</td>
-</tr>
-<tr>
-<td>服务发现</td>
-<td>KubeDNS &#x2F; CoreDNS</td>
-<td>Spring Cloud Eureka</td>
-</tr>
-<tr>
-<td>配置中心</td>
-<td>ConfigMap &#x2F; Secret</td>
-<td>Spring Cloud Config</td>
-</tr>
-<tr>
-<td>服务网关</td>
-<td>Ingress Controller</td>
-<td>Spring Cloud Zuul</td>
-</tr>
-<tr>
-<td>负载均衡</td>
-<td>Load Balancer</td>
-<td>Spring Cloud Ribbon</td>
-</tr>
-<tr>
-<td>服务安全</td>
-<td>RBAC API</td>
-<td>Spring Cloud Security</td>
-</tr>
-<tr>
-<td>跟踪监控</td>
-<td>Metrics API &#x2F; Dashboard</td>
-<td>Spring Cloud Turbine</td>
-</tr>
-<tr>
-<td>降级熔断</td>
-<td>N&#x2F;A</td>
-<td>Spring Cloud Hystrix</td>
-</tr>
-<tr>
-<td>基础设施管理粒度粗旷，只能到容器层面，对单个远程服务就很难有效管控。对于这一类的解决方案就是<strong>服务网格</strong>（18年火起来）。具体含义是由系统自动在服务容器（通常是指 Kubernetes 的 Pod）中注入一个通信代理服务器，相当于那个挎斗，以类似网络安全里中间人攻击的方式进行流量劫持，在应用毫无感知的情况下，悄然接管应用所有对外通信。服务网格最终会取代Spring Cloud全家桶大部分组件的能力。</td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<p>业务、技术完全分离、远程和本地完全透明。</p>
-<h2 id="无服务时代"><a href="#无服务时代" class="headerlink" title="无服务时代"></a>无服务时代</h2><blockquote>
-<p><strong>无服务架构（Serverless）</strong><br>如果说微服务架构是分布式系统这条路的极致，那无服务架构，也许就是“不分布式”的云端系统这条路的起点。</p>
-</blockquote>
-<p>2012年提出，以“简单”为主要卖点的，它只涉及两块内容：后端设施（Backend）和函数（Function）。</p>
-<ul>
-<li><strong>后端设施</strong>：指数据库、消息队列、日志、存储，等等这一类用于支撑业务逻辑运行，但本身无业务含义的技术组件，这些后端设施都运行在云中，无服务中称其为“后端即服务”（Backend as a Service，BaaS）。</li>
-<li><strong>函数</strong>：指业务逻辑代码，这里函数的概念与粒度，都已经很接近于程序编码角度的函数了，其区别是无服务中的函数运行在云端，不必考虑算力问题，不必考虑容量规划，无服务中称其为“函数即服务”（Function as a Service，FaaS）。</li>
-</ul>
-<p>如果说微服务架构是分布式系统这条路当前所能做到的极致，那无服务架构，也许就是“不分布式”的云端系统这条路的起点。</p>
-<h1 id="架构师的视角"><a href="#架构师的视角" class="headerlink" title="架构师的视角"></a>架构师的视角</h1><h2 id="访问远程服务"><a href="#访问远程服务" class="headerlink" title="访问远程服务"></a>访问远程服务</h2><p><strong>远程服务</strong>将计算机程序的工作范围从单机扩展到网络，从本地延伸至远程，是构建分布式系统的首要基础</p>
-<h3 id="远程服务调用"><a href="#远程服务调用" class="headerlink" title="远程服务调用"></a>远程服务调用</h3><p>Remote Procedure Call，RPC，最开始，就是<strong>为了让计算机能够跟调用本地方法一样去调用远程方法</strong>。</p>
-<p>进程间通信（IPC）的常用方法：</p>
-<ul>
-<li>管道：通过管道在进程间传递少量的字符流或字节流</li>
-<li>信号：通知目标进程有事件发生，比如kill</li>
-<li>信号量：操作系统的特殊变量</li>
-<li>消息队列：用于进程间数据量较多的通信</li>
-<li>共享内存：多个进程访问同一块公共的内存空间，效率最高</li>
-<li>套接字接口：可用于不同机器之间的进程通信</li>
-</ul>
-<h4 id="通信的成本"><a href="#通信的成本" class="headerlink" title="通信的成本"></a>通信的成本</h4><p>RPC就是IPC的特例，早期透明的调用形式造成程序员误以为<strong>通信无成本</strong><br>后续提出了这种透明调用形式是方向性错误，RPC不同于IPC，它是一种高层次的特征。<br>20世纪80年代，世界上第一个基于RPC的商业应用Courier。<br><strong>远程服务调用</strong>是指位于互不重合的内存地址空间中的两个程序，在语言层面上，以同步的方式使用带宽有限的信道来传输程序控制信息。</p>
-<h4 id="三个基本问题"><a href="#三个基本问题" class="headerlink" title="三个基本问题"></a>三个基本问题</h4><p>RPC协议主要就是解决三个基本问题：</p>
-<ul>
-<li>如何表示数据：要有序列化协议把数据转化为中立的数据流格式</li>
-<li>如何传递数据：应用层协议，Wire Potocol</li>
-<li>如何表示方法：有跨语言的统一标准去找方法</li>
-</ul>
-<h4 id="统一的RPC"><a href="#统一的RPC" class="headerlink" title="统一的RPC"></a>统一的RPC</h4><ul>
-<li>CORBA：太罗嗦，写一个对象请求代理大概要 200 行代码，其中大概有 170 行都是纯粹无用的废话</li>
-<li>W3C Web Service：采用了 XML 作为远程过程调用的序列化、接口描述、服务发现等所有编码的载体，当时 XML 是计算机工业最新的银弹，只要是定义为 XML 的东西几乎就都被认为是好的，风头一时无两。性能有问题，而且贪婪，有一堆协议<br>简单、普适、高性能这三点，似乎真的难以同时满足</li>
-</ul>
-<h4 id="分裂的RPC"><a href="#分裂的RPC" class="headerlink" title="分裂的RPC"></a>分裂的RPC</h4><ul>
-<li>面向对象：RMI、.NET Remoting、CORBA 和 DCOM</li>
-<li>性能：gRPC、Thrift。一是专有序列化器，二是传输协议方面，gRPC 是基于 HTTP&#x2F;2 的，支持多路复用和 Header 压缩，Thrift 则直接基于传输层的 TCP 协议来实现，省去了额外应用层协议的开销</li>
-<li>简化：JSON-RPC，牺牲了功能和效率，换来的是协议的简单轻便，接口与格式都更为通用</li>
-</ul>
-<p>目前逐渐朝着插件化的能力支持，比如Dubbo，传输协议、序列化器都可以调整。</p>
-<h3 id="REST设计风格"><a href="#REST设计风格" class="headerlink" title="REST设计风格"></a>REST设计风格</h3><p> <strong>REST 并不是一种远程服务调用协议，也不是一种协议，是一种风格</strong></p>
-<h4 id="理解REST"><a href="#理解REST" class="headerlink" title="理解REST"></a>理解REST</h4><p>“REST”（<strong>Re</strong>presentational <strong>S</strong>tate <strong>T</strong>ransfer）实际上是“HTT”（<strong>H</strong>yper<strong>t</strong>ext <strong>T</strong>ransfer）的进一步抽象，两者就如同接口与实现类的关系一般。超文本即能够进行分支判断和差异响应的文本。</p>
-<p>一个阅读文章的例子来看REST：</p>
-<ul>
-<li>资源：这个文章就是资源</li>
-<li>表征：文章的格式就是表征</li>
-<li>状态：我要看下一篇，对于服务器分为有状态、无状态，主要看它要不要记住现在的</li>
-<li>转移：服务器通过某种方式转移状态</li>
-</ul>
-<p>相关概念名字：</p>
-<ul>
-<li>统一接口：URL是资源，HTTP协议统一接口，其中基本操作，触发表征状态转移</li>
-<li>超文本驱动：任何网站导航行为都是由服务器发出的请求响应信息（超文本）驱动的</li>
-<li>自描述信息：消息类型和处置方法，比如互联网媒体类型、UTF-8格式</li>
-</ul>
-<h4 id="RESTful的系统"><a href="#RESTful的系统" class="headerlink" title="RESTful的系统"></a>RESTful的系统</h4><p>六大设计原则：</p>
-<ul>
-<li>服务端与客户端分离：前端技术发展</li>
-<li>无状态：服务器不要负责维护状态，大多数达不到</li>
-<li>可缓存：通讯传递者把部分应用缓存起来</li>
-<li>分层系统：客户端一般不需要知道是否直接连接到了最终的服务器，抑或连接到路径上的中间服务器，比如CDN</li>
-<li>统一接口：统一接口的方式，系统应能做到每次请求中都包含资源的 ID，所有操作均通过资源 ID 来进行；建议每个资源都应该是自描述的消息；建议通过超文本来驱动应用状态的转移</li>
-<li>按需代码：可选原则，将可执行的软件程序从服务器发送到客户端的技术</li>
-</ul>
-<p>REST 的基本思想是面向资源来抽象问题，它与此前流行的编程思想——面向过程的编程在抽象主体上有本质的差别。在 REST 提出以前，人们设计分布式系统服务的唯一方案就只有 RPC，RPC 是将本地的方法调用思路迁移到远程方法调用上，开发者是围绕着“远程方法”去设计两个系统间交互的，譬如 CORBA、RMI、DCOM，等等。服务的每个方法都是完全独立的，服务使用者必须逐个学习才能正确地使用它们。</p>
-<p>REST 提出以资源为主体进行服务设计的风格，能为它带来不少好处：</p>
-<ul>
-<li>降低服务接口的学习成本：统一接口，全部映射到HTTP</li>
-<li>资源天然具有集合与层次结构：资源有层次关系，符合人的直觉</li>
-<li>REST绑定于HTTP协议：HTTP 本来就是面向资源而设计的网络协议</li>
-</ul>
-<p>在互联网中，面向资源来进行网络传输是这三十年来 HTTP 协议精心培养出来的用户习惯，如果开发者能够适应 REST 不太符合人类思维习惯的抽象方式，那 REST 通常能够更好地匹配在 HTTP 基础上构建的互联网，在效率与扩展性方面会有可观的收益。</p>
-<h4 id="RMM成熟度"><a href="#RMM成熟度" class="headerlink" title="RMM成熟度"></a>RMM成熟度</h4><p>如何评价服务是否 RESTful，分为0到3级：</p>
-<ol start="0">
-<li>The Swamp of <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Plain_Old_XML">Plain Old XML</a>：完全不 REST。另外，关于 Plain Old XML 这说法，SOAP 表示<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%84%9F%E8%A7%89%E6%9C%89%E8%A2%AB%E5%86%92%E7%8A%AF%E5%88%B0">感觉有被冒犯到</a>。</li>
-<li>Resources：开始引入资源的概念。</li>
-<li>HTTP Verbs：引入统一接口，映射到 HTTP 协议的方法上。</li>
-<li>Hypermedia Controls：超媒体控制在本文里面的说法是“超文本驱动”，在 Fielding 论文里的说法是“Hypertext As The Engine Of Application State，HATEOAS”，其实都是指同一件事情。除了第一个请求是由你在浏览器地址栏输入所驱动之外，其他的请求都应该能够自己描述清楚后续可能发生的状态转移，由超文本自身来驱动。</li>
-</ol>
-<h4 id="不足与争议"><a href="#不足与争议" class="headerlink" title="不足与争议"></a>不足与争议</h4><ul>
-<li>面向过程编程时，为什么要以算法和处理过程为中心，输入数据，输出结果？当然是为了符合计算机世界中主流的交互方式。</li>
-<li>面向对象编程时，为什么要将数据和行为统一起来、封装成对象？当然是为了符合现实世界的主流的交互方式。</li>
-<li>面向资源编程时，为什么要将数据（资源）作为抽象的主体，把行为看作是统一的接口？当然是为了符合网络世界的主流的交互方式。</li>
-</ul>
-<h2 id="事务处理"><a href="#事务处理" class="headerlink" title="事务处理"></a>事务处理</h2><p>数据库的经典理论：</p>
-<ul>
-<li><strong>原子性</strong>（<strong>A</strong>tomic）：在同一项业务处理过程中，事务保证了对多个数据的修改，要么同时成功，要么同时被撤销。</li>
-<li><strong>一致性</strong>（<strong>C</strong>onsistency）：数据都是符合期望的，且相互关联的数据之间不会产生矛盾</li>
-<li><strong>隔离性</strong>（<strong>I</strong>solation）：在不同的业务处理过程中，事务保证了各自业务正在读、写的数据互相独立，不会彼此影响。</li>
-<li><strong>持久性</strong>（<strong>D</strong>urability）：事务应当保证所有成功被提交的数据修改都能够正确地被持久化，不丢失数据。</li>
-</ul>
-<p>其实ACID并不正交，A、I、S是手段，C是目的。</p>
-<p>内部一致性：同一个数据源<br>外部一致性：多个不同的数据源</p>
-<p>外部一致性就很难通过AID解决了，将C从二元转变为多元属性</p>
-<h3 id="本地事务"><a href="#本地事务" class="headerlink" title="本地事务"></a>本地事务</h3><p><strong>本地事务</strong>是指仅操作单一事务资源的、不需要全局事务管理器进行协调的事务。适用于单个服务使用单个数据源的场景。<br>直接依赖于数据源本身的事务能力来工作。</p>
-<h4 id="实现原子性和持久性"><a href="#实现原子性和持久性" class="headerlink" title="实现原子性和持久性"></a>实现原子性和持久性</h4><p>Commit Logging方法</p>
-<ul>
-<li>最大困难：“写入磁盘”这个操作并不是原子的，不仅有“写入”与“未写入”状态，还客观地存在着“正在写”的中间状态。</li>
-<li>实现方法：不直接该，而且写到日志里，日志再进行持久化，即Commit Logging”（提交日志）方法</li>
-<li>巨大缺陷：真实修改都必须发生在事务提交以后，对提升数据库的性能十分不利。</li>
-</ul>
-<p>Write-Ahead方法（允许在事务提交之前，提前写入变动数据）<br>将何时写入变动数据，按照事务提交时点为界，划分为 FORCE 和 STEAL 两类情况。</p>
-<ul>
-<li>FORCE：提交之后必须同时写入，不强制同时就是NO-FORCE</li>
-<li>STEAL：提交前，允许变动数据提前写入，不允许是NO-STEAL</li>
-</ul>
-<p>Commit Logging允许 NO-FORCE，但不允许 STEAL。<br>Write-Ahead Logging 允许 NO-FORCE，也允许 STEAL。增加了Undo Log，表明修改情况，便于回滚。<br>Undo Log：回滚日志&#x2F; Redo Log：重做日志。</p>
-<p>Write-Ahead Logging三阶段操作：</p>
-<ul>
-<li><strong>分析阶段</strong>：从最后一次检查点扫描，组成集合</li>
-<li><strong>重做阶段</strong>：依据分析阶段中产生的待恢复的事务集合来重演历史</li>
-<li><strong>回滚阶段</strong>：处理经过分析、重做阶段后剩余的恢复事务集合</li>
-</ul>
-<h4 id="实现隔离性"><a href="#实现隔离性" class="headerlink" title="实现隔离性"></a>实现隔离性</h4><p>并发下实现串行的数据访问——加锁，具体又有三种锁：</p>
-<ul>
-<li><strong>写锁</strong>（Write Lock，也叫作排他锁，eXclusive Lock，简写为 X-Lock）：如果数据有加写锁，就只有持有写锁的事务才能对数据进行写入操作，数据加持着写锁时，其他事务不能写入数据，也不能施加读锁。</li>
-<li><strong>读锁</strong>（Read Lock，也叫作共享锁，Shared Lock，简写为 S-Lock）：多个事务可以对同一个数据添加多个读锁，数据被加上读锁后就不能再被加上写锁，所以其他事务不能对该数据进行写入，但仍然可以读取。对于持有读锁的事务，如果该数据只有它自己一个事务加了读锁，允许直接将其升级为写锁，然后写入数据。</li>
-<li><strong>范围锁</strong>（Range Lock）：对于某个范围直接加排他锁，在这个范围内的数据不能被写入。如下语句是典型的加范围锁的例子：</li>
-</ul>
-<p>事物的隔离级别：</p>
-<ul>
-<li>可串行化：对事务所有读、写的数据全都加上读锁、写锁和范围锁</li>
-<li>可重复读：对事务所涉及的数据加读锁和写锁，且一直持有至事务结束，但不再加范围锁。<strong>幻读</strong>：两次读的范围不一样</li>
-<li>读已提交：对事务涉及的数据加的写锁会一直持续到事务结束，但加的读锁在查询操作完成后就马上会释放。<strong>不可重复读</strong>：同一行查两次不一样</li>
-<li>读未提交：对事务涉及的数据只加写锁，会一直持续到事务结束，但完全不加读锁。<strong>脏读</strong>：一个事务读取到了另一个事务未提交的数据</li>
-</ul>
-<p>隔离性的另一种实现方案：无锁优化方案MVCC，对数据库的任何修改都不会直接覆盖之前的数据，而是产生一个新版副本与老版本共存，以此达到读取时可以完全不加锁的目的。具体的规则：</p>
-<ul>
-<li>插入数据时：CREATE_VERSION 记录插入数据的事务 ID，DELETE_VERSION 为空。</li>
-<li>删除数据时：DELETE_VERSION 记录删除数据的事务 ID，CREATE_VERSION 为空。</li>
-<li>修改数据时：将修改数据视为“删除旧数据，插入新数据”的组合，即先将原有数据复制一份，原有数据的 DELETE_VERSION 记录修改数据的事务 ID，CREATE_VERSION 为空。复制出来的新数据的 CREATE_VERSION 记录修改数据的事务 ID，DELETE_VERSION 为空。</li>
-</ul>
-<p>根据隔离级别来决定到底应该读取哪个版本的数据：</p>
-<ul>
-<li>隔离级别是<code>可重复读</code>：总是读取 CREATE_VERSION 小于或等于当前事务 ID 的记录，在这个前提下，如果数据仍有多个版本，则取最新（事务 ID 最大）的。</li>
-<li>隔离级别是<code>读已提交</code>：总是取最新的版本即可，即最近被 Commit 的那个版本的数据记录。</li>
-</ul>
-<p>另外两个隔离级别都没有必要用到 MVCC，因为<code>读未提交</code>直接修改原始数据即可，其他事务查看数据的时候立刻可以看到，根本无须版本字段。<code>可串行化</code>本来的语义就是要阻塞其他事务的读取操作，而 MVCC 是做读取时无锁优化的，自然就不会放到一起用。</p>
-<p>MVCC 是只针对“读+写”场景的优化，如果是两个事务同时修改数据，即“写+写”的情况，那就没有多少优化的空间了，此时加锁几乎是唯一可行的解决方案，稍微有点讨论余地的是加锁的策略是“乐观加锁”（Optimistic Locking）还是“悲观加锁”（Pessimistic Locking）。前面笔者介绍的加锁都属于悲观加锁策略，即认为如果不先做加锁再访问数据，就肯定会出现问题。相对地，乐观加锁策略认为事务之间数据存在竞争是偶然情况，没有竞争才是普遍情况，这样就不应该在一开始就加锁，而是应当在出现竞争时再找补救措施。</p>
-<h3 id="全局事务"><a href="#全局事务" class="headerlink" title="全局事务"></a>全局事务</h3><p><strong>全局事务</strong>：一种适用于单个服务使用多个数据源场景的事务解决方案。<br><strong>分布式事务</strong>：多服务多数据源的事务。</p>
-<p>1991年，XA提出，包含全局事务管理器、局部资源管理器，一个用于协调全局事务，一个用于驱动本地事务。</p>
-<p>XA并不是Java的技术规范，而且一套语言无关的通用规范。Java是实现是JTA。<br>XA 将事务提交拆分成为两阶段过程：</p>
-<ul>
-<li>准备阶段：协调者询问事务的所有参与者是否准备好提交，参与者如果已经准备好提交则回复 Prepared，否则回复 Non-Prepared。对于数据库来说，准备操作是在重做日志中记录全部事务提交操作所要做的内容，它与本地事务中真正提交的区别只是暂不写入最后一条 Commit Record 而已，这意味着在做完数据持久化后并不立即释放隔离性，即仍继续持有锁，维持数据对其他非事务内观察者的隔离状态。</li>
-<li>提交阶段：协调者如果在上一阶段收到所有事务参与者回复的 Prepared 消息，则先自己在本地持久化事务状态为 Commit，在此操作完成后向所有参与者发送 Commit 指令，所有参与者立即执行提交操作；否则，任意一个参与者回复了 Non-Prepared 消息，或任意一个参与者超时未回复，协调者将自己的事务状态持久化为 Abort 之后，向所有参与者发送 Abort 指令，参与者立即执行回滚操作。对于数据库来说，这个阶段的提交操作应是很轻量的，仅仅是持久化一条 Commit Record 而已，通常能够快速完成，只有收到 Abort 指令时，才需要根据回滚日志清理已提交的数据，这可能是相对重负载的操作。</li>
-</ul>
-<p>XA是<strong>两阶段提交协议</strong>，它的成功还有两个前期：</p>
-<ul>
-<li>网络在提交阶段是可靠的，不会丢消息，不会有错消息</li>
-<li>网络分区、机器崩溃导致失联的节点最终能恢复，不会永久失联<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/1750745377838.png"><br>两阶段提交的显著问题：</li>
-<li>单点问题：协调者故障，参与者一直等待</li>
-<li>性能问题：两次服务调用，三次数据持久化（写Redolog、协调者状态持久化、提交阶段写Commit Record）</li>
-<li>一致性风险：网络不稳定、宕机恢复能力</li>
-</ul>
-<p>为了解决单点问题和准备阶段的性能问题，发展出<strong>三阶段提交</strong>，准备阶段再细分，具体包括：</p>
-<ul>
-<li>CanCommit阶段：让参与者评估是否有可能顺利完成</li>
-<li>PreCommit阶段：开始写重做日志</li>
-<li>DoCommit阶段：进行写Commit Record</li>
-</ul>
-<p>不需要回滚的场景下，三阶段更差，需要回滚的场景下，三阶段更优。另外如果协调者宕机，默认让参与者提交事务。同样也有一致性问题。</p>
-<p><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/1750746104506.png"></p>
-<h3 id="共享事务"><a href="#共享事务" class="headerlink" title="共享事务"></a>共享事务</h3><p><strong>共享事务</strong>：多个服务共用同一个数据源。</p>
-<p>由于数据库连接的基础是网络连接，它是与 IP 地址和端口号绑定的，字面意义上的“不同服务节点共享数据库连接”很难做到，所以为了实现共享事务，就必须新增一个“交易服务器”的中间角色。转化为了本地事务</p>
-<p>伪需求，因为往往都是数据库压力最大，需要拓展。有一种常见的变种形式就是：使用消息队列服务器来代替交易服务器。</p>
-<h3 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h3><p><strong>分布式事务</strong>：多个服务同时访问多个数据源的事务处理机制</p>
-<h4 id="CAP与ACID"><a href="#CAP与ACID" class="headerlink" title="CAP与ACID"></a>CAP与ACID</h4><p>2000年证明了CAP猜想，成为著名的定理，三个特性最多只能满足其中两个：</p>
-<ul>
-<li><strong>一致性</strong>（<strong>C</strong>onsistency）：代表数据在任何时刻、任何分布式节点中所看到的都是符合预期的。一致性在分布式研究中是有严肃定义、有多种细分类型的概念，以后讨论分布式共识算法时，我们还会再提到一致性，那种面向副本复制的一致性与这里面向数据库状态的一致性严格来说并不完全等同，具体差别我们将在后续分布式共识算法中再作探讨。</li>
-<li><strong>可用性</strong>（<strong>A</strong>vailability）：代表系统不间断地提供服务的能力，理解可用性要先理解与其密切相关两个指标：可靠性（Reliability）和可维护性（Serviceability）。</li>
-<li><strong>分区容忍性</strong>（<strong>P</strong>artition Tolerance）：代表分布式环境中部分节点因网络原因而彼此失联后，即与其他节点形成“网络分区”时，系统仍能正确地提供服务的能力。</li>
-</ul>
-<p>不可兼得的影响分析：</p>
-<ul>
-<li><strong>如果放弃分区容忍性</strong>（CA without P）：节点之间通信永远是可靠的。永远可靠的通信在分布式系统中必定不成立的。Oracle RAC通过共享此判来避免出现网络分区。</li>
-<li><strong>如果放弃可用性</strong>（CP without A）：一旦网络发生分区，节点之间的信息同步时间可以无限制地延长。在现实中，选择放弃可用性的 CP 系统情况一般用于对数据质量要求很高的场合中。HBase也是CP系统。</li>
-<li><strong>如果放弃一致性</strong>（AP without C）：目前是设计分布式系统的主流选择，因为 P 是分布式网络的天然属性，你再不想要也无法丢弃；而 A 通常是建设分布式的目的。大多数 NoSQL 库和支持分布式的缓存框架都是 AP 系统，比如Redis。</li>
-</ul>
-<p>在 CAP、ACID 中讨论的一致性称为<strong>强一致性</strong>，有时也称为<strong>线性一致性</strong>。牺牲了 C 的 AP 系统又要尽可能获得正确的结果的行为称为追求<strong>弱一致性</strong>。如果数据在一段时间之内没有被另外的操作所更改，那它最终将会达到与强一致性过程相同的结果，即<strong>最终一致性</strong>。刚性事务&#x2F;柔性事务。</p>
-<h4 id="可靠事件队列"><a href="#可靠事件队列" class="headerlink" title="可靠事件队列"></a>可靠事件队列</h4><p>BASE 分别是基本可用性（<strong>B</strong>asically <strong>A</strong>vailable）、柔性事务（<strong>S</strong>oft State）和最终一致性（<strong>E</strong>ventually Consistent）的缩写。其实就是靠持续重试来保障可靠性，也叫做最大努力交付。</p>
-<h4 id="TCC事务"><a href="#TCC事务" class="headerlink" title="TCC事务"></a>TCC事务</h4><p>2007年提出，Try Confirm Cancel<br>可靠消息队列简单、相对可靠，但是没有任何隔离性。<br>使用场景：如果业务需要隔离，那架构师通常就应该重点考虑 TCC 方案，该方案天生适合用于需要强隔离性的分布式事务中。<br>整体分为三个阶段：</p>
-<ul>
-<li><strong>Try</strong>：尝试执行阶段，完成所有业务可执行性的检查（保障一致性），并且预留好全部需用到的业务资源（保障隔离性）。</li>
-<li><strong>Confirm</strong>：确认执行阶段，不进行任何业务检查，直接使用 Try 阶段准备的资源来完成业务处理。Confirm 阶段可能会重复执行，因此本阶段所执行的操作需要具备幂等性。</li>
-<li><strong>Cancel</strong>：取消执行阶段，释放 Try 阶段预留的业务资源。Cancel 阶段可能会重复执行，也需要满足幂等性。</li>
-</ul>
-<p>TCC 其实有点类似 2PC 的准备阶段和提交阶段，但 TCC 是位于用户代码层面，而不是在基础设施层面，这为它的实现带来了较高的灵活性，可以根据需要设计资源锁定的粒度。TCC 在业务执行时只操作预留资源，几乎不会涉及锁和资源的争用，具有很高的性能潜力。<br>业务侵入性强，一般通过分布式事务中间件来完成。</p>
-<h4 id="SAGA事务"><a href="#SAGA事务" class="headerlink" title="SAGA事务"></a>SAGA事务</h4><p>1987年提出，把一个大事务分解为可以交错运行的一系列子事务集合。<br>目的：避免大事务长时间锁定数据库的资源，后来才发展成将一个分布式环境中的大事务分解为一系列本地事务的设计模式。SAGA 由两部分操作组成。</p>
-<ul>
-<li>大事务拆分若干个小事务，将整个分布式事务 T 分解为 n 个子事务，命名为 T1，T2，…，Ti，…，Tn。每个子事务都应该是或者能被视为是原子行为。如果分布式事务能够正常提交，其对数据的影响（最终一致性）应与连续按顺序成功提交 Ti等价。</li>
-<li>为每一个子事务设计对应的补偿动作，命名为 C1，C2，…，Ci，…，Cn。Ti与 Ci必须满足以下条件：<ul>
-<li>Ti与 Ci都具备幂等性。</li>
-<li>Ti与 Ci满足交换律（Commutative），即先执行 Ti还是先执行 Ci，其效果都是一样的。</li>
-<li>Ci必须能成功提交，即不考虑 Ci本身提交失败被回滚的情形，如出现就必须持续重试直至成功，或者要人工介入。</li>
-</ul>
-</li>
-</ul>
-<p>两种恢复策略：</p>
-<ul>
-<li><p><strong>正向恢复</strong>（Forward Recovery）：如果 Ti事务提交失败，则一直对 Ti进行重试，直至成功为止（最大努力交付）。这种恢复方式不需要补偿，适用于事务最终都要成功的场景，譬如在别人的银行账号中扣了款，就一定要给别人发货。正向恢复的执行模式为：T1，T2，…，Ti（失败），Ti（重试）…，Ti+1，…，Tn。</p>
-</li>
-<li><p><strong>反向恢复</strong>（Backward Recovery）：如果 Ti事务提交失败，则一直执行 Ci对 Ti进行补偿，直至成功为止（最大努力交付）。这里要求 Ci必须（在持续重试后）执行成功。反向恢复的执行模式为：T1，T2，…，Ti（失败），Ci（补偿），…，C2，C1。</p>
-<ol>
-<li>Saga不需要为资源设计冻结状态。</li>
-<li>必须保证所有子事务都得以提交或者补偿</li>
-</ol>
-</li>
-</ul>
-<p>还有AT事务，也是基于数据补偿来代替回滚的思路</p>
-<h2 id="透明多级分流系统"><a href="#透明多级分流系统" class="headerlink" title="透明多级分流系统"></a>透明多级分流系统</h2><p>对系统进行流量规划时，有两条普适、简单的原则指导设计：</p>
-<ul>
-<li>尽可能减少单点部件</li>
-<li>奥卡姆剃须刀原则，满足需求的情况下，最简单的系统就是最好的系统</li>
-</ul>
-<h3 id="客户端缓存"><a href="#客户端缓存" class="headerlink" title="客户端缓存"></a>客户端缓存</h3><blockquote>
-<p><strong>客户端缓存（Client Cache）</strong><br>HTTP 协议的无状态性决定了它必须依靠客户端缓存来解决网络传输效率上的缺陷。</p>
-</blockquote>
-<p>HTTP设计之初无状态，但是每次都要携带重复数据，网络性能会降低。针对这个问题引入客户端缓存，逐步形成了“状态缓存“”强制缓存“”协商缓存“的机制。</p>
-<h4 id="强制缓存"><a href="#强制缓存" class="headerlink" title="强制缓存"></a>强制缓存</h4><p>强制缓存：假设在某个时点到来以前，譬如收到响应后的 10 分钟内，资源的内容和状态一定不会被改变，因此客户端可以无须经过任何请求，在该时点前一直持有和使用该资源的本地缓存副本。<br>两类实现：</p>
-<ul>
-<li>Expires： HTTP&#x2F;1.0 协议中开始提供的 Header，后面跟随一个截至时间参数。存在问题<ol>
-<li>受限于客户端本地时间，客户端修改本地时间</li>
-<li>无法处理涉及到用户身份的私有资源，被其它代理服务器缓存</li>
-<li>无法描述不缓存的语义</li>
-</ol>
-</li>
-<li>Cache-Control：HTTP&#x2F;1.1 协议中定义的强制缓存 Header，两个同时存在，以它为准</li>
-</ul>
-<h4 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h4><p>协商缓存：基于变化检测的缓存机制，在一致性上会有比强制缓存更好的表现，但需要一次变化检测的交互开销，性能上就会略差一些。两种变动检查机制，分别是根据资源的修改时间进行检查，以及根据资源唯一标识是否发生变化来进行检查，它们都是靠一组成对出现的请求、响应 Header 来实现的：</p>
-<ul>
-<li><strong>Last-Modified 和 If-Modified-Since</strong>：Last-Modified 是服务器的响应 Header，用于告诉客户端这个资源的最后修改时间。对于带有这个 Header 的资源，当客户端需要再次请求时，会通过 If-Modified-Since 把之前收到的资源最后修改时间发送回服务端。</li>
-<li><strong>Etag 和 If-None-Match</strong>：Etag 是服务器的响应 Header，用于告诉客户端这个资源的唯一标识。对于带有这个 Header 的资源，当客户端需要再次请求时，会通过 If-None-Match 把之前收到的资源唯一标识发送回服务端。</li>
-</ul>
-<p>Etag 是 HTTP 中一致性最强的缓存机制，却又是 HTTP 中性能最差的缓存机制</p>
-<p>对于多类资源，HTTP 协议设计了以 Accept*开头的一套请求 Header 和对应的以 Content-*开头的响应 Header，这些 Headers 被称为 HTTP 的内容协商机制。</p>
-<h3 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h3><p>DNS的解析步骤：</p>
-<ol>
-<li>客户端先检查本地DNS缓存，DNS会有TTL检查有效情况。</li>
-<li>客户端把地址发给本地DNS，可以手工配置，也可以DHCP分配</li>
-<li>本地DNS收到请求后，依次查询地址记录<ul>
-<li><strong>权威域名服务器</strong>：负责翻译特定域名的 DNS 服务器</li>
-<li><strong>根域名服务器</strong>：固定的、无需查询的顶级域名服务器</li>
-</ul>
-</li>
-<li>不存在任何权威域名服务器，找到根，根再到权威服务器</li>
-<li>通过权威服务器找域名的地址记录，不一定是IP，有十多种</li>
-</ol>
-<p>可以根据地区、服务商等因素确定返回记录，找到最合适的数据中心</p>
-<ul>
-<li>性能问题：DNS预取，如果有使用需求就预解释</li>
-<li>劫持问题：HTTPDCN，基于HTTPS的查询服务器，绕过传统DNS</li>
-</ul>
-<h3 id="传输链路"><a href="#传输链路" class="headerlink" title="传输链路"></a>传输链路</h3><p>程序发出的请求能否与应用层、传输层协议提倡的方式相匹配，对传输的效率也会有极大影响。</p>
-<h4 id="连接数优化"><a href="#连接数优化" class="headerlink" title="连接数优化"></a>连接数优化</h4><p>HTTP over TCP 这种搭配未必合适，TCP有三次握手还有慢启动，建立链接时速度最低，后面才稳定，在长时间的尺度下，连接才不是瓶颈。<br>因此开展减少请求数量、增加连接数量去优化。</p>
-<p>节省TCP连接也有很多副作用，比如传输容量膨胀、大图片等问题。因此衍生连接复用技术，即“keep alive机制”</p>
-<p><strong>持久连接</strong>：让客户端对同一个域名长期持有一个或多个不会用完即断的 TCP 连接。在客户端维护一个 FIFO 队列，每次取完数据之后一段时间内不自动断开连接，以便获取下一个资源时直接复用，避免创建 TCP 连接的成本。</p>
-<p>这样又会有阻塞等待问题，2014年又提出了“HTTP管道”复用技术，让客户端一次将所有要请求的资源名单全部发给服务端，由服务端来安排返回顺序，管理传输队列。服务端能够较为准确地评估资源消耗情况，进而能够更紧凑地安排资源传输，保证队列中两项工作之间尽量减少空隙，甚至做到并行化传输，从而提升链路传输的效率。<br>协调复杂，推广不太成功。</p>
-<p>HTTP&#x2F;2解决，用帧来作为信息单位，HTTP&#x2F;2多路复用技术。</p>
-<h4 id="传输压缩"><a href="#传输压缩" class="headerlink" title="传输压缩"></a>传输压缩</h4><p>HTTP支持gzip，最开始是静态预压缩，看客户端的接受情况返回，后来是即时压缩，不等资源压缩完成。<br>持久链接和即时压缩只能二选其一<br>HTTP&#x2F;1.1增加分块传输编码的资源结束判断机制，彻底解决了 Content-Length 与持久链接的冲突问题。</p>
-<h4 id="快速UDP网络连接"><a href="#快速UDP网络连接" class="headerlink" title="快速UDP网络连接"></a>快速UDP网络连接</h4><p>HTTP&#x2F;3 设计重点： HTTP over UDP，叫做QUIC：其不仅能满足 HTTP 传输协议，日后还能支持 SMTP、DNS、SSH、Telnet、NTP 等多种其他上层协议。</p>
-<ul>
-<li>QUIC可靠性完全由自己来实现，能对每个流能做单独的控制，如果在一个流中发生错误，协议栈仍然可以独立地继续为其他流提供服务。</li>
-<li>QUIC 提出了连接标识符的概念，该标识符可以唯一地标识客户端与服务器之间的连接，而无须依靠 IP 地址。这样，切换网络后，只需向服务端发送一个包含此标识符的数据包即可重用既有的连接，因为即使用户的 IP 地址发生变化，原始连接连接标识符依然是有效的。</li>
-</ul>
-<p>Google 在 Chromium 的网络协议栈中同时启用了 QUIC 和传统 TCP 连接，并在 QUIC 连接失败时以零延迟回退到 TCP 连接，尽可能让用户无感知地逐步地扩大 QUIC 的使用面。</p>
-<h3 id="内容分发网络"><a href="#内容分发网络" class="headerlink" title="内容分发网络"></a>内容分发网络</h3><p>影响互联网系统速度的四点因素：</p>
-<ol>
-<li>网站服务器接入网络运营商的出口带宽</li>
-<li>用户客户端接入网络运营商的链路所能提供的入口带宽。</li>
-<li>从网站到用户之间经过的不同运营商之间互联节点的带宽</li>
-<li>从网站到用户之间的物理链路传输时延</li>
-</ol>
-<p> CDN可以显著改善1、3、4的问题</p>
-<h4 id="路由解析"><a href="#路由解析" class="headerlink" title="路由解析"></a>路由解析</h4><p>没有内容分发网络参与的解析过程：<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/1750989315200.png"><br>有内容分发网络的解析过程：<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/1750989558268.png"></p>
-<h4 id="内容分发"><a href="#内容分发" class="headerlink" title="内容分发"></a>内容分发</h4><p>CDN 获取源站资源的过程被称为“内容分发”，“内容分发网络”的名字正是由此而来，有两种分发方式：</p>
-<ul>
-<li>主动分发：源站主动发起，将内容从源站或者其他资源库推送到用户边缘的各个 CDN 缓存节点上。可以采用任何传输方式、推送策略。双十一这种就会主动分发</li>
-<li>被动回源：由用户访问所触发全自动、双向透明的资源缓存过程。当某个资源首次被用户请求的时候，CDN 缓存节点发现自己没有该资源，就会实时从源站中获取，这时资源的响应时间可粗略认为是资源从源站到 CDN 缓存节点的时间，再加上资源从 CDN 发送到用户的时间之和。小型站点一般是这样。</li>
-</ul>
-<h4 id="CDN应用"><a href="#CDN应用" class="headerlink" title="CDN应用"></a>CDN应用</h4><ul>
-<li>加速静态资源</li>
-<li>安全防御：源站只对CDN提供服务，CDH对外界提供服务，防御DDos攻击很有效</li>
-<li>协议升级：对外提供的协议升级</li>
-<li>状态缓存：可以缓存源站的状态</li>
-<li>修改资源：返回资源给用户得时候可以修改内容，比如压缩、比如跨域</li>
-<li>访问控制：实现黑白名单功能</li>
-<li>注入功能：不该源站代码，注入各种功能</li>
-<li>绕过网络措施</li>
-</ul>
-<h3 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h3><blockquote>
-<p><strong>负载均衡（Load Balancing）</strong><br>调度后方的多台机器，以统一的接口对外提供服务，承担此职责的技术组件被称为“负载均衡”。</p>
-</blockquote>
-<p>负载均衡往往是多级的，组要聚焦于网络请求进入数据中心入口之后的其它层级的负载均衡。</p>
-<ul>
-<li>四层负载均衡的优势是性能高，七层负载均衡的优势是功能强。</li>
-<li>做多级混合负载均衡，通常应是低层的负载均衡在前，高层的负载均衡在后</li>
-</ul>
-<p>四层负载均衡：统称，胃痛维持着一个TCP连接，不是说只工作在第四层。只要工作在二层、三层，单纯只处理第四层的数据无法做到负载均衡的转发，因为上四层是主机层，已经到了目标主机了，谈不上转发，最多就是代理。</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>层</th>
-<th>数据单元</th>
-<th>功能</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>7</td>
-<td>应用层</td>
-<td>数据</td>
-<td>提供为应用软件提供服务的接口，用于与其他应用软件之间的通信。典型协议：HTTP、HTTPS、FTP、Telnet、SSH、SMTP、POP3 等</td>
-</tr>
-<tr>
-<td>6</td>
-<td>表达层</td>
-<td>数据</td>
-<td>把数据转换为能与接收者的系统格式兼容并适合传输的格式。</td>
-</tr>
-<tr>
-<td>5</td>
-<td>会话层</td>
-<td>数据</td>
-<td>负责在数据传输中设置和维护计算机网络中两台计算机之间的通信连接。</td>
-</tr>
-<tr>
-<td>4</td>
-<td>传输层</td>
-<td>数据段</td>
-<td>把传输表头加至数据以形成数据包。传输表头包含了所使用的协议等发送信息。典型协议：TCP、UDP、RDP、SCTP、FCP 等</td>
-</tr>
-<tr>
-<td>3</td>
-<td>网络层</td>
-<td>数据包</td>
-<td>决定数据的传输路径选择和转发，将网络表头附加至数据段后以形成报文（即数据包）。典型协议：IPv4&#x2F;IPv6、IGMP、ICMP、EGP、RIP 等</td>
-</tr>
-<tr>
-<td>2</td>
-<td>数据链路层</td>
-<td>数据帧</td>
-<td>负责点对点的网络寻址、错误侦测和纠错。当表头和表尾被附加至数据包后，就形成数据帧（Frame）。典型协议：WiFi（802.11）、Ethernet（802.3）、PPP 等。</td>
-</tr>
-<tr>
-<td>1</td>
-<td>物理层</td>
-<td>比特流</td>
-<td>在物理网络上传送数据帧，它负责管理电脑通信设备和网络媒体之间的互通。包括了针脚、电压、线缆规范、集线器、中继器、网卡、主机接口卡等。</td>
-</tr>
-</tbody></table>
-<h4 id="数据链路层负载均衡"><a href="#数据链路层负载均衡" class="headerlink" title="数据链路层负载均衡"></a>数据链路层负载均衡</h4><p>数据链路层传输：数据帧。</p>
-<p>数据帧中有MAC源地址、MAC目标地址。<strong>数据链路层负载均衡，核心就是修改请求数据帧中的MAC目标地址，转发到对应服务器的网卡上。</strong></p>
-<p>使用这种负载均衡模式时，需要把真实物理服务器集群所有机器的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Virtual_IP_address">虚拟 IP 地址</a>（Virtual IP Address，VIP）配置成与负载均衡器的虚拟 IP 一样</p>
-<p>![](&#x2F;images&#x2F;凤凰架构&#x2F;Pasted image 20250627111727.png)<br>整个请求、转发、响应的链路形成一个“三角关系”，所以这种负载均衡模式也常被很形象地称为“三角传输模式”（Direct Server Return，DSR）</p>
-<h4 id="网络层负载均衡"><a href="#网络层负载均衡" class="headerlink" title="网络层负载均衡"></a>网络层负载均衡</h4><p>网络层传输：分组数据包。</p>
-<p>分组数据包中包含源IP和目的IP，也是同样的思路，<strong>通过改变IP地址来实现数据包的转发</strong>。</p>
-<ul>
-<li><strong>IP隧道传输</strong>：新建数据包，把原来的做为新数据包的Payload，新包中写入目标IP，服务器收到包后，进行拆包，是“套娃式”的传输。效率低，依然还是三角传输，可以跨越VLAN。<br>![](&#x2F;images&#x2F;凤凰架构&#x2F;Pasted image 20250627140319.png)<br>一是要求真实服务器必须支持IP隧道协议，二十必须通过专门配置，都有相同的虚拟IP，需要系统管理员介入。</li>
-<li><strong>NAT（网络地址转换）</strong>：改变目标数据包，不需要拆包。修改了之后，客户端不可能认识该IP，还得必须再返回到负载均衡。<br>![](&#x2F;images&#x2F;凤凰架构&#x2F;Pasted image 20250627140927.png)<br>流量压力比较大的时候，会有性能损失</li>
-<li><strong>SNAT</strong>：在转发时候，不仅修改目标的IP，源IP也一起改，改成均衡器自己的IP。好处就是不配网关就可以正常三层路由到负载均衡商，缺点是所有流量都来自负载均衡器，有一些需要根据目标IP控制的约为逻辑无法进行。</li>
-</ul>
-<h4 id="应用层负载均衡"><a href="#应用层负载均衡" class="headerlink" title="应用层负载均衡"></a>应用层负载均衡</h4><p>四层负载均衡工作模式，本质还是转发；<br>四层以上的负载均衡，只能进行代理。<br>![](&#x2F;images&#x2F;凤凰架构&#x2F;Pasted image 20250627142731.png)</p>
-<p>代理，根据”哪一方能感知到“的原则，分正向代理、反向代理、透明代理。</p>
-<ul>
-<li>正向代理：在客户端设置的，正向代理服务，VPN</li>
-<li>反向代理：在服务器设置的，对客户端透明</li>
-<li>透明代理：对双方都透明，比如架设在路由器上的透明翻墙代理。</li>
-</ul>
-<p>七层负载均衡器属于反向代理，网络性能肯定比不过四层均衡器。由于它至少多一轮TCP握手。主要的应用就是利用它在应用层通信的优势，进行决策。七层代理的功能：</p>
-<ul>
-<li>CDN缓存</li>
-<li>智能化路由</li>
-<li>安全防御</li>
-<li>链路治理</li>
-</ul>
-<h4 id="均衡策略与实现"><a href="#均衡策略与实现" class="headerlink" title="均衡策略与实现"></a>均衡策略与实现</h4><p>负载均衡的两大职责是“选择谁来处理用户请求”和“将用户请求转发过去”，转发前面已经介绍，处理策略如下：</p>
-<ul>
-<li>轮询均衡：从1到N平均分配</li>
-<li>权重轮询均衡：分权重分配</li>
-<li>随机均衡：随机分配给多个服务器</li>
-<li>一致性哈希均衡：算法保证同一个特征值一定落在相同的服务器上</li>
-<li>响应速度均衡：向服务器发出探测请求，哪个块给哪个</li>
-<li>最少连接数均衡：对每一台服务器都有数据记录，分给连接数最小的服务器。</li>
-</ul>
-<p>按照实现具体可以分为软负载和硬负载：</p>
-<ul>
-<li>软负载：操作系统（LVS）、应用程序（Nginx、HAproxy）</li>
-<li>硬负载：F5、A10</li>
-</ul>
-<h3 id="服务端缓存"><a href="#服务端缓存" class="headerlink" title="服务端缓存"></a>服务端缓存</h3><p>引入缓存的两大理由：</p>
-<ol>
-<li>为缓解CPU压力而做缓存：把原来实时计算的内容提前算好，节省CPU算力</li>
-<li>为缓解I&#x2F;O压力而做缓存：网络、磁盘慢介质变为内存这类快介质</li>
-</ol>
-<p>缓存，空间换时间，出发点就是缓解CPU和I&#x2F;O的压力。</p>
-<h4 id="缓存属性"><a href="#缓存属性" class="headerlink" title="缓存属性"></a>缓存属性</h4><p>设计缓存至少考虑四个维度：</p>
-<ul>
-<li><strong>吞吐量</strong>：缓存的吞吐量使用 OPS 值（每秒操作数，Operations per Second，ops&#x2F;s）来衡量，反映了对缓存进行<strong>并发</strong>读、写操作的效率，即缓存本身的工作效率高低。</li>
-<li><strong>命中率</strong>：缓存的命中率即成功从缓存中返回结果次数与总请求次数的比值，反映了引入缓存的价值高低，命中率越低，引入缓存的收益越小，价值越低。</li>
-<li><strong>扩展功能</strong>：缓存除了基本读写功能外，还提供哪些额外的管理功能，譬如最大容量、失效时间、失效事件、命中率统计，等等。</li>
-<li><strong>分布式支持</strong>：缓存可分为“进程内缓存”和“分布式缓存”两大类，前者只为节点本身提供服务，无网络访问操作，速度快但缓存的数据不能在各个服务节点中共享，后者则相反</li>
-</ul>
-<h5 id="吞吐量"><a href="#吞吐量" class="headerlink" title="吞吐量"></a>吞吐量</h5><p>JDK 8 改进之后的 ConcurrentHashMap 基本上就是你能找到的吞吐量最高的缓存容器</p>
-<p>对读写操作的状态维护，有两种思路：</p>
-<ul>
-<li>同步处理，Guava Cache，在访问数据时一并完成缓存淘汰、统计、失效等状态变更操作，通过分段加锁优化减少竞争。</li>
-<li>异步处理，Caffeine，将对数据的读、写过程看作是日志（即对数据的操作指令）的提交过程。</li>
-</ul>
-<h5 id="命中率与淘汰策略"><a href="#命中率与淘汰策略" class="headerlink" title="命中率与淘汰策略"></a>命中率与淘汰策略</h5><p><strong>淘汰策略</strong>：缓存如何自动地实现淘汰低价值目标，最基础的淘汰策略实现方案有以下三种：</p>
-<ul>
-<li>FIFO：优先淘汰最早进入被缓存的数据</li>
-<li>LRU：优先淘汰最久未被使用访问过的数据，HashMap+Linkedlist实现，热点有点时间没访问过，可能也会被淘汰</li>
-<li>LFU：优先淘汰最不经常使用的数据，访问计数，解决惹点问题，但是需要额外维护计数器<ul>
-<li><strong>TinyLFU</strong>：为了缓解 LFU 每次访问都要修改计数器所带来的性能负担，用相对小得多的记录频率和空间来近似地找出缓存中的低价值数据</li>
-<li><strong>W-TinyLFU</strong>：应对稀疏突发访问</li>
-</ul>
-</li>
-</ul>
-<h5 id="扩展功能"><a href="#扩展功能" class="headerlink" title="扩展功能"></a>扩展功能</h5><p>专业的缓存往往还会提供很多额外的功能：</p>
-<ul>
-<li>加载器：让缓存从只能被动存储外部放入的数据，变为能够主动通过加载器去加载指定 Key 值的数据，加载器也是实现自动刷新功能的基础前提。</li>
-<li>淘汰策略：支持用户自己根据需要选择不同的淘汰策略。</li>
-<li>失效策略：要求缓存的数据在一定时间后自动失效或者自动刷新。</li>
-<li>事件通知：提供一些事件监听器</li>
-<li>并发级别：对于通过分段加锁来实现的缓存（以 Guava Cache 为代表），往往会提供并发级别的设置。</li>
-<li>容量控制：缓存通常都支持指定初始容量和最大容量，初始容量目的是减少扩容频率</li>
-<li>持久化：支持将缓存的内容存储到数据库或者磁盘中</li>
-</ul>
-<h5 id="分布式缓存"><a href="#分布式缓存" class="headerlink" title="分布式缓存"></a>分布式缓存</h5><ul>
-<li>复制式缓存：甚少更新但频繁读取的数据。缓存中所有数据在分布式集群的每个节点里面都存在有一份副本，读取数据时无须网络访问，直接从当前节点的进程内存中返回，理论上可以做到与进程内缓存一样高的读取性能</li>
-<li>集中式缓存：更新和读取都较为频繁的数据。Redis成为了分布式缓存的实质上的首选，几乎到了不必管读取、写入哪种操作更频繁，都可以无脑上 Redis 的程度。</li>
-</ul>
-<p>一致性方面，一般也不会追求强一致性的数据使用缓存来处理。比如Redis就是典型的AP式，不保证强一致性。</p>
-<p> ZooKeeper、Doozerd、Etcd是能够保证强一致性的分布式协调框架，其常与 Redis 和其他分布式缓存搭配工作，用来实现其中的通知、协调、队列、分布式锁等功能。</p>
-<p>分布式缓存和进程内缓存各有所长，可以搭配形成透明多级缓存<br>![](&#x2F;images&#x2F;凤凰架构&#x2F;Pasted image 20250630144540.png)</p>
-<h4 id="缓存风险"><a href="#缓存风险" class="headerlink" title="缓存风险"></a>缓存风险</h4><ul>
-<li><strong>缓存穿透</strong>：查询不存在数据，有两种办法，一是本身无法避免的，返回空值，二是恶意攻击的，设置布隆过滤器，最小代价判断元素是否存在集合</li>
-<li><strong>缓存击穿</strong>：单个热点数据失效，导致其都到真实的数据源重。有两种办法，一是以请求该数据的 Key 值为锁，使得只有第一个请求可以流入到真实的数据源中；二是代码管理热点数据，自动管理</li>
-<li><strong>缓存雪崩</strong>：大批数据在短时间内一起失效，导致压力据增。有三种办法：一是提升可用性；二是多级透明缓存，分散过期时间；三是生存期改成随机时间。</li>
-<li><strong>缓存污染</strong>：缓存数据与真实数据不一致。应该遵循更新缓存规范，比如Cache Aside模式，先读缓存，没有读源，放入再响应，写时先写数据源，然后失效缓存。一定是<strong>先数据源后缓存</strong>。</li>
-</ul>
-<h2 id="架构安全性"><a href="#架构安全性" class="headerlink" title="架构安全性"></a>架构安全性</h2><h3 id="认证"><a href="#认证" class="headerlink" title="认证"></a>认证</h3><blockquote>
-<p><strong>认证（Authentication）</strong><br>系统如何正确分辨出操作用户的真实身份？</p>
-</blockquote>
-<p>代码认证的研究发展方向已经很固定，基本上都统一到证书签名上，本书主要研究用户认证。</p>
-<h4 id="认证的标准"><a href="#认证的标准" class="headerlink" title="认证的标准"></a>认证的标准</h4><p>主流的三种认证方式</p>
-<ul>
-<li>通信信道上的认证：传输得时候证明你是谁（SSL&#x2F;TSL认证）</li>
-<li>通信协议上的认证：请求我资源前证明你是谁（HTTP认证）</li>
-<li>通信内容上的认证：使用我服务器证明你是谁（Web内容认证）</li>
-</ul>
-<h5 id="HTTP认证"><a href="#HTTP认证" class="headerlink" title="HTTP认证"></a>HTTP认证</h5><p>HTTP 认证框架提出认证方案是希望能把认证“要产生身份凭证”的目的与“具体如何产生凭证”的实现分离开来。</p>
-<p><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/1751337254849.png"></p>
-<h5 id="Web认证"><a href="#Web认证" class="headerlink" title="Web认证"></a>Web认证</h5><p>采用HTTP认证的比例很低，因为HTTP本质时传输资源，只能面向传输协议设计认证框架。</p>
-<p><strong>Web认证</strong>：由系统本身的功能完成，实现形式上登录表单占了主流，因此也被称为“表单认证”</p>
-<p>WebAuthn注册流程：<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/1751339849482.png"></p>
-<h4 id="认证的实现"><a href="#认证的实现" class="headerlink" title="认证的实现"></a>认证的实现</h4><p>在今时今日，实际活跃于 Java 安全领域的是两个私有的安全框架：Apache Shiro 和 Spring Security</p>
-<ul>
-<li>Shiro：便捷易用</li>
-<li>Security：复杂强大<br>包含功能：认证、安全上下文、授权、密码的存储与验证。</li>
-</ul>
-<h3 id="授权"><a href="#授权" class="headerlink" title="授权"></a>授权</h3><blockquote>
-<p><strong>授权（ Authorization）</strong><br>系统如何控制一个用户该看到哪些数据、能操作哪些功能？</p>
-</blockquote>
-<p>4A（Authentication、Authorization、Audit、Account），安全领域的授权具体涉及两个问题：</p>
-<ul>
-<li><strong>授权过程可靠</strong>：多方授权协议：OAuth2、SAML2.0</li>
-<li><strong>授权结果可控</strong>：自主访问控制DAC、基于属性访问控制ABAC、基于角色访问控制RBAC</li>
-</ul>
-<h4 id="RBAC"><a href="#RBAC" class="headerlink" title="RBAC"></a>RBAC</h4><p>所有的访问控制模型，实质上都是在解决同一个问题：“<strong>谁</strong>（User）拥有什么<strong>权限</strong>（Authority）去<strong>操作</strong>（Operation）哪些<strong>资源</strong>（Resource）”。</p>
-<p>RBAC 将权限从用户身上剥离，改为绑定到“<strong>角色</strong>”（Role）上，将权限控制变为对“<strong>角色</strong>拥有操作哪些<strong>资源</strong>的<strong>许可</strong>”这个逻辑表达式的值是否为真的求解过程。</p>
-<p><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/1751445826794.png"></p>
-<p>天然满足“最小特权原则”，允许角色之间定义关联与约束（继承关系）、不同角色之间也可以具有互斥性。</p>
-<h4 id="OAuth2"><a href="#OAuth2" class="headerlink" title="OAuth2"></a>OAuth2</h4><p> OAuth2 是<strong>面向于解决第三方应用</strong>（Third-Party Application）的认证授权协议。<br> 关键术语：<br> - 第三方应用：需要得到授权访问我资源的那个应用<br> - 授权服务器：能够根据我的意愿提供授权的服务器<br> - 资源服务器：能够提供第三方应用所需资源的服务器<br> - 资源所有者：拥有授权权限的人，即此场景中的“我”。<br> - 操作代理：指用户用来访问服务器的工具</p>
-<p>OAuth2 一共提出了四种不同的授权方式</p>
-<ol>
-<li>授权码模式：最严谨，考虑了所有敏感信息泄露的预防和后果</li>
-<li>隐式授权模式：略掉了通过授权码换取令牌的步骤，整个授权过程都不需要服务端支持</li>
-<li>密码模式：认证和授权就被整合成了同一个过程</li>
-<li>客户端模式：没有了“第二方”的存在</li>
-</ol>
-<h3 id="凭证"><a href="#凭证" class="headerlink" title="凭证"></a>凭证</h3><blockquote>
-<p><strong>凭证（Credentials）</strong><br>系统如何保证它与用户之间的承诺是双方当时真实意图的体现，是准确、完整且不可抵赖的？</p>
-</blockquote>
-<p>共享状态信息在服务端还是客户端，分化为Cookies、Session以及JWT。</p>
-<h4 id="Cookie-Session"><a href="#Cookie-Session" class="headerlink" title="Cookie-Session"></a>Cookie-Session</h4><p> HTTP 协议无状态，最有悖于常见的网络应用场景就是认证授权。<br> RFC 6265规范定义了HTTP状态管理机制，在协议种增加了Set-Cookie指令。一般来说，系统会把状态信息保存在服务端，在Cookie里只传输一个无意义的字符串，以sessionid为名。<br> Cookie-Session 也是最传统的，由服务端与客户端联动来完成的状态管理机制。</p>
-<p>当服务器水平拓展时，设计者必须在CAP中选择牺牲</p>
-<p><strong>分布式下的认证授权问题，不一定只能依靠共享信息实现</strong><br>JWT 令牌与 Cookie-Session 并不是完全对等的解决方案，它只用来处理认证授权问题，充其量能携带少量非敏感的信息，只是 Cookie-Session 在认证授权问题上的替代品</p>
-<h4 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h4><p>当服务器存在多个，客户端只有一个时，把状态信息存储在客户端，每次随着请求发回服务器去。标准答案就是JWT。<br>最常见的使用方式是附在名为 Authorization 的 Header 发送给服务端</p>
-<p>JWT令牌以JSON结构存储，分三个部分：</p>
-<ul>
-<li>令牌头：展示令牌类型和签名算法</li>
-<li>负载：真正需要向服务端传递的信息，告诉服务器用户是谁，拥有什么权限</li>
-<li>签名：使用在对象头中公开的特定签名算法，通过特定的密钥对前面两部分内容进行加密计算，保证信息可信。<br>JWT的缺点：</li>
-<li>令牌难以主动失效</li>
-<li>相对更容易遭受重放攻击</li>
-<li>只能携带相当有限的数据</li>
-<li>必须考虑令牌在客户端如何存储</li>
-<li>无状态不也总是好的</li>
-</ul>
-<h3 id="保密"><a href="#保密" class="headerlink" title="保密"></a>保密</h3><blockquote>
-<p><strong>保密（Confidentiality）</strong><br>系统如何保证敏感数据无法被包括系统管理员在内的内外部人员所窃取、滥用？</p>
-</blockquote>
-<p>加密和解密的统称<br>按照缓解可以分为“端的保密”和“链路的保密”两类</p>
-<h4 id="保密的强度"><a href="#保密的强度" class="headerlink" title="保密的强度"></a>保密的强度</h4><p>分级开展信息保密。以用户登录为例，例举了几种不同强度的保密手段：</p>
-<ul>
-<li>摘要代替明文：无法防止弱密码被彩虹表攻击</li>
-<li>加盐再哈希：不能防止加密被监听、冒认等问题</li>
-<li>物理设备U盾：开辟独立于网络的信息通道</li>
-</ul>
-<h4 id="客户端加密"><a href="#客户端加密" class="headerlink" title="客户端加密"></a>客户端加密</h4><p>真正防御性的密码加密存储确实应该在服务端中进行</p>
-<h4 id="密码存储和验证"><a href="#密码存储和验证" class="headerlink" title="密码存储和验证"></a>密码存储和验证</h4><p>介绍对一个普通安全强度的信息系统，密码如何从客户端传输到服务端，然后存储进数据库的全过程。</p>
-<ol>
-<li>输入明文密码</li>
-<li>简单哈希摘要</li>
-<li>加盐处理</li>
-<li>引入慢哈希函数</li>
-<li>引入随机盐值</li>
-<li>将动态盐值混入客户端传来的哈希值再做一次哈希</li>
-</ol>
-<h3 id="传输"><a href="#传输" class="headerlink" title="传输"></a>传输</h3><blockquote>
-<p><strong>传输（Transport Security）</strong><br>系统如何保证通过网络传输的信息无法被第三方窃听、篡改和冒充？</p>
-</blockquote>
-<h4 id="摘要、加密与签名"><a href="#摘要、加密与签名" class="headerlink" title="摘要、加密与签名"></a>摘要、加密与签名</h4><p>摘要称之为数字摘要（Digital Digest）或数字指纹（Digital Fingerprint）。JWT 令牌中默认的签名信息是对令牌头、负载和密钥三者通过令牌头中指定的哈希算法（HMAC SHA256）计算出来的摘要值</p>
-<p>理想和哈希算法有易变性、不可逆性两大特点。摘要的意义是在源信息不泄漏的前提下辨别其真伪。摘要也会用来做加密和签名。</p>
-<ul>
-<li><p>与加密的区别，加密是可逆的。现代密码学不依靠机密性，加解密算法都是完全公开的，安全建立在特定问题的计算复杂度之上，具体是指算法根据输入端计算输出结果耗费的算力资源很小，但根据输出端的结果反过来推算原本的输入，耗费的算力就极其庞大。</p>
-</li>
-<li><p>在签名方面，现在一般会结合摘要与非对称加密的优点，以对摘要结果做加密的形式来保证签名的适用性。由于对任何长度的输入源做摘要之后都能得到固定长度的结果，所以只要对摘要的结果进行签名，即相当于对整个输入源进行了背书，保证一旦内容遭到篡改，摘要结果就会变化，签名也就马上失效了。</p>
-</li>
-</ul>
-<p> <img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/1751785359667.png"></p>
-<h4 id="数字证书"><a href="#数字证书" class="headerlink" title="数字证书"></a>数字证书</h4><p>无法以“签名”的手段来达成信任时——公开密钥基础设施PKI，借助数字证书认证中心CA将用户和公开密钥连接。<br>PKI是负责发放和管理数字证书的权威机构</p>
-<p>证书（Certificate），证书是权威 CA 中心对特定公钥信息的一种公证载体，也可以理解为是权威 CA 对特定公钥未被篡改的签名背书。证书有具体标准和包含的信息项</p>
-<h4 id="传输安全层"><a href="#传输安全层" class="headerlink" title="传输安全层"></a>传输安全层</h4><p>这里介绍了TLS通信的保障过程。</p>
-<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>提倡的做法是把校验行为从分层中剥离出来，不是在哪一层做，而是在 Bean 上做。即 Java Bean Validation。</p>
-<h1 id="分布式的基石"><a href="#分布式的基石" class="headerlink" title="分布式的基石"></a>分布式的基石</h1><h2 id="分布式共识算法"><a href="#分布式共识算法" class="headerlink" title="分布式共识算法"></a>分布式共识算法</h2><p>如何重要数据的可靠性（多台机器数据一致）、可用性（多台机器数据可访问）</p>
-<p>❓如果你有一份会随时变动的数据，要确保它正确地存储于网络中的几台不同机器之上，你会怎么做？</p>
-<ul>
-<li>将同步视为事务性操作：2PC、3PC实现，完成同步操作</li>
-<li>主从全同步复制（<strong>状态转移</strong>）：Mysql，等待所有 Slave 节点的 Binlog 都完成写入后，Master 节点的事务才进行提交</li>
-</ul>
-<p>可靠性与可用性矛盾，在分布式系统里主流的数据复制方法是以<strong>操作转移（Operation Transfer）</strong> 为基础，类似于状态机，提出状态机复制。</p>
-<p><strong>Quorum机制</strong>：一旦系统中过半数的节点中完成了状态的转换，就认为数据的变化已经被正确地存储在系统当中，这样就可以容忍少数（通常是不超过半数）的节点失联，使得增加机器数量对系统整体的可用性变成是有益的。</p>
-<p><strong>协商共识算法</strong>：需要设计出一种算法，能够让分布式系统内部暂时容忍存在不同的状态，但最终能够保证大多数节点的状态达成一致；同时，能够让分布式系统在外部看来始终表现出整体一致的结果。</p>
-<p>Tips：共识是达成一致性的方法和过程，一致性是数据不同副本之间的差异</p>
-<h3 id="Paxos"><a href="#Paxos" class="headerlink" title="Paxos"></a>Paxos</h3><blockquote>
-<p><strong>Distributed Consensus Algorithm</strong><br>世界上只有一种共识协议，就是 Paxos，其他所有共识算法都是 Paxos 的退化版本。</p>
-</blockquote>
-<p>Leslie Lamport提出Paxox，一种基于消息传递的协商共识算法</p>
-<h4 id="Paxos的诞生"><a href="#Paxos的诞生" class="headerlink" title="Paxos的诞生"></a>Paxos的诞生</h4><p>虚构了“Paxos”希腊城邦，要制定法律，需要靠兼职议会来完成，无法保证所有城邦居民都能够及时地了解新的法律提案、也无法保证居民会及时为提案投票。</p>
-<p>目标：让城邦能够在每一位居民都不承诺一定会及时参与的情况下，依然可以按照少数服从多数的原则，最终达成一致意见。（不考虑错传）</p>
-<h4 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h4><ul>
-<li><strong>提案节点</strong>：称为 Proposer，提出对某个值进行设置操作的节点，设置值这个行为就被称之为<strong>提案</strong>（Proposal），值一旦设置成功，就是不会丢失也不可变的。请注意，Paxos 是典型的基于操作转移模型而非状态转移模型来设计的算法，这里的“设置值”不要类比成程序中变量赋值操作，应该类比成日志记录操作，在后面介绍的 Raft 算法中就直接把“提案”叫作“日志”了。</li>
-<li><strong>决策节点</strong>：称为 Acceptor，是应答提案的节点，决定该提案是否可被投票、是否可被接受。提案一旦得到过半数决策节点的接受，即称该提案被<strong>批准</strong>（Accept），提案被批准即意味着该值不能再被更改，也不会丢失，且最终所有节点都会接受该它。</li>
-<li><strong>记录节点</strong>：被称为 Learner，不参与提案，也不参与决策，只是单纯地从提案、决策节点中学习已经达成共识的提案，譬如少数派节点从网络分区中恢复时，将会进入这种状态。</li>
-</ul>
-<p><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/c9c77ab9-785d-4a81-b812-b4eb1b7dad20.png">（需要反复看）</p>
-<h3 id="Multi-Paxos"><a href="#Multi-Paxos" class="headerlink" title="Multi Paxos"></a>Multi Paxos</h3><p><strong>核心改进</strong>：</p>
-<ul>
-<li>增加了“选主”的过程，提案节点会通过定时轮询（心跳），确定当前网络中的所有节点里是否存在有一个主提案节点，一旦没有发现主节点存在，节点就会在心跳超时后使用 Basic Paxos 中定义的准备、批准的两轮网络交互过程，向所有其他节点广播自己希望竞选主节点的请求，希望整个分布式系统对“由我作为主节点”这件事情协商达成一致共识，如果得到了决策节点中多数派的批准，便宣告竞选成功。</li>
-<li>通俗理解为选主过后，就不会再有其他节点与它竞争，相当于是处于无并发的环境当中进行的有序操作，所以此时系统中要对某个值达成一致，只需要进行一次批准的交互即可，</li>
-</ul>
-<p><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/213d39e5-7f0b-4a89-b39a-27ab3920a36e.png"><br>“分布式系统中如何对某个值达成一致” 转化为如下三个子问题：</p>
-<ul>
-<li>如何选主</li>
-<li>如何把数据复制到各个节点上</li>
-<li>如何保证过程是安全的<br><strong>Raft 算法</strong> ：就是这种解题思路， Etcd、LogCabin、Consul 等重要分布式程序的实现基础</li>
-</ul>
-<h3 id="Gossip-协议"><a href="#Gossip-协议" class="headerlink" title="Gossip 协议"></a>Gossip 协议</h3><p>分布式共识协议：</p>
-<ul>
-<li>强一致性：Paxos、Raft、ZAB 等分布式算法（从系统外部看来，不一致的情况并不会被观察到，所以整体上看系统是强一致性的）</li>
-<li>最终一致性：Gossip 协议，不一致的状态有可能会在一定时间内被外部直接观察到</li>
-</ul>
-<p>区块链、DNS中所有使用到。<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250725003457545.png"></p>
-<p>步骤：</p>
-<ul>
-<li>如果有某一项信息需要在整个网络中所有节点中传播，那从信息源开始，选择一个固定的传播周期（譬如 1 秒），随机选择它相连接的 k 个节点（称为 Fan-Out）来传播消息。</li>
-<li>每一个节点收到消息后，如果这个消息是它之前没有收到过的，将在下一个周期内，选择除了发送消息给它的那个节点外的其他相邻 k 个节点发送相同的消息，直到最终网络中所有节点都收到了消息，尽管这个过程需要一定时间，但是理论上最终网络的所有节点都会拥有相同的消息。<br>缺点：一是不知道什么时候能全部一致，二是可能重复可能取消，增加网络压力<br>对应又设计了两种可能的传播模式：反熵（Anti-Entropy）和传谣（Rumor-Mongering）</li>
-</ul>
-<h2 id="从类库到服务"><a href="#从类库到服务" class="headerlink" title="从类库到服务"></a>从类库到服务</h2><ul>
-<li>类库：在编译期静态链接到程序中的，通过调用本地方法来使用其中的功能</li>
-<li>服务：进程外组件，通过调用远程方法来使用其中的功能</li>
-</ul>
-<p>采用服务来构建程序，获得的收益是软件系统“整体”与“部分”在物理层面的真正隔离，但是也带来了复杂度和性能问题：</p>
-<ul>
-<li><strong>服务发现</strong>：对消费者来说，外部的服务由谁提供？具体在什么网络位置？</li>
-<li><strong>服务的网关路由</strong>：对生产者来说，内部哪些服务需要暴露？哪些应当隐藏？应当以何种形式暴露服务？以什么规则在集群中分配请求？</li>
-<li><strong>服务的负载均衡</strong>对调用过程来说，如何保证每个远程服务都接收到相对平均的流量，获得尽可能高的服务质量与可靠性？</li>
-</ul>
-<h3 id="服务发现的意义"><a href="#服务发现的意义" class="headerlink" title="服务发现的意义"></a>服务发现的意义</h3><p>远程服务调用坐标：权限定名、端口号、服务标识</p>
-<ul>
-<li>全限定名：网络中某台主机的精确位置</li>
-<li>端口号：主机上某一个提供了 TCP&#x2F;UDP 网络服务的程序</li>
-<li>服务标识：该程序所提供的某个具体的方法入口。与应用层协议相关，具有多样性。</li>
-</ul>
-<p>服务发现的两种理解：</p>
-<ul>
-<li>UDDI百科全书式的服务发现：啥都在管辖范围内</li>
-<li>“门牌号码式”的服务发现（<strong>主流</strong>）：只满足从某个代表服务提供者的全限定名到服务实际主机 IP 地址的翻译转换</li>
-</ul>
-<p>演进过程：DNS+负载均衡——&gt;Zookeeper——&gt;Eureka——&gt;基础设施</p>
-<h3 id="可用和可靠"><a href="#可用和可靠" class="headerlink" title="可用和可靠"></a>可用和可靠</h3><p>服务发现的必须过程：</p>
-<ul>
-<li><strong>服务注册</strong>：当服务启动的时候，它应该通过某些形式将自己的坐标信息通知到服务注册中心，这个过程可能由应用程序本身来完成，称为自注册模式</li>
-<li><strong>服务维护</strong>：保证所维护的服务列表的正确性，以避免告知消费者服务的坐标后，得到的服务却不能使用的尴尬情况。</li>
-<li><strong>服务发现</strong>：把一个符号（譬如 Eureka 中的 ServiceID、Nacos 中的服务名、或者通用的 FQDN）转换为服务实际坐标的过程</li>
-</ul>
-<p>概念模型中的服务发现：<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250726023346666.png"></p>
-<p>真实系统中的服务发现：<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250726023704759.png"></p>
-<p>不同框架CAP的选择：</p>
-<ul>
-<li>Eureka 的选择是优先保证高可用性，相对牺牲系统中服务状态的一致性。（通过 Ribbon 和 Hystrix 模块配合来兜底，实现故障转移（Failover）或者快速失败（Failfast））</li>
-<li>Consul 的选择是优先保证高可靠性，相对牺牲系统服务发现的可用性。（Raft算法、Gossip）</li>
-</ul>
-<h3 id="注册中心实现"><a href="#注册中心实现" class="headerlink" title="注册中心实现"></a>注册中心实现</h3><p>有三类工具&#x2F;组件：</p>
-<ul>
-<li>在分布式 K&#x2F;V 存储框架上自己开发的服务发现（提供了分布式环境下读写操作的共识算法，都是CP）</li>
-<li>以基础设施（主要是指 DNS 服务器）来实现服务发现，这类的代表是 SkyDNS、CoreDNS。</li>
-<li>专门用于服务发现的框架和工具，这类的代表是 Eureka、Consul 和 Nacos。</li>
-</ul>
-<h3 id="网关路由"><a href="#网关路由" class="headerlink" title="网关路由"></a>网关路由</h3><p>单体架构：为各个单体系统的副本分发流量的负载均衡器实质上承担了内部服务与外部请求之间的网关角色。</p>
-<p>微服务环境：微服务架构下，每个服务节点都可能由不同团队负责，都有着自己独立的、互不相同的接口，如果服务集群缺少一个统一对外交互的代理人角色，那外部的服务消费者就必须知道所有微服务节点在集群中的精确坐标</p>
-<p><strong>微服务网关</strong>（“服务网关”或者“API 网关”）的首要职责就是作为统一的出口对外提供服务，将外部访问网关地址的流量，根据适当的规则路由到内部集群中正确的服务节点之上。</p>
-<p>网关 &#x3D; 路由器（基础职能） + 过滤器（可选职能）</p>
-<ul>
-<li>路由器：“网络协议层次”和“性能与可用性”<ul>
-<li>四层流量转发与七层流量代理，本质和负载均衡器差不多（从目的角度看，负载均衡器与服务网关会有一些区别，具体在于前者是为了根据均衡算法对流量进行平均地路由，后者是为了根据流量中的某种特征进行正确地路由。）</li>
-<li>网关的性能与它的工作模式和自身实现算法都有关系，但毫无疑问工作模式是最关键的因素，如果能够采用 DSR 三角传输模式，原理上就决定了性能一定会比代理模式来的强</li>
-</ul>
-</li>
-</ul>
-<h3 id="网关IO模型"><a href="#网关IO模型" class="headerlink" title="网关IO模型"></a>网关IO模型</h3><p>网络 I&#x2F;O 的出入口就是 Socket 的读和写</p>
-<p>当发生一次网络请求发生后，将会按顺序经历“等待数据从远程主机到达缓冲区”和“将数据从缓冲区拷贝到应用程序地址空间”两个阶段，根据实现这两个阶段的不同方法，人们把网络 I&#x2F;O 模型总结为两类、五种模型：</p>
-<ul>
-<li>两类是指<strong>同步 I&#x2F;O</strong>与<strong>异步 I&#x2F;O</strong></li>
-<li>五种是指在同步 IO 中又分有划分出<strong>阻塞 I&#x2F;O</strong>、<strong>非阻塞 I&#x2F;O</strong>、<strong>多路复用 I&#x2F;O</strong>和<strong>信号驱动 I&#x2F;O</strong>四种细分模型。</li>
-</ul>
-<p>同步：调用端发出请求之后，得到结果之前必须一直等待；<br>异步：发出调用请求之后将立即返回，不会马上得到处理结果，结果将通过状态变化和回调来通知调用者。<br>阻塞和非阻塞：针对请求处理过程，指收到调用请求之后，返回结果之前，当前处理线程是否会被挂起。</p>
-<ul>
-<li><strong>异步 I&#x2F;O</strong>：订盒饭，做好通知我，一定是非阻塞</li>
-<li><strong>同步 I&#x2F;O</strong>：去食堂打饭<ul>
-<li><strong>阻塞 I&#x2F;O</strong>：发现饭还没做好，你也干不了别的，只能打个瞌睡（线程休眠）</li>
-<li><strong>非阻塞 I&#x2F;O</strong>：你去到饭堂，发现饭还没做好，你就回去了，然后每隔 3 分钟来一次饭堂看饭做好了没，直到饭做好</li>
-<li><strong>多路复用 I&#x2F;O</strong>：可以在同一条阻塞线程上处理多个不同端口的监听。代表整个宿舍去饭堂打饭，去到饭堂，发现饭还没做好，还是继续打瞌睡，但哪个舍友的饭好了，你就马上把那份饭送回去。可以细分 select、epoll、kqueue</li>
-<li><strong>信号驱动 I&#x2F;O</strong>：你去到饭堂，发现饭还没做好，但你跟厨师熟，跟他说饭做好了叫你，然后回去该干嘛干嘛，等收到厨师通知后，你把饭从饭堂拿回宿舍。这里厨师的通知就是那个“信号“。</li>
-</ul>
-</li>
-</ul>
-<p>异步 I&#x2F;O 模型是最方便的，但是目前不是很完善，当下以多路复用 I&#x2F;O 模型模式为主。</p>
-<p>网关的可用性：</p>
-<ul>
-<li>网关应尽可能轻量，过度增加网关的职责是危险的</li>
-<li>应该尽可能选择较成熟的产品实现</li>
-<li>虑在网关之前部署负载均衡器</li>
-</ul>
-<p>BFF网关：应该针对不同的前端，聚合不同的服务，提供不同的接口和网络访问协议支持。</p>
-<h3 id="客户端负载均衡"><a href="#客户端负载均衡" class="headerlink" title="客户端负载均衡"></a>客户端负载均衡</h3><h3 id="客户端负载均衡器"><a href="#客户端负载均衡器" class="headerlink" title="客户端负载均衡器"></a>客户端负载均衡器</h3><p><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250730050927848.png"><br>服务端负载均衡器&#x2F;客户端负载均衡器</p>
-<p>客户端负载均衡器的好处：</p>
-<ul>
-<li>均衡器与服务之间信息交换是进程内的方法调用，不存在任何额外的网络开销。</li>
-<li>不依赖集群边缘的设施，所有内部流量都仅在服务集群的内部循环<br>缺点：</li>
-<li>它与服务运行于同一个进程之内，意味着它的选型受到服务所使用的编程语言的限制</li>
-<li>k从个体服务来看，由于是共用一个进程，均衡器的稳定性会直接影响整个服务进程的稳定性</li>
-</ul>
-<p>客户端均衡器中最具代表性的产品是 Netflix Ribbon 和 Spring Cloud Load Balancer</p>
-<h3 id="代理负载均衡器"><a href="#代理负载均衡器" class="headerlink" title="代理负载均衡器"></a>代理负载均衡器</h3><p>最近两三年，服务网格（Service Mesh）开始逐渐盛行，提出了代理均衡器</p>
-<p><strong>代理均衡器</strong>：对此前的客户端负载均衡器的改进是将原本嵌入在服务进程中的均衡器提取出来，作为一个进程之外，同一 Pod 之内的特殊服务。<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250731002326833.png"><br>代理均衡器的优势：</p>
-<ul>
-<li>不再受编程语言的限制</li>
-<li>在服务拓扑感知方面代理均衡器也要更有优势</li>
-<li>在安全性、可观测性上，由于边车代理都是一致的实现，有利于在服务间建立双向 TLS 通信，也有利于对整个调用链路给出更详细的统计信息。</li>
-</ul>
-<p>目前还不太成熟，但未来会是微服务主流的通讯方式。</p>
-<h3 id="地域和区域"><a href="#地域和区域" class="headerlink" title="地域和区域"></a>地域和区域</h3><ul>
-<li><strong>Region</strong>：地域，譬如华北、东北、华东、华南，这些都是地域范围。不同地域之间是没有内网连接的，所有流量都只能经过公众互联网相连，如果微服务的流量跨越了地域，实际就跟调用外部服务商提供的互联网服务没有任何差别了。</li>
-<li><strong>Zone</strong>：区域，地理上位于同一地域内，但电力和网络是互相独立的物理区域，譬如在华东的上海、杭州、苏州的不同机房就是同一个地域的几个可用区域。同一个地域的可用区域之间具有内网连接，流量不占用公网带宽，因此区域是微服务集群内流量能够触及的最大范围。<ul>
-<li>高可用即多区域部署</li>
-<li>低延迟即同区域部署<br>对于没有使用云计算设施的系统，不涉及地域、区域的概念。</li>
-</ul>
-</li>
-</ul>
-<h2 id="流量治理"><a href="#流量治理" class="headerlink" title="流量治理"></a>流量治理</h2><p>随着拆分出的服务越来越多，也会有两个问题的困扰：</p>
-<ul>
-<li>某一个服务崩溃，导致雪崩效应</li>
-<li>服务没有崩溃，但是大部分请求都超时无法治理</li>
-</ul>
-<h3 id="服务容错"><a href="#服务容错" class="headerlink" title="服务容错"></a>服务容错</h3><p>容错性设计：无法妥协的构建微服务的指导性原则</p>
-<h3 id="容错策略"><a href="#容错策略" class="headerlink" title="容错策略"></a>容错策略</h3><p>常见的容错策略：</p>
-<table>
-<thead>
-<tr>
-<th>容错策略</th>
-<th>优点</th>
-<th>缺点</th>
-<th>应用场景</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>故障转移</strong></td>
-<td>系统自动处理，调用者对失败的信息不可见</td>
-<td>增加调用时间，额外的资源开销</td>
-<td>调用幂等服务  对调用时间不敏感的场景</td>
-</tr>
-<tr>
-<td><strong>快速失败</strong></td>
-<td>调用者有对失败的处理完全控制权，不依赖服务的幂等性</td>
-<td>调用者必须正确处理失败逻辑，如果一味只是对外抛异常，容易引起雪崩</td>
-<td>调用非幂等的服务，超时阈值较低的场景</td>
-</tr>
-<tr>
-<td><strong>安全失败</strong></td>
-<td>不影响主路逻辑</td>
-<td>只适用于旁路调用</td>
-<td>调用链中的旁路服务</td>
-</tr>
-<tr>
-<td><strong>沉默失败</strong></td>
-<td>控制错误不影响全局</td>
-<td>出错的地方将在一段时间内不可用</td>
-<td>频繁超时的服务</td>
-</tr>
-<tr>
-<td><strong>故障恢复</strong></td>
-<td>调用失败后自动重试，也不影响主路逻辑</td>
-<td>重试任务可能产生堆积，重试仍然可能失败</td>
-<td>调用链中的旁路服务  对实时性要求不高的主路逻辑也可以使用</td>
-</tr>
-<tr>
-<td><strong>并行调用</strong></td>
-<td>尽可能在最短时间内获得最高的成功率</td>
-<td>额外消耗机器资源，大部分调用可能都是无用功</td>
-<td>资源充足且对失败容忍度低的场景</td>
-</tr>
-<tr>
-<td><strong>广播调用</strong></td>
-<td>支持同时对批量的服务提供者发起调用</td>
-<td>资源消耗大，失败概率高</td>
-<td>只适用于批量操作的场景</td>
-</tr>
-</tbody></table>
-<h3 id="容错设计模式"><a href="#容错设计模式" class="headerlink" title="容错设计模式"></a>容错设计模式</h3><p><strong>断路器</strong>：通过代理（断路器对象）来一对一地（一个远程服务对应一个断路器对象）接管服务调用者的远程请求。断路器会持续监控并统计服务返回的成功、失败、超时、拒绝等各种结果，当出现故障（失败、超时、拒绝）的次数达到断路器的阈值时，它状态就自动变为“OPEN”，后续此断路器代理的远程访问都将直接返回调用失败，而不会发出真正的远程服务请求。<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/29141bb3-e5b4-447b-8629-470d9d559350.png"></p>
-<p>断路器服务熔断，上有系统服务降级</p>
-<h3 id="舱壁隔离模式"><a href="#舱壁隔离模式" class="headerlink" title="舱壁隔离模式"></a>舱壁隔离模式</h3><p>服务隔离的意义：为了不让某一个远程服务的局部失败演变成全局性的影响，就必须设置某种止损方案</p>
-<ul>
-<li>局部线程池：能够隔离影响，但存在问题。根据 Netflix 官方给出的数据，一旦启用 Hystrix 线程池来进行服务隔离，大概会为每次服务调用增加约 3 毫秒至 10 毫秒的延时，如果调用链中有 20 次远程服务调用，那每次请求就要多付出 60 毫秒至 200 毫秒的代价来换取服务隔离的安全保障。</li>
-<li>信号量机制：只为每个远程服务维护一个线程安全的计数器即可。单纯维护一个作为计数器的信号量的性能损耗，相对于局部线程池来说几乎可以忽略不计。</li>
-</ul>
-<h3 id="重试模式"><a href="#重试模式" class="headerlink" title="重试模式"></a>重试模式</h3><p>故障转移、故障恢复</p>
-<p>重试模式应该满足以下几个前提条件：</p>
-<ul>
-<li>仅在主路逻辑的关键服务上进行同步的重试</li>
-<li>对由瞬时故障导致的失败进行重试</li>
-<li>仅对具备幂等性的服务进行重试</li>
-<li>重试必须有明确的终止条件，常用的终止条件有两种，超时终止、次数终止</li>
-</ul>
-<h3 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h3><p>一个健壮的系统需要做到恰当的流量控制，需要妥善解决以下三个问题：</p>
-<ul>
-<li>依据什么限流：要不要做，要做哪些，做到什么程度</li>
-<li>具体如何限流：掌握常用的服务限流算法和设计模式</li>
-<li>超额流量如何处理：否定式限流&#x2F;阻塞式限流</li>
-</ul>
-<h3 id="流量统计指标"><a href="#流量统计指标" class="headerlink" title="流量统计指标"></a>流量统计指标</h3><ul>
-<li><strong>每秒事务数</strong>（Transactions per Second，TPS）：TPS是衡量信息系统吞吐量的最终标准。</li>
-<li><strong>每秒请求数</strong>（Hits per Second，HPS）：HPS 是指每秒从客户端发向服务端的请求数。如果只要一个请求就能完成一笔业务，那 HPS 与 TPS 是等价的。</li>
-<li><strong>每秒查询数</strong>（Queries per Second，QPS）：QPS 是指一台服务器能够响应的查询次数。如果只有一台服务器来应答请求，那 QPS 和 HPS 是等价的。</li>
-</ul>
-<p>主流系统大多倾向使用 HPS 作为首选的限流指标。但限流指标并不存在任何必须遵循的权威法则，根据系统的实际需要，哪怕完全不选择基于调用计数的指标都是有可能的。</p>
-<h3 id="限流设计模式"><a href="#限流设计模式" class="headerlink" title="限流设计模式"></a>限流设计模式</h3><ul>
-<li>流量计数器：设置一个计数器来进行限流，但是有问题，流量计数器的缺陷根源在于它只是针对时间点进行离散的统计。</li>
-<li>滑动窗口算法：可以保证任意时间片段内，只需经过简单的调用计数比较，就能控制住请求次数一定不会超过限流的阈值，在单机限流或者分布式服务单点网关中的限流中很常用。<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250731055039601.png"></li>
-<li>漏桶模式：一个以请求对象作为元素的先入先出队列（FIFO Queue），队列长度就相当于漏桶的大小，当队列已满时便拒绝新的请求进入。漏桶实现起来很容易，困难在于如何确定漏桶的两个参数：桶的大小和水的流出速率。</li>
-<li>令牌桶模式：漏桶是从水池里往系统出水，令牌桶则是系统往排队机中放入令牌。限制系统在 X 秒内最大请求次数不超过 Y，那就每间隔 X&#x2F;Y 时间就往桶中放一个令牌，当有请求进来时，首先要从桶中取得一个准入的令牌，然后才能进入系统处理。</li>
-<li>分布式限流：前面都是单机限流，精细控制分布式集群中每个服务消耗量的限流算法称为分布式限流。核心差别在于如何管理限流的统计指标</li>
-</ul>
-<h2 id="可靠通讯"><a href="#可靠通讯" class="headerlink" title="可靠通讯"></a>可靠通讯</h2><h3 id="零信任网络"><a href="#零信任网络" class="headerlink" title="零信任网络"></a>零信任网络</h3><p>基于边界的安全模型：把网络划分为不同的区域，不同的区域对应于不同风险级别和允许访问的网络资源权限，将安全防护措施集中部署在各个区域的边界之上，重点关注跨区域的网络流量。</p>
-<p>2010年提出了<strong>零信任安全模型</strong>的概念。<br>中心思想：不应当以某种固有特征来自动信任任何流量，除非明确得到了能代表请求来源（不一定是人，更可能是另一个服务）的身份凭证，否则一律不会有默认的信任关系。</p>
-<table>
-<thead>
-<tr>
-<th>传统、边界安全模型</th>
-<th>云原生、零信任安全模型</th>
-<th>具体需求</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>基于防火墙等设施，认为边界内可信</td>
-<td>服务到服务通信需认证，环境内的服务之间默认没有信任</td>
-<td>保护网络边界（仍然有效）；服务之间默认没有互信</td>
-</tr>
-<tr>
-<td>用于特定的 IP 和硬件（机器）</td>
-<td>资源利用率、重用、共享更好，包括 IP 和硬件</td>
-<td>受信任的机器运行来源已知的代码</td>
-</tr>
-<tr>
-<td>基于 IP 的身份</td>
-<td>基于服务的身份</td>
-<td>同上</td>
-</tr>
-<tr>
-<td>服务运行在已知的、可预期的服务器上</td>
-<td>服务可运行在环境中的任何地方，包括私有云&#x2F;公有云混合部署</td>
-<td>同上</td>
-</tr>
-<tr>
-<td>安全相关的需求由应用来实现，每个应用单独实现</td>
-<td>由基础设施来实现，基础设施中集成了共享的安全性要求。</td>
-<td>集中策略实施点（Choke Points），一致地应用到所有服务</td>
-</tr>
-<tr>
-<td>对服务如何构建、评审、实施的安全需求的约束力较弱</td>
-<td>安全相关的需求一致地应用到所有服务</td>
-<td>同上</td>
-</tr>
-<tr>
-<td>安全组件的可观测性较弱</td>
-<td>有安全策略及其是否生效的全局视图</td>
-<td>同上</td>
-</tr>
-<tr>
-<td>发布不标准，发布频率较低</td>
-<td>标准化的构建和发布流程，每个微服务变更独立，变更更频繁</td>
-<td>简单、自动、标准化的变更发布流程</td>
-</tr>
-<tr>
-<td>工作负载通常作为虚拟机部署或部署到物理主机，并使用物理机或管理程序进行隔离</td>
-<td>封装的工作负载及其进程在共享的操作系统中运行，并有管理平台提供的某种机制来进行隔离</td>
-<td>在共享的操作系统的工作负载之间进行隔离</td>
-</tr>
-<tr>
-<td>零信任网络的主要观点：</td>
-<td></td>
-<td></td>
-</tr>
-</tbody></table>
-<ul>
-<li>零信任网络不等同于放弃在边界上的保护设施</li>
-<li>身份只来源于服务</li>
-<li>服务之间也没有固有的信任关系</li>
-<li>集中、共享的安全策略实施点</li>
-</ul>
-<p>如何构建零信任网络安全是一个非常大而且比较前沿的话题</p>
-<h3 id="服务安全"><a href="#服务安全" class="headerlink" title="服务安全"></a>服务安全</h3><p>基于权威公证人（PKI）建立信任</p>
-<ul>
-<li><strong>单向 TLS 认证</strong>：只需要服务端提供证书，客户端通过服务端证书验证服务器的身份，但服务器并不验证客户端的身份。单向 TLS 用于公开的服务，即任何客户端都被允许连接到服务进行访问，它保护的重点是客户端免遭冒牌服务器的欺骗。</li>
-<li><strong>双向 TLS 认证</strong>：客户端、服务端双方都要提供证书，双方各自通过对方提供的证书来验证对方的身份。双向 TLS 用于私密的服务，即服务只允许特定身份的客户端访问，它除了保护客户端不连接到冒牌服务器外，也保护服务端不遭到非法用户的越权访问。</li>
-</ul>
-<p>根据认证对象分为<strong>服务认证</strong>和<strong>请求认证</strong></p>
-<ul>
-<li>服务认证：Istio——mTLS认证；Spring Cloud—— OAuth 2</li>
-<li>用户认证：Istio——JWKS；Spring Cloud——JWT</li>
-</ul>
-<p>授权：Istio——完备的工具；Spring Cloud——Spring Security</p>
-<h2 id="可观测性"><a href="#可观测性" class="headerlink" title="可观测性"></a>可观测性</h2><p>可观测性可以分解为三个具体方向：事件日志、链路追踪、聚合度量<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250731092727827.png"></p>
-<ul>
-<li><strong>日志</strong>：日志的职责是记录离散事件，通过这些记录事后分析出程序的行为，譬如曾经调用过什么方法，曾经操作过哪些数据，等等。</li>
-<li><strong>追踪</strong>：单体系统时代追踪的范畴基本只局限于栈追踪，分布式系统中的追踪在国内常被称为“全链路追踪”，追踪的主要目的是排查故障，如分析调用链的哪一部分、哪个方法出现错误或阻塞，输入输出是否符合预期，等等。</li>
-<li><strong>度量</strong>：度量是指对系统中某一类信息的统计聚合。</li>
-</ul>
-<p>工业界的情况：</p>
-<ul>
-<li><strong>日志</strong>：大多被统一到 Elastic Stack（ELK）技术栈上，如果说未来还能出现什么变化的话，也就是其中的 Logstash 能看到有被 Fluentd 取代的趋势，让 ELK 变成 EFK，但整套 Elastic Stack 技术栈的地位已是相当稳固。</li>
-<li><strong>度量</strong>：Prometheus 也击败了度量领域里以 Zabbix 为代表的众多前辈，即将成为云原生时代度量监控的事实标准</li>
-<li><strong>追踪</strong>：追踪是与具体网络协议、程序语言密切相关的，近年来各种链路追踪产品层出不穷，市面上主流的工具既有像 Datadog 这样的一揽子商业方案，也有 AWS X-Ray 和 Google Stackdriver Trace 这样的云计算厂商产品，还有像 SkyWalking、Zipkin、Jaeger 这样来自开源社区的优秀产品。</li>
-</ul>
-<h3 id="事件日志"><a href="#事件日志" class="headerlink" title="事件日志"></a>事件日志</h3><p>日志处理的过程<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250731095813194.jpg"><br>以最成熟的 Elastic Stack 技术栈为例子，介绍该链条每个步骤的目的与方法。</p>
-<h4 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h4><p>日志中不应当出现的：<strong>避免打印敏感信息</strong>、<strong>避免引用慢操作</strong>、<strong>避免打印追踪诊断信息</strong>；应该要出现的：<strong>处理请求时的 TraceID</strong>、<strong>系统运行过程中的关键事件</strong>、<strong>启动时输出配置信息</strong>。</p>
-<h4 id="收集与缓冲"><a href="#收集与缓冲" class="headerlink" title="收集与缓冲"></a>收集与缓冲</h4><p>最初，ELK 中日志收集与下一节要讲的加工聚合的职责都是由 Logstash 来承担的，但作为每个节点都要部署的日志收集器就显得太过负重了。后来，Elastic.co 公司将所有需要在服务节点中处理的工作整理成以Libbeat为核心的Beats 框架。</p>
-<p>日志收集器不仅要保证能覆盖全部数据来源，还要尽力保证日志数据的连续性，这其实并不容易做到。</p>
-<p>不必追求ELK与生产日志完全一致，只追求在代价可承受的范围内保证尽可能地保证较高的数据质量。一种最常用的缓解压力的做法是将日志接收者从 Logstash 和 Elasticsearch 转移至抗压能力更强的队列缓存，譬如在 Logstash 之前架设一个 Kafka 或者 Redis 作为缓冲层，面对突发流量，Logstash 或 Elasticsearch 处理能力出现瓶颈时自动削峰填谷，甚至当它们短时间停顿，也不会丢失日志数据。</p>
-<h4 id="加工与聚合"><a href="#加工与聚合" class="headerlink" title="加工与聚合"></a>加工与聚合</h4><p>Logstash 的基本职能是把日志行中的非结构化数据，通过 Grok 表达式语法转换，以 JSON 格式输出到 Elasticsearch 中，Elasticsearch 便可针对不同的数据项来建立索引，进行条件查询、统计、聚合等操作的了。</p>
-<h4 id="存储与查询"><a href="#存储与查询" class="headerlink" title="存储与查询"></a>存储与查询</h4><p>Elasticsearch 在日志分析这方面完全没有什么值得一提的竞争者，几乎就是解决此问题的唯一答案。</p>
-<ul>
-<li>从数据特征的角度看，日志是典型的基于时间的数据流，日志的数据特征决定了所有用于日志分析的 Elasticsearch 都会使用时间范围作为索引</li>
-<li>从数据价值的角度看，日志基本上只会以最近的数据为检索目标，点决定了可以很容易区分出冷数据和热数据，进而对不同数据采用不一样的硬件策略。</li>
-<li>从数据使用的角度看，分析日志很依赖全文检索和即席查询，对实时性的要求是处于实时与离线两者之间的“近实时”，也正好都是 Elasticsearch 的强项。</li>
-</ul>
-<p>Elasticsearch 只提供了 API 层面的查询能力，它通常搭配同样出自 Elastic.co 公司的 Kibana 一起使用，可以将 Kibana 视为 Elastic Stack 的 GUI 部分。</p>
-<h3 id="链路追踪"><a href="#链路追踪" class="headerlink" title="链路追踪"></a>链路追踪</h3><p>广义上讲，一个完整的分布式追踪系统应该由数据收集、数据存储和数据展示三个相对独立的子系统构成，而狭义上讲的追踪则就只是特指链路追踪数据的收集部分。</p>
-<h4 id="追踪与跨度"><a href="#追踪与跨度" class="headerlink" title="追踪与跨度"></a>追踪与跨度</h4><p>Dapper 提出了“追踪”与“跨度”两个概念：<br><strong>追踪</strong>：从客户端发起请求抵达系统的边界开始，记录请求流经的每一个服务，直到到向客户端返回响应为止，这整个过程就称为一次“追踪”<br><strong>跨度</strong>：由于每次 Trace 都可能会调用数量不定、坐标不定的多个服务，为了能够记录具体调用了哪些服务，以及调用的顺序、开始时点、执行时长等信息，每次开始调用服务前都要先埋入一个调用记录，这个记录称为一个“跨度”、</p>
-<p>每一次 Trace 实际上都是由若干个有顺序、有层级关系的 Span 所组成一颗“追踪树”（Trace Tree）<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250731103715032.png"><br>链路追踪面临的挑战：<strong>低性能损耗</strong>、<strong>对应用透明</strong>、<strong>随应用扩缩</strong>、<strong>持续的监控</strong></p>
-<h4 id="数据收集"><a href="#数据收集" class="headerlink" title="数据收集"></a>数据收集</h4><p>追踪系统根据数据收集方式的差异，可分为三种主流的实现方式，分别是<strong>基于日志的追踪</strong>（Log-Based Tracing），<strong>基于服务的追踪</strong>（Service-Based Tracing）和<strong>基于边车代理的追踪</strong>（Sidecar-Based Tracing）：</p>
-<ul>
-<li>基于日志的追踪：将 Trace、Span 等信息直接输出到应用日志中，然后随着所有节点的日志归集过程汇聚到一起，再从全局日志信息中反推出完整的调用链拓扑关系。缺点是直接依赖于日志归集过程，代表产品是 Spring Cloud Sleuth</li>
-<li>基于服务的追踪：通过某些手段给目标应用注入追踪探针（Probe），针对 Java 应用一般就是通过 Java Agent 注入的。探针在结构上可视为一个寄生在目标服务身上的小型微服务系统，它一般会有自己专用的服务注册、心跳检测等功能，有专门的数据收集协议，把从目标系统中监控得到的服务调用信息，通过另一次独立的 HTTP 或者 RPC 请求发送给追踪系统。消耗资源，侵入性强。目前服务追踪的其中一个发展趋势是轻量化，国产的 SkyWalking 正是这方面的佼佼者。</li>
-<li>基于边车代理的追踪：服务网格的专属方案，它对应用完全透明，无论是日志还是服务本身都不会有任何变化；目前还不够普及。占有率最好的边车代理：Envoy</li>
-</ul>
-<h4 id="追踪规范化"><a href="#追踪规范化" class="headerlink" title="追踪规范化"></a>追踪规范化</h4><p>为了推进追踪领域的产品的标准化，2016 年 11 月，CNCF 技术委员会接受了 OpenTracing 作为基金会第三个项目。OpenTracing 是一套与平台无关、与厂商无关、与语言无关的追踪协议规范，只要遵循 OpenTracing 规范，任何公司的追踪探针、存储、界面都可以随时切换，也可以相互搭配使用。</p>
-<p>OpenTracing 规范公布后，几乎所有业界有名的追踪系统，譬如 Zipkin、Jaeger、SkyWalking 等都很快宣布支持 OpenTracing，Google 自己却在此时出来表示反对，并提出了与 OpenTracing 目标类似的 OpenCensus 规范，随后又得到了巨头 Microsoft 的支持和参与。</p>
-<p>OpenTracing 和 OpenCensus 迅速形成了可观测性的两大阵营，一边是在这方面深耕多年的众多老牌 APM 系统厂商，另一边是分布式追踪概念的提出者 Google，以及与 Google 同样庞大的 Microsoft。</p>
-<p>2019年发布终极解决方案：OpenTelemetry，目前还不太成熟。</p>
-<h3 id="聚合度量"><a href="#聚合度量" class="headerlink" title="聚合度量"></a>聚合度量</h3><p>度量（Metrics）的目的是揭示系统的总体运行状态。</p>
-<p>度量总体上可分为客户端的指标收集、服务端的存储查询以及终端的监控预警三个相对独立的过程</p>
-<h3 id="指标收集"><a href="#指标收集" class="headerlink" title="指标收集"></a>指标收集</h3><p>“如何定义指标”以及“如何将这些指标告诉服务端”</p>
-<p>指标的数据类型可数：<strong>计数度量器</strong>、<strong>瞬态度量器</strong>、<strong>吞吐率度量器</strong>、<strong>直方图度量器</strong>、<strong>采样点分位图度量器</strong></p>
-<p>告诉服务端的方式：<strong>拉取式采集</strong>、<strong>推送式采集</strong></p>
-<p><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250731110627537.png"></p>
-<p>这是一个位于 Prometheus Server 外部的相对独立的中介模块，将外部推送来的指标放到 Push Gateway 中暂存，然后再等候 Prometheus Server 从 Push Gateway 中去拉取。Prometheus 设计 Push Gateway 的本意是为了解决 Pull 的一些固有缺陷，譬如目标系统位于内网，通过 NAT 访问外网，外网的 Prometheus 是无法主动连接目标系统的，这就只能由目标系统主动推送数据；又譬如某些小型短生命周期服务，可能还等不及 Prometheus 来拉取，服务就已经结束运行了，因此也只能由服务自己 Push 来保证度量的及时和准确。</p>
-<p>Exporter 是 Prometheus 提出的概念，它是目标应用的代表，既可以独立运行，也可以与应用运行在同一个进程中，只要集成 Prometheus 的 Client Library 便可。Exporter 以 HTTP 协议返回符合 Prometheus 格式要求的文本数据给 Prometheus 服务器。</p>
-<h3 id="存储查询"><a href="#存储查询" class="headerlink" title="存储查询"></a>存储查询</h3><p>时序数据库用于存储跟随时间而变化的数据，并且以时间（时间点或者时间区间）来建立索引的数据库。</p>
-<p>Prometheus 服务端自己就内置了一个强大时序数据库实现，该时序数据库提供了名为 PromQL 的数据查询语言，能对时序数据进行丰富的查询、聚合以及逻辑运算。</p>
-<h3 id="监控预警"><a href="#监控预警" class="headerlink" title="监控预警"></a>监控预警</h3><p>指标度量是手段，最终目的是做分析和预警。</p>
-<p>在生产环境下，大多是 Prometheus 配合 Grafana 来进行展示的，这是 Prometheus 官方推荐的组合方案，但该组合也并非唯一选择，如果要搭配 Kibana 甚至 SkyWalking来使用也都是完全可行的。</p>
-<p>Prometheus 提供了专门用于预警的 Alert Manager，将 Alert Manager 与 Prometheus 关联后，可以设置某个指标在多长时间内达到何种条件就会触发预警状态，触发预警后，根据路由中配置的接收器，譬如邮件接收器、Slack 接收器、微信接收器、或者更通用的WebHook接收器等来自动通知用户。</p>
-<h1 id="不可变基础设施"><a href="#不可变基础设施" class="headerlink" title="不可变基础设施"></a>不可变基础设施</h1><h2 id="从微服务到云原生"><a href="#从微服务到云原生" class="headerlink" title="从微服务到云原生"></a>从微服务到云原生</h2><p>在云原生基金会定义的“云原生”概念中，“不可变基础设施”提升到了与微服务平级的重要程度，此时它的内涵已不再局限于方便运维、程序升级和部署的手段，而是升华为向应用代码隐藏分布式架构复杂度、让分布式架构得以成为一种可普遍推广的普适架构风格的必要前提。</p>
-<h2 id="虚拟化容器"><a href="#虚拟化容器" class="headerlink" title="虚拟化容器"></a>虚拟化容器</h2><p>容器是云计算、微服务等诸多软件业界核心技术的共同基石，容器的首要目标是让软件分发部署过程从传统的发布安装包、靠人工部署转变为直接发布已经部署好的、包含整套运行环境的虚拟化镜像。</p>
-<p>让软件能够在任何环境、任何物理机器上达到“一次编译，需要有以下三方面的兼容性来共同保障：</p>
-<ul>
-<li><strong>ISA 兼容</strong>：目标机器指令集兼容性，譬如 ARM 架构的计算机无法直接运行面向 x86 架构编译的程序</li>
-<li><strong>ABI 兼容</strong>：目标系统或者依赖库的二进制兼容性，譬如 Windows 系统环境中无法直接运行 Linux 的程序，又譬如 DirectX 12 的游戏无法运行在 DirectX 9 之上</li>
-<li><strong>环境兼容</strong>：目标环境的兼容性，譬如没有正确设置的配置文件、环境变量、注册中心、数据库地址、文件系统的权限等等，任何一个环境因素出现错误，都会让你的程序无法正常运行。</li>
-</ul>
-<p>解决以上三项兼容性问题的虚拟化技术分类：</p>
-<ul>
-<li><strong>指令集虚拟化</strong>：通过软件来模拟不同 ISA 架构的处理器工作过程，将虚拟机发出的指令转换为符合本机 ISA 的指令</li>
-<li><strong>硬件抽象层虚拟化</strong>：以软件或者直接通过硬件来模拟处理器、芯片组、内存、磁盘控制器、显卡等设备的工作过程。</li>
-<li><strong>操作系统层虚拟化</strong>：采用隔离手段，使得不同进程拥有独立的系统资源和资源配额，看起来仿佛是独享了整个操作系统一般，其实就是容器化</li>
-<li><strong>运行库虚拟化</strong>：使用软件翻译的方法来模拟系统，它以一个独立进程来代替操作系统内核来提供目标软件运行所需的全部能力</li>
-<li><strong>语言虚拟化</strong>：由虚拟机将高级语言生成的中间代码转换为目标机器可以直接执行的指令，代表为 Java 的 JVM 和.NET 的 CLR</li>
-</ul>
-<h3 id="容器的崛起"><a href="#容器的崛起" class="headerlink" title="容器的崛起"></a>容器的崛起</h3><p>以容器发展历史为线索，介绍容器技术在不同历史阶段中的主要关注点。</p>
-<h4 id="隔离文件：chroot"><a href="#隔离文件：chroot" class="headerlink" title="隔离文件：chroot"></a>隔离文件：chroot</h4><p> 1979年，系统提供chroot命令，功能：当某个进程经过<code>chroot</code>操作之后，它的根目录就会被锁定在命令参数所指定的位置，以后它或者它的子进程将不能再访问和操作该目录之外的其他文件。<br> 1991年：第一个监控黑客行动的蜜罐程序就是使用<code>chroot</code>来实现的<br> 2000年：引入<code>pivot_root</code>技术来实现文件隔离<br> 时至今日，<code>chroot</code>命令依然活跃在 UNIX 系统与几乎所有主流的 Linux 发行版中，都并不能提供完美的隔离性。文件隔离性有限</p>
-<h4 id="隔离访问：namespaces"><a href="#隔离访问：namespaces" class="headerlink" title="隔离访问：namespaces"></a>隔离访问：namespaces</h4><p>2002 年，Linux Kernel 2.4.19 版内核引入了一种全新的隔离机制：Linux 名称空间，一种由内核直接提供的全局资源封装，是内核针对进程设计的访问隔离机制。<br>最初的目的依然只是为了隔离文件系统，后来，要求系统隔离其他访问操作的呼声愈发强烈<br>2006年，内核陆续添加了 UTS、IPC 等名称空间隔离，直到目前最新的 Linux Kernel 5.6 版内核为止，Linux 名称空间支持八种资源的隔离</p>
-<h4 id="隔离资源：cgroups"><a href="#隔离资源：cgroups" class="headerlink" title="隔离资源：cgroups"></a>隔离资源：cgroups</h4><p>cgroup：用于隔离或者说分配并限制某个进程组能够使用的资源配额，资源配额包括处理器时间、内存大小、磁盘 I&#x2F;O 速度，等等</p>
-<h4 id="封装系统：LXC"><a href="#封装系统：LXC" class="headerlink" title="封装系统：LXC"></a>封装系统：LXC</h4><p>2008 年 Linux Kernel 2.6.24 内核刚刚开始提供cgroups的同一时间，就马上发布了名为Linux 容器<br>LXC 眼中的容器的定义与 OpenVZ 和 Linux-VServer 并无差别，是一种封装<code>系统</code>的轻量级虚拟机，而 Docker 眼中的容器的定义则是一种封装应用的技术手段。</p>
-<h4 id="封装应用：Docker"><a href="#封装应用：Docker" class="headerlink" title="封装应用：Docker"></a>封装应用：Docker</h4><p>2013 年宣布开源的 Docker 毫无疑问是容器发展历史上里程碑式的发明，然而 Docker 的成功似乎没有太多技术驱动的成分。LXC是封装系统，Docker是封装应用。<br>2014 年，Docker 开源了自己用 Golang 开发的libcontainer，能直接与系统内核打交道，不必依赖 LXC 来提供容器化隔离能力了。<br>2015 年，在 Docker 的主导和倡议下，多家公司联合制定了“开放容器交互标准”（Open Container Initiative，OCI），这是一个关于容器格式和运行时的规范文件，其中包含运行时标准（runtime-spec ）、容器镜像标准（image-spec）和镜像分发标准（distribution-spec）<br>2016 年，Docker 把 containerd 捐献给了 CNCF 管理，runC 与 containerd 两个项目的捐赠托管，即带有 Docker 对开源信念的追求，也带有 Docker 在众多云计算大厂夹击下自救的无奈，这两个项目将成为未来 Docker 消亡和存续的伏笔</p>
-<p><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250807190756431.png"></p>
-<h4 id="封装集群：Kubernetes"><a href="#封装集群：Kubernetes" class="headerlink" title="封装集群：Kubernetes"></a>封装集群：Kubernetes</h4><ul>
-<li>以 Docker 为代表的容器引擎将软件的发布流程从分发二进制安装包转变为直接分发虚拟化后的整个运行环境，令应用得以实现跨机器的绿色部署；</li>
-<li>以 Kubernetes 为代表的容器编排框架，就是把大型软件系统运行所依赖的集群环境也进行了虚拟化，令集群得以实现跨数据中心的绿色部署，并能够根据实际情况自动扩缩。</li>
-</ul>
-<p>2015 年 7 月，Kubernetes 发布了第一个正式版本 1.0 版，更重要的事件是 Google 宣布与 Linux 基金会共同筹建云原生基金会（Cloud Native Computing Foundation，CNCF），并且将 Kubernetes 托管到 CNCF，成为其第一个项目。随后，Kubernetes 以摧枯拉朽之势覆灭了容器编排领域的其他竞争对手</p>
-<p><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250807191420768.png">2016 年，Kubernetes 1.5 版本开始引入“容器运行时接口”（Container Runtime Interface，CRI），这是一个定义容器运行时应该如何接入到 kubelet 的规范标准。<br>2017 年，由 Google、RedHat、Intel、SUSE、IBM 联合发起的CRI-O（Container Runtime Interface Orchestrator）项目发布了首个正式版本。<br>2018 年，由 Docker 捐献给 CNCF 的 containerd，在 CNCF 的精心孵化下发布了 1.1 版，1.1 版与 1.0 版的最大区别是此时它已完美地支持了 CRI 标准，这意味着原本用作 CRI 适配器的 cri-containerd 从此不再需要。</p>
-<h3 id="以容器构建系统"><a href="#以容器构建系统" class="headerlink" title="以容器构建系统"></a>以容器构建系统</h3><p>分布式系统里应用的概念已不再等同于进程，此时的应用需要多个进程共同协作，通过集群的形式对外提供服务，以虚拟化方法实现这个目标的过程就被称为容器编排。</p>
-<h4 id="隔离与协作"><a href="#隔离与协作" class="headerlink" title="隔离与协作"></a>隔离与协作</h4><p>从k8s设计的实现意图出发了解k8s</p>
-<p>Kubernetes 时代的 Pod 整合了 Borg 时代的“Prod”（Production Task 的缩写）与“Non-Prod”的职能。</p>
-<ol>
-<li>两个应用封装在一个容器——违背了 Docker 提倡的单个容器封装单进程应用的最佳实践。</li>
-<li>两个应用封装在两个容器，通过共享空间交换数据——同一个进程组中的多个进程天然就可以共享着相同的访问权限与资源配额，要找到进程组，即Pod。Pod默认共享UTS 、网络、IPC等名称空间，Pod 还要实现原子性调度</li>
-<li>容器都运行在一个节点上——要协同调度，Pod 是隔离与调度的基本单位</li>
-</ol>
-<p><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250807193153146.png"></p>
-<p>K8s关键资源概念</p>
-<ul>
-<li><strong>容器</strong>（Container）：延续了自 Docker 以来一个容器封装一个应用进程的理念，是镜像管理的最小单位。</li>
-<li><strong>生产任务</strong>（Pod）：补充了容器化后缺失的与进程组对应的“容器组”的概念，Pod 中容器共享 UTS、IPC、网络等名称空间，是资源调度的最小单位。</li>
-<li><strong>节点</strong>（Node）：对应于集群中的单台机器，这里的机器即可以是生产环境中的物理机，也可以是云计算环境中的虚拟节点，节点是处理器和内存等资源的资源池，是硬件单元的最小单位。</li>
-<li><strong>集群</strong>（Cluster）：对应于整个集群，Kubernetes 提倡理念是面向集群来管理应用。当你要部署应用的时候，只需要通过声明式 API 将你的意图写成一份元数据（Manifests），将它提交给集群即可，而无需关心它具体分配到哪个节点（尽管通过标签选择器完全可以控制它分配到哪个节点，但一般不需要这样做）、如何实现 Pod 间通信、如何保证韧性与弹性，等等，所以集群是处理元数据的最小单位。</li>
-<li><strong>集群联邦</strong>（Federation）：对应于多个集群，通过联邦可以统一管理多个 Kubernetes 集群，联邦的一种常见应用是支持跨可用区域多活、跨地域容灾的需求</li>
-</ul>
-<h4 id="韧性与弹性"><a href="#韧性与弹性" class="headerlink" title="韧性与弹性"></a>韧性与弹性</h4><p>作为用户，当然最希望容器编排系统能自动把所有意外因素都消灭掉，让任何每一个服务都永远健康，永不出错。但永不出错的服务是不切实际的，那就只能退而求其次，让编排系统在这些服务出现问题，运行状态不正确的时候，能自动将它们调整成正确的状态</p>
-<p>将这种控制回路的思想迁移应用到容器编排上，自然会为 Kubernetes 中的资源附加上了期望状态与实际状态两项属性。</p>
-<p>与资源相对应，只要是实际状态有可能发生变化的资源对象，通常都会由对应的控制器进行追踪，每个控制器至少会追踪一种类型的资源。</p>
-<p>如果你希望改变某个资源的某种状态，应该将期望状态告诉 Kubernetes，而不是去教 Kubernetes 具体该如何操作。</p>
-<p>故障恢复、滚动更新、自动扩缩这些特性，在云原生中时代里常被概括成服务的弹性（Elasticity）与韧性（Resilience），ReplicaSet、Deployment、Autoscaling 的用法，也属于是所有 Kubernetes 教材资料都会讲到的“基础必修课”。</p>
-<h3 id="以应用为中心的封装"><a href="#以应用为中心的封装" class="headerlink" title="以应用为中心的封装"></a>以应用为中心的封装</h3><p>Kubernetes 被誉为云原生时代的操作系统，但是，从易用角度讲，坦白说差距还非常大，云原生基础设施的其中一个重要目标是接管掉业务系统复杂的非功能特性，让业务研发与运维工作变得足够简单，不受分布式的牵绊，然而 Kubernetes 被诟病得最多的就是复杂，自诞生之日起就以陡峭的学习曲线而闻名。</p>
-<p>定义“以应用为中心的封装”，有以下几种思路：</p>
-<ul>
-<li>Kustomize：“用配置文件来配置配置文件”，根据环境来生成不同的部署配置。只要建立多个 Kustomization 文件，开发人员就能以基于基准进行派生（Base and Overlay）的方式，对不同的模式（譬如生产模式、调试模式）、不同的项目（同一个产品对不同客户的客制化）定制出不同的资源整合包。</li>
-<li>Helm 与 Chart：模仿 Linux 包管理器的思路去管理 Kubernetes 应用，Helm 无法很好地管理这种有状态的依赖关系</li>
-<li>Operator 与 CRD：一种封装、部署和管理 Kubernetes 应用的方法，尤其是针对最复杂的有状态应用去封装运维能力的解决方案，Operator 是如何解决那些 StatefulSet 覆盖不到的有状态服务管理需求的</li>
-<li>开放应用模型：由一组相互关联但又离散独立的组件构成，这些组件实例化在合适的运行时上，由配置来控制行为并共同协作提供统一的功能，开发人员负责管理 Component；运维人员将 Component 组合并绑定 Trait 变成 Application Configuration；平台人员或基础设施提供方负责提供 OAM 的解释能力</li>
-</ul>
-<h2 id="容器间网络"><a href="#容器间网络" class="headerlink" title="容器间网络"></a>容器间网络</h2><p>本节特指“基于 Linux 系统的网络虚拟化技术来实现的容器间网络通信”</p>
-<h3 id="Linux-网络虚拟化"><a href="#Linux-网络虚拟化" class="headerlink" title="Linux 网络虚拟化"></a>Linux 网络虚拟化</h3><h4 id="网络通信模型"><a href="#网络通信模型" class="headerlink" title="网络通信模型"></a>网络通信模型</h4><p>OSI 七层模型——&gt; TCP&#x2F;IP 四层模型<img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250808100735641.png"><br>网络传输的阶段：</p>
-<ul>
-<li><strong>Socket</strong>：应用层的程序是通过 Socket 编程接口来和内核空间的网络协议栈通信的。</li>
-<li><strong>TCP&#x2F;UDP</strong>：传输层协议族里最重要的协议无疑是传输控制协议（Transmission Control Protocol，TCP）和用户数据报协议（User Datagram Protocol，UDP）两种</li>
-<li><strong>IP</strong>：网络层协议最主要就是网际协议（Internet Protocol，IP），其他还有因特网组管理协议（Internet Group Management Protocol，IGMP）</li>
-<li><strong>Device</strong>：网络设备（Device）是网络访问层中面向系统一侧的接口</li>
-<li><strong>Driver</strong>：网卡驱动程序（Driver）是网络访问层中面向硬件一侧的接口</li>
-</ul>
-<h4 id="干预网络通信"><a href="#干预网络通信" class="headerlink" title="干预网络通信"></a>干预网络通信</h4><p> Linux Kernel 2.4 版开始，内核开放了一套通用的、可供代码干预数据在协议栈中流转的过滤器框架。</p>
-<p>围绕网络层（IP 协议）的周围，埋下了五个钩子（Hooks），每当有数据包流到网络层，经过这些钩子时，就会自动触发由内核模块注册在这里的回调函数，程序代码就能够通过回调来干预 Linux 的网络通信。</p>
-<p><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250808102611840.png"><br>Netfilter 允许在同一个钩子处注册多个回调函数，因此向钩子注册回调函数时必须提供明确的优先级，以便触发时能按照优先级从高到低进行激活。</p>
-<p>以 Netfilter 为基础的应用有很多，其中使用最广泛的毫无疑问要数 Xtables 系列工具，譬如iptables、ebtables、arptables、ip6tables 等等</p>
-<p>iptables 不仅仅是 Linux 系统自带的一个网络工具，它在容器间通信中扮演相当重要的角色，譬如 Kubernetes 用来管理 Service 的 Endpoints 的核心组件 kube-proxy，就依赖 iptables 来完成 ClusterIP 到 Pod 的通信，这种通信的本质就是一种 NAT 访问</p>
-<h4 id="虚拟化网络设备"><a href="#虚拟化网络设备" class="headerlink" title="虚拟化网络设备"></a>虚拟化网络设备</h4><p>目前主流的虚拟网卡方案有tun&#x2F;tap和veth两种：</p>
-<ul>
-<li><strong>tun&#x2F;tap</strong>： 在时间上 tun&#x2F;tap 出现得更早，它是一组通用的虚拟驱动程序包，里面包含了两个设备，分别是用于网络数据包处理的虚拟网卡驱动，以及用于内核空间与用户空间交互的字符设备（Character Devices，这里具体指&#x2F;dev&#x2F;net&#x2F;tun）驱动。 tun&#x2F;tap 方案比起 veth 方案有更广泛的适用范围。<img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250808104458086.png"></li>
-<li>供了专门的虚拟以太网（Virtual Ethernet，习惯简写做 veth）让两个隔离的网络名称空间之间可以互相通信。直接把 veth 比喻成是虚拟网卡其实并不十分准确，如果要和物理设备类比，它应该相当于由交叉网线连接的一对物理网卡。它是一对设备，对多个容器间通信，如果仍然单纯只用 veth pair 的话，事情就会变得非常麻烦，让每个容器都为与它通信的其他容器建立一对专用的 veth pair 并不实际，这时就迫切需要有一台虚拟化的交换机来解决多容器之间的通信问题了<img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250808104452797.png"></li>
-</ul>
-<p>既然有了虚拟网卡，很自然也会联想到让网卡接入到交换机里，实现多个容器间的相互连接。Linux Bridge便是 Linux 系统下的虚拟化交换机</p>
-<p> Linux Bridge 与普通交换机的区别是除了显式接入的设备外，它自己也无可分割地连接着一台有着完整网络协议栈的 Linux 主机，因为 Linux Bridge 本身肯定是在某台 Linux 主机上创建的，可以看作 Linux Bridge 有一个与自己名字相同的隐藏端口，隐式地连接了创建它的那台 Linux 主机。因此，Linux Bridge 允许给自己设置 IP 地址，比普通交换机多出一种特殊的转发情况。<br> Linux Bridge 构建单 IP 容器网络<br> <img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250808104956285.png"></p>
-<p>下一步就是要使用这些设备组成网络，容器分布在不同的物理主机上，每一台物理主机都有物理网络相互联通</p>
-<p>SDN（Software Defined Network，SDN） 里位于下层的物理网络被称为 Underlay，它着重解决网络的连通性与可管理性，位于上层的逻辑网络被称为 Overlay，它着重为应用提供与软件需求相符的传输服务和网络拓扑。由于跨主机的容器间通信，用的大多是 Overlay 网络，以 VXLAN 为例去介绍 Overlay 网络的原理。</p>
-<p>VLAN的缺陷：</p>
-<ul>
-<li>VLAN ID 最多只能有 212&#x3D;4096 种取值。当云计算数据中心出现后，即使不考虑虚拟化的需求，单是需要分配 IP 的物理设备都有可能数以万计甚至数以十万计，这样 4096 个 VLAN 肯定是不够用的。（出新规范）</li>
-<li>VLAN 本身是为二层网络所设计的，但是在两个独立数据中心之间，信息只能够通过三层网络传递（定义了 VXLAN 规范）</li>
-</ul>
-<p>VXLAN：原本在二层传输的以太帧放到四层 UDP 协议的报文体内，同时加入了自己定义的 VXLAN Header，VLAN ID可以存储 1677 万个不同的取值，让二层网络得以在三层范围内进行扩展，不再受数据中心间传输的限制。</p>
-<p>从 Linux Kernel 3.7 版本起，Linux 系统就开始支持 VXLAN。到了 3.12 版本，Linux 对 VXLAN 的支持已达到完全完备的程度，能够处理单播和组播，能够运行于 IPv4 和 IPv6 之上，一台 Linux 主机经过简单配置之后，便可以把 Linux Bridge 作为 VTEP 设备使用。不过，VXLAN 也带来了额外的复杂度和性能开销，传输、性能效率的下降。</p>
-<p>MACVLAN 借用了 VLAN 子接口的思路，并且在这个基础上更进一步，不仅允许对同一个网卡设置多个 IP 地址，还允许对同一张网卡上设置多个 MAC 地址，这也是 MACVLAN 名字的由来。<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250808184541113.png"><br>用 MACVLAN 技术虚拟出来的副本网卡，在功能上和真实的网卡是完全对等的，此时真正的物理网卡实际上确实承担着类似交换机的职责，收到数据包后，根据目标 MAC 地址判断这个包应转发给哪块副本网卡处理，由同一块物理网卡虚拟出来的副本网卡，天然处于同一个 VLAN 之中，可以直接二层通信，不需要将流量转发到外部网络。</p>
-<p>Docker 的网络方案在操作层面上是指能够直接通过<code>docker run --network</code>参数指定的网络，或者先<code>docker network create</code>创建后再被容器使用的网络。安装 Docker 过程中会自动在宿主机上创建一个名为 docker0 的网桥，以及三种不同的 Docker 网络，分别是 bridge、host 和 none，对应着 Docker 提供的三种开箱即用的网络方案。</p>
-<h3 id="容器网络与生态"><a href="#容器网络与生态" class="headerlink" title="容器网络与生态"></a>容器网络与生态</h3><h4 id="CNM-与-CNI"><a href="#CNM-与-CNI" class="headerlink" title="CNM 与 CNI"></a>CNM 与 CNI</h4><p>容器网络的事实标准CNI（Container Networking Interface）</p>
-<p>从程序功能上看，CNM 和 CNI 的网络插件提供的能力都能划分为网络的管理与 IP 地址的管理两类，插件可以选择只实现其中的某一个，也可以全部都实现，包括<strong>管理网络创建与删除</strong>、<strong>管理 IP 地址分配与回收</strong>。</p>
-<h4 id="CNM-到-CNI"><a href="#CNM-到-CNI" class="headerlink" title="CNM 到 CNI"></a>CNM 到 CNI</h4><p>Kubernetes与 CoreOS 合作以 RKT 网络提案为基础发展出 CNI 规范。CNI的成功史</p>
-<h4 id="网络插件生态"><a href="#网络插件生态" class="headerlink" title="网络插件生态"></a>网络插件生态</h4><p>跨主机通信的网络实现方式有如下三种模式：</p>
-<ul>
-<li><strong>Overlay 模式</strong>：一种虚拟化的上层逻辑网络，好处在于它不受底层物理网络结构的约束，有更大的自由度，更好的易用性；坏处是由于额外的包头封装导致信息密度降低，额外的隧道封包解包会导致传输性能下降。</li>
-<li><strong>路由模式</strong>：路由模式其实属于 Underlay 模式的一种特例，这里将它单独作为一种网络实现模式来介绍。相比起 Overlay 网络，路由模式的主要区别在于它的跨主机通信是直接通过路由转发来实现的，因而无须在不同主机之间进行隧道封包。这种模式的好处是性能相比 Overlay 网络有明显提升，坏处是路由转发要依赖于底层网络环境的支持</li>
-<li><strong>Underlay 模式</strong>：这里的 Underlay 模式特指让容器和宿主机处于同一网络，两者拥有相同的地位的网络方案。Underlay 网络要求容器的网络接口能够直接与底层网络进行通信，因此该模式是直接依赖于虚拟化设备与底层网络能力的。</li>
-</ul>
-<h2 id="持久化存储"><a href="#持久化存储" class="headerlink" title="持久化存储"></a>持久化存储</h2><h3 id="Kubernetes-存储设计"><a href="#Kubernetes-存储设计" class="headerlink" title="Kubernetes 存储设计"></a>Kubernetes 存储设计</h3><p>Kubernetes 预置了很多 In-Tree插件来对接，让用户根据自己业务按需选择。</p>
-<h4 id="Mount-和-Volume"><a href="#Mount-和-Volume" class="headerlink" title="Mount 和 Volume"></a>Mount 和 Volume</h4><ul>
-<li>Mount 是动词，表示将某个外部存储挂载到系统中</li>
-<li>Volume 是名词，表示物理存储的逻辑抽象，目的是为物理存储提供有弹性的分割方式</li>
-</ul>
-<p>Docker 内建支持了三种挂载类型，分别是 Bind（<code>--mount type=bind</code>）、Volume（<code>--mount type=volume</code>）和 tmpfs（<code>--mount type=tmpfs</code>），只着重关注 Bind 和 Volume 两种挂载类型<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250809141518216.png"></p>
-<ul>
-<li>Bind Mount：把宿主机的某个目录（或文件）挂载到容器的指定目录（或文件）下，Bind Mount 只能让容器与本地宿主机之间建立了某个目录的映射，如果想要在不同宿主机上的容器共享同一份存储，就必须先把共享存储挂载到每一台宿主机操作系统的某个目录下，然后才能逐个挂载到容器内使用<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250809141657730.png">、</li>
-<li>Volume Mount：为了提升 Docker 对不同存储介质的支撑能力，提出了与 Storage Driver 相对应的 Volume Driver（卷驱动）的概念。用户可以通过docker plugin install命令安装外部的卷驱动，并在创建 Volume 时指定一个与其存储系统相匹配的卷驱动</li>
-</ul>
-<h4 id="静态存储分配"><a href="#静态存储分配" class="headerlink" title="静态存储分配"></a>静态存储分配</h4><p>Kubernetes 将 Volume 分为持久化的 PersistentVolume 和非持久化的普通 Volume 两类<img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250809142049107.png"></p>
-<ul>
-<li>普通 Volume：同一个 Pod 中多个容器提供可共享的存储资源，因此 Volume 具有十分明确的生命周期——与挂载它的 Pod 相同的生命周期，这意味着尽管普通 Volume 不具备持久化的存储能力，但至少比 Pod 中运行的任何容器的存活期都更长，Pod 中不同的容器能共享相同的普通 Volume，当容器重新启动时，普通 Volume 中的数据也会能够得到保留。</li>
-<li>持久化Volumn：可以独立于 Pod 存在，生命周期与 Pod 无关，因此也决定了 PersistentVolume 不应该依附于任何一个宿主机节点，PersistentVolume 是由管理员（运维人员）负责维护的，用户（开发人员）通过 PersistentVolumeClaim 来匹配到合乎需求的 PersistentVolume。<img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250809142542596.png"></li>
-</ul>
-<h4 id="动态存储分配"><a href="#动态存储分配" class="headerlink" title="动态存储分配"></a>动态存储分配</h4><p>一旦应用规模增大，PersistentVolume 很难被自动化的问题就会突显出来。<br>动态存储分配：指在用户声明存储能力的需求时，不是期望通过 Kubernetes 撮合来获得一个管理员人工预置的 PersistentVolume，而是由特定的资源分配器（Provisioner）自动地在存储资源池或者云存储系统中分配符合用户存储需要的 PersistentVolume，然后挂载到 Pod 中使用，完成这项工作的资源被命名为 StorageClass<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250809142941504.png"></p>
-<h3 id="容器存储与生态"><a href="#容器存储与生态" class="headerlink" title="容器存储与生态"></a>容器存储与生态</h3><h4 id="Kubernetes-存储架构"><a href="#Kubernetes-存储架构" class="headerlink" title="Kubernetes 存储架构"></a>Kubernetes 存储架构</h4><p>Kubernetes 参考了传统操作系统接入或移除新存储设备做法，把接入或移除外部存储这件事情分解为以下三种操作：</p>
-<ul>
-<li><strong>准备</strong>（Provision）：确定了接入存储的来源、容量、性能以及其他技术参数，它的逆操作是<strong>移除</strong>（Delete）存储。</li>
-<li><strong>附加</strong>（Attach）：确定了存储的设备名称、驱动方式等面向系统一侧的信息，它的逆操作是<strong>分离</strong>（Detach）存储设备。</li>
-<li><strong>挂载</strong>（Mount）：存储的访问目录、文件系统格式等面向应用一侧的信息，它的逆操作是<strong>卸载</strong>（Unmount）存储设备。</li>
-</ul>
-<p>六种操作分别被 Kubernetes 通过两个控制器及一个管理器来进行调用，这些控制器、管理器的作用分别是：</p>
-<ul>
-<li><strong>PV 控制器</strong>（PersistentVolume Controller）：PV 控制器的期望状态有两个，分别是“所有未绑定的 PersistentVolume 都能处于可用状态”以及“所有处于等待状态的 PersistentVolumeClaim 都能配对到与之绑定的 PersistentVolume”</li>
-<li><strong>AD 控制器</strong>（Attach&#x2F;Detach Controller）：AD 控制器的期望状态是“所有被调度到准备新创建 Pod 的节点，都附加好了要使用的存储；当 Pod 被销毁后，原本运行 Pod 的节点都分离了不再被使用的存储”，如果实际状态不符合该期望，会根据需要调用存储驱动插件的 Attach&#x2F;Detach 操作。</li>
-<li><strong>Volume 管理器</strong>（Volume Manager）：用来支持本节点中 Volume 执行 Attach&#x2F;Detach&#x2F;Mount&#x2F;Unmount 操作。<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250809143905280.png"></li>
-</ul>
-<h4 id="FlexVolume-与-CSI"><a href="#FlexVolume-与-CSI" class="headerlink" title="FlexVolume 与 CSI"></a>FlexVolume 与 CSI</h4><p>Kubernetes 目前同时支持FlexVolume与CSI（Container Storage Interface）两套独立的存储扩展机制。</p>
-<ul>
-<li>FlexVolume是 Kubernetes 很早期版本（1.2 版开始提供，1.8 版达到 GA 状态）就开始支持的扩展机制，它是只针对 Kubernetes 的私有的存储扩展，目前已经处于冻结状态，可以正常使用但不再发展新功能了。</li>
-<li>CSI 是公开的技术规范，任何容器运行时、容器编排引擎只要愿意支持，都可以使用 CSI 规范去扩展自己的存储能力，这是目前 Kubernetes 重点发展的扩展机制。</li>
-</ul>
-<h4 id="容器插件生态"><a href="#容器插件生态" class="headerlink" title="容器插件生态"></a>容器插件生态</h4><p>目前出现过的存储系统和设备均可以划分到块存储、文件存储和对象存储这三种存储类型之中，划分依据是各种存储提供何种形式的接口供外部访问数据，不同的外部访问接口将反过来影响到存储的内部结构、性能与功能表现。</p>
-<ul>
-<li><p><strong>块存储</strong>：块存储是数据存储的最古老形式，数据都储存在固定长度的一个或多个块（Block）中，想要读写访问数据，就必须使用与存储相匹配的协议，硬盘就是最经典的块存储设备。块存储由于贴近底层硬件，没有文件、目录、访问权限等的牵绊，所以性能通常都是最优秀的，吞吐量高，延迟低。</p>
-</li>
-<li><p><strong>文件存储</strong>：文件存储是最贴近人类用户的数据存储形式，数据存储在长度不固定的文件之中，用户可以针对文件进行新增、写入、追加、移动、复制、删除、重命名等各种操作，POSIX接口（Portable Operating System Interface，POSIX）已经成为了事实标准，被各种商用的存储系统和操作系统共同支持。绝大多数传统的文件存储都是基于块存储之上去实现的。人们把定义文件分配表应该如何实现、储存哪些信息、提供什么功能的标准称为文件系统（File System），FAT32、NTFS、exFAT、ext2&#x2F;3&#x2F;4、XFS、BTRFS 等都是很常用的文件系统。对于性能有影响</p>
-</li>
-<li><p><strong>对象储存</strong>：对象存储是相对较新的数据存储形式，是一种随着云数据中心的兴起而发展起来的存储，是以非结构化数据为目标的存储方案。“对象”可以理解为一个元数据及与其配对的一个逻辑数据块的组合，元数据提供了对象所包含的上下文信息，譬如数据的类型、大小、权限、创建人、创建时间，等等，数据块则存储了对象的具体内容。对象存储基本上只会在分布式存储系统之上去实现，由于对象存储天生就有明确的“元数据”概念，不必依靠文件系统来提供数据的描述信息，由于对象的元数据仅描述对象本身的信息，与其他对象都没有关联，换而言之每个对象都是相互独立的，自然也就不存在目录的概念，可见对象存储天然就是扁平化的。由于对象存储天生的分布式特性，以及极其低廉的扩展成本，使它很适合于<a target="_blank" rel="noopener" href="https://icyfenix.cn/architect-perspective/general-architecture/diversion-system/cdn.html">CDN</a>一类的应用，拿来存放图片、音视频等媒体内容，以及网页、脚本等静态资源。</p>
-</li>
-</ul>
-<h2 id="资源与调度"><a href="#资源与调度" class="headerlink" title="资源与调度"></a>资源与调度</h2><p><strong>调度</strong>：是指为新创建出来的 Pod 寻找到一个最恰当的宿主机节点来运行它，这个过程成功与否、结果恰当与否，关键取决于容器编排系统是如何管理与分配集群节点的资源的。</p>
-<h3 id="资源模型"><a href="#资源模型" class="headerlink" title="资源模型"></a>资源模型</h3><p>“一切皆为资源”的设计是 Kubernetes 能够顺利施行声明式 API 的必要前提，Kubernetes 以资源为载体，建立了一套同时囊括了抽象元素（如策略、依赖、权限）和物理元素（如软件、硬件、网络）的领域特定语言。</p>
-<p>从编排系统的角度来看，Node 是资源的提供者，Pod 是资源的使用者，调度是将两者进行恰当的撮合。</p>
-<p>Node 通常能够提供的三方面的资源：计算资源（如处理器、图形处理器、内存）、存储资源（如磁盘容量、不同类型的介质）和网络资源（如带宽、网络地址）</p>
-<p>处理器这样的资源被称作可压缩资源（Compressible Resources），特点是当可压缩资源不足时，Pod 只会处于“饥饿状态”，运行变慢，但不会被系统杀死；内存这样的资源，则被称作不可压缩资源（Incompressible Resources），特点是当不可压缩资源不足，或者超过了容器自己声明的最大限度时，Pod 就会因为内存溢出（Out-Of-Memory，OOM）而被系统直接杀掉。</p>
-<p>Kubernetes 只负责保证 Pod 能够使用到“一个处理器”的计算能力，对不同硬件环境构成的 Kubernetes 集群，乃至同一个集群中不同硬件的宿主机节点来说，“一个处理器”所代表的真实算力完全有可能是不一样的。</p>
-<h3 id="服务质量与优先级"><a href="#服务质量与优先级" class="headerlink" title="服务质量与优先级"></a>服务质量与优先级</h3><p>Pod 是由一到多个容器所组成，资源最终是交由 Pod 的各个容器去使用，所以资源的需求是设定在容器上的，具体的配置是 Pod 的<code>spec.containers[].resource.limits/requests.cpu/memory</code>字段。</p>
-<p>资源需求的配额则不是针对容器的，而是针对 Pod 整体，Pod 的资源配额无需手动设置，它就是它包含的每个容器资源需求的累加值。</p>
-<p>注意到 Kubernetes 给出的配置中有<code>limits</code>和<code>requests</code>两个设置项：</p>
-<ul>
-<li><code>requests</code>是给调度器用的，Kubernetes 选择哪个节点运行 Pod，只会根据<code>requests</code>的值来进行决策</li>
-<li><code>limits</code>才是给 cgroups 用的，Kubernetes 在向 cgroups 的传递资源配额时，会按照<code>limits</code>的值来进行设置。</li>
-</ul>
-<p>经验法则：用户提交工作负载时设置的资源配额，并不是容器调度一定必须严格遵守的值，因为根据实际经验，大多数的工作负载运行过程中真正使用到的资源，其实都远小于它所请求的资源配额。</p>
-<p><strong>驱逐机制</strong>：要进行驱逐，首先 Kubernetes 就必须拿出资源不足时该先牺牲哪些 Pod、该保留哪些 Pod 的明确准则，由此就形成了 Kubernetes 的<strong>服务质量等级</strong>（Quality of Service Level，QoS Level）和<strong>优先级</strong>（Priority）的概念</p>
-<p>Kubernetes 目前提供的服务质量等级一共分为三级，由高到低分别为 Guaranteed、Burstable 和 BestEffort。</p>
-<ul>
-<li>Guaranteed：如果 Pod 中所有的容器都设置了<code>limits</code>和<code>requests</code>，且两者的值相等，那此 Pod 的服务质量等级便为最高的 Guaranteed；建议将数据库应用等有状态的应用，或者一些重要的要保证不能中断的业务的服务质量等级定为 Guaranteed</li>
-<li>Burstable：如果 Pod 中有部分容器的 requests 值小于<code>limits</code>值，或者只设置了<code>requests</code>而未设置<code>limits</code>，那此 Pod 的服务质量等级为第二级 Burstable；</li>
-<li>BestEffort：如果不去设置<code>limits</code>和<code>requests</code>，就是最低的 BestEffort 了。</li>
-</ul>
-<p>Kubernetes 允许系统管理员自行决定 Pod 的优先级，这是通过类型为 PriorityClass 的资源来实现的。优先级影响更大的另一方面是指 Kubernetes 的<strong>抢占机制</strong>。如果有一个被设置了明确优先级的 Pod 调度失败无法创建的话，Kubernetes 就会在系统中寻找出一批牺牲者（Victims），将它们杀掉以便给更高优先级的 Pod 让出资源。寻找的原则是根据在优先级低于待调度 Pod 的所有已调度 Pod 里，按照优先级从低到高排序，从最低的杀起，直至腾出的资源足以满足待调度 Pod 的成功调度为止，或者已经找不到更低优先级的 Pod 为止。</p>
-<h4 id="驱逐机制"><a href="#驱逐机制" class="headerlink" title="驱逐机制"></a>驱逐机制</h4><p>Pod 的驱逐机制是通过 kubelet 来执行的，kubelet 是部署在每个节点的集群管理程序，由于本身就运行在节点中，所以最容易感知到节点的资源实时耗用情况。kubelet 一旦发现某种不可压缩资源将要耗尽，就会主动终止节点上较低服务质量等级的 Pod，以保证其他更重要的 Pod 的安全。被驱逐的 Pod 中所有的容器都会被终止，Pod 的状态会被更改为 Failed。</p>
-<p>驱逐行为不等同于垃圾收集器。垃圾收集是安全的内存回收行为，而驱逐 Pod 是一种毁坏性的清理行为，有可能会导致服务产生中断，必须更加谨慎。</p>
-<p>驱逐机制中就有了<strong>软驱逐</strong>（Soft Eviction）、<strong>硬驱逐</strong>（Hard Eviction）以及<strong>优雅退出期</strong>（Grace Period）的概念：</p>
-<ul>
-<li><strong>软驱逐</strong>：通常配置一个较低的警戒线（譬如可用内存仅剩 20%），触及此线时，系统将进入一段观察期。如果只是暂时的资源抖动，在观察期内能够恢复到正常水平的话，那就不会真正启动驱逐操作。</li>
-<li><strong>硬驱逐</strong>：通常配置一个较高的终止线（譬如可用内存仅剩 10%），一旦触及此红线，立即强制杀掉 Pod，不理会优雅退出。</li>
-</ul>
-<h3 id="默认调度器"><a href="#默认调度器" class="headerlink" title="默认调度器"></a>默认调度器</h3><p>Kubernetes 是如何撮合 Pod 与 Node 的，调度是为新创建出来的 Pod 寻找到一个最恰当的宿主机节点去运行它。</p>
-<ul>
-<li>运行：从集群所有节点中找出一批剩余资源可以满足该 Pod 运行的节点。为此，Kubernetes 调度器设计了一组名为 Predicate 的筛选算法。</li>
-<li>恰当：从符合运行要求的节点中找出一个最适合的节点完成调度。为此，Kubernetes 调度器设计了一组名为 Priority 的评价算法。</li>
-</ul>
-<h2 id="服务网格"><a href="#服务网格" class="headerlink" title="服务网格"></a>服务网格</h2><blockquote>
-<p>服务网格是一种用于管控服务间通信的的基础设施，职责是为现代云原生应用支持网络请求在复杂的拓扑环境中可靠地传递。在实践中，服务网格通常会以轻量化网络代理的形式来体现，这些代理与应用程序代码会部署在一起，对应用程序来说，它完全不会感知到代理的存在。</p>
-</blockquote>
-<p><strong>服务网格</strong>：只是一种处理程序间通信的基础设施，典型的存在形式是部署在应用旁边，一对一为应用提供服务的边车代理，及管理这些边车代理的控制程序。</p>
-<h3 id="透明通信的涅槃"><a href="#透明通信的涅槃" class="headerlink" title="透明通信的涅槃"></a>透明通信的涅槃</h3><h4 id="通信的成本-1"><a href="#通信的成本-1" class="headerlink" title="通信的成本"></a>通信的成本</h4><p>如何做到可靠的通信的，通过以下五个阶段的变化，理解分布式服务的通信是如何逐步演化成本章主角服务网格</p>
-<ol>
-<li>将通信的非功能性需求视作业务需求的一部分，通信的可靠性由程序员来保障。<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250811105702722.png"></li>
-<li>将代码中的通信功能抽离重构成公共组件库，通信的可靠性由专业的平台程序员来保障。<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250811105750990.png"></li>
-<li>将负责通信的公共组件库分离到进程之外，程序间通过网络代理来交互，通信的可靠性由专门的网络代理提供商来保障。<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250811105826841.png"></li>
-<li>将网络代理以边车的形式注入到应用容器，自动劫持应用的网络流量，通信的可靠性由专门的通信基础设施来保障。<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250811105955427.png"></li>
-<li>将边车代理统一管控起来实现安全、可控、可观测的通信，将数据平面与控制平面分离开来，实现通用、透明的通信，这项工作就由专门的服务网格框架来保障。<br><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250811110038854.png"></li>
-</ol>
-<h4 id="数据平面"><a href="#数据平面" class="headerlink" title="数据平面"></a>数据平面</h4><p>数据平面由一系列边车代理所构成，核心职责是转发应用的入站（Inbound）和出站（Outbound）数据包，因此数据平面也有个别名叫转发平面（Forwarding Plane）。同时，为了在不可靠的物理网络中保证程序间通信最大的可靠性，数据平面必须根据控制平面下发策略的指导，在应用无感知的情况下自动完成服务路由、健康检查、负载均衡、认证鉴权、产生监控数据等一系列工作。为了达成上述的工作目标，至少需要妥善解决以下三个关键问题：</p>
-<ul>
-<li>代理注入：边车代理是如何注入到应用程序中的？</li>
-<li>流量劫持：边车代理是如何劫持应用程序的通信流量的？</li>
-<li>可靠通信：边车代理是如何保证应用程序的通信可靠性的？</li>
-</ul>
-<h4 id="控制平面"><a href="#控制平面" class="headerlink" title="控制平面"></a>控制平面</h4><p>控制平面的特点是不直接参与程序间通信，而只会与数据平面中的代理通信，在程序不可见的背后，默默地完成下发配置和策略，指导数据平面工作。</p>
-<h3 id="服务网格与生态"><a href="#服务网格与生态" class="headerlink" title="服务网格与生态"></a>服务网格与生态</h3><p>服务网格实质上是数据平面产品与控制平面产品的集合，所以在规范制订方面，很自然地也分成了两类：SMI 规范提供了外部环境（实际上就是 Kubernetes）与控制平面交互的标准，使得 Kubernetes 及在其之上的应用能够无缝地切换各种服务网格产品。UDPA 规范则提供了控制平面与数据平面交互的标准，使得服务网格产品能够灵活地搭配不同的边车代理，针对不同场景的需求，发挥各款边车代理的功能或者性能优势。</p>
-<p><img src="/images/%E5%87%A4%E5%87%B0%E6%9E%B6%E6%9E%84/file-20250811111217042.png"></p>
-<h4 id="服务网格接口"><a href="#服务网格接口" class="headerlink" title="服务网格接口"></a>服务网格接口</h4><p> SMI 规范包括四方面的 API 构成，分别是：<br> - <strong>流量规范</strong>（Traffic Specs）：目标是定义流量的表示方式，譬如 TCP 流量、HTTP&#x2F;1 流量、HTTP&#x2F;2 流量、gRPC 流量、WebSocket 流量等该如何在配置中抽象及使用。<br> - <strong>流量拆分</strong>（Traffic Split）：目标是定义不同版本服务之间的流量比例，提供流量治理的能力，譬如限流、降级、容错，等等，以满足灰度发布、A&#x2F;B 测试等场景。<br> - <strong>流量度量</strong>（Traffic Metrics）：目标是为资源提供通用集成点，度量工具可以通过访问这些集成点来抓取指标。<br> - <strong>流量访问控制</strong>（Traffic Access Control）：目标是根据客户端的身份配置，对特定的流量访问特定的服务提供简单的访问控制。</p>
-<h4 id="通用数据平面-API"><a href="#通用数据平面-API" class="headerlink" title="通用数据平面 API"></a>通用数据平面 API</h4><p>UDAP 的主要内容会分为传输协议（UDPA-TP，TransPort）和数据模型（UDPA-DM，Data Model）两部分，这两部分是独立设计的，以后完全有可能会出现不同的数据模型共用同一套传输协议的可能性</p>
-<h1 id="向微服务迈进"><a href="#向微服务迈进" class="headerlink" title="向微服务迈进"></a>向微服务迈进</h1><p>“<strong>软件研发中任何一项技术、方法、架构都不可能是银弹</strong>”</p>
-<h2 id="目的：微服务的驱动力"><a href="#目的：微服务的驱动力" class="headerlink" title="目的：微服务的驱动力"></a>目的：微服务的驱动力</h2><p>软件系统选择微服务架构，通常比较常见的、合理的驱动力来自组织外部、内部两方面，笔者先列举一些外部因素：</p>
-<ul>
-<li>当意识到没有什么技术能够包打天下。</li>
-<li>当个人能力因素成为系统发展的明显制约。</li>
-<li>当遇到来自外部商业层面对内部技术层面提出的要求。</li>
-</ul>
-<p>在系统和研发团队内部，也会有一些因素促使其向微服务靠拢：</p>
-<ul>
-<li>变化发展特别快的创新业务系统往往会自主地向微服务架构靠近。</li>
-<li>大规模的、业务复杂的、历史包袱沉重的系统也可能主动向微服务架构靠近。</li>
-</ul>
-<p>微服务最主要的目的是对系统进行有效的拆分，实现物理层面的隔离，微服务的核心价值就是拆分之后的系统能够让局部的单个服务<strong>有可能</strong>实现敏捷地卸载、部署、开发、升级，局部的持续更迭，是系统整体具备 Phoenix 特性的必要条件。</p>
-<h2 id="前提：微服务需要的条件"><a href="#前提：微服务需要的条件" class="headerlink" title="前提：微服务需要的条件"></a>前提：微服务需要的条件</h2><ul>
-<li>决策者与执行者都能意识到康威定律在软件设计中的关键作用。</li>
-<li>组织中具备一些对微服务有充分理解、有一定实践经验的技术专家。</li>
-<li>系统应具有以自治为目标的自动化与监控度量能力。</li>
-<li>复杂性已经成为制约生产力的主要矛盾。</li>
-</ul>
-<h2 id="边界：微服务的粒度"><a href="#边界：微服务的粒度" class="headerlink" title="边界：微服务的粒度"></a>边界：微服务的粒度</h2><p>微服务边界具体实践的方法论，即领域驱动设计。</p>
-<p><strong>微服务粒度的下界是它至少应满足独立——能够独立发布、独立部署、独立运行与独立测试，内聚——强相关的功能与数据在同一个服务中处理，完备——一个服务包含至少一项业务实体与对应的完整操作。</strong></p>
-<p><strong>微服务粒度的上界是一个 2 Pizza Team 能够在一个研发周期内完成的全部需求范围。</strong></p>
-<h2 id="治理：理解系统复杂性"><a href="#治理：理解系统复杂性" class="headerlink" title="治理：理解系统复杂性"></a>治理：理解系统复杂性</h2><p><strong>软件规模小时微服务的复杂度高于单体系统，规模大时则相反</strong>。</p>
-<p>演进式设计是 ThoughtWorks 提出的架构方法，无论是代际的演进还是渐进的演进，都带有不少争议，它不仅是建造的学问，也是破坏的学问。</p>
+          <p>🏷中等 #广度优先搜索 #数组 #矩阵</p>
+<p>在给定的 <code>m x n</code> 网格 <code>grid</code> 中，每个单元格可以有以下三个值之一：</p>
+<ul>
+<li>值 <code>0</code> 代表空单元格；</li>
+<li>值 <code>1</code> 代表新鲜橘子；</li>
+<li>值 <code>2</code> 代表腐烂的橘子。</li>
+</ul>
+<p>每分钟，腐烂的橘子 <strong>周围 4 个方向上相邻</strong> 的新鲜橘子都会腐烂。</p>
+<p>返回 <em>直到单元格中没有新鲜橘子为止所必须经过的最小分钟数。如果不可能，返回 <code>-1</code></em> 。</p>
+<p><strong>示例 1：</strong></p>
+<p><strong><img src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2019/02/16/oranges.png"></strong></p>
+<p>输入：grid &#x3D; [[2,1,1],[1,1,0],[0,1,1]]<br>输出：4<br>示例 2：</p>
+<p>输入：grid &#x3D; [[2,1,1],[0,1,1],[1,0,1]]<br>输出：-1<br>解释：左下角的橘子（第 2 行， 第 0 列）永远不会腐烂，因为腐烂只会发生在 4 个方向上。<br>示例 3：</p>
+<p>输入：grid &#x3D; [[0,2]]<br>输出：0<br>解释：因为 0 分钟时已经没有新鲜橘子了，所以答案就是 0 。</p>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>m == grid.length</code></li>
+<li><code>n == grid[i].length</code></li>
+<li><code>1 &lt;= m, n &lt;= 10</code></li>
+<li><code>grid[i][j]</code> 仅为 <code>0</code>、<code>1</code> 或 <code>2</code></li>
+</ul>
+<h1 id="解题思路与实现"><a href="#解题思路与实现" class="headerlink" title="解题思路与实现"></a>解题思路与实现</h1><ul>
+<li>把所有腐烂橘子放进队列；</li>
+<li>每轮感染周围新鲜橘子（这一轮算 1 分钟）；</li>
+<li>感染完所有后返回总分钟数；</li>
+<li>如果有新鲜橘子没感染到，返回 -1。</li>
+</ul>
+<h2 id="方法一：队列"><a href="#方法一：队列" class="headerlink" title="方法一：队列"></a>方法一：队列</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">orangesRotting</span>(<span class="params">self, grid: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        q = deque()</span><br><span class="line">        fresh = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(grid)):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(grid[<span class="number">0</span>])):</span><br><span class="line">                <span class="keyword">if</span> grid[i][j] == <span class="number">2</span>:</span><br><span class="line">                    q.append((i,j))</span><br><span class="line">                <span class="keyword">elif</span> grid[i][j] == <span class="number">1</span>: </span><br><span class="line">                    fresh += <span class="number">1</span></span><br><span class="line">        time = <span class="number">0</span></span><br><span class="line">        dirs = [(<span class="number">1</span>,<span class="number">0</span>),(-<span class="number">1</span>,<span class="number">0</span>),(<span class="number">0</span>,<span class="number">1</span>),(<span class="number">0</span>,-<span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">while</span> q <span class="keyword">and</span> fresh:</span><br><span class="line">            <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(q)):</span><br><span class="line">                x, y = q.popleft()</span><br><span class="line">                <span class="keyword">for</span> dx, dy <span class="keyword">in</span> dirs:</span><br><span class="line">                    nx, ny = x+dx, y+dy</span><br><span class="line">                    <span class="keyword">if</span> <span class="number">0</span>&lt;=nx&lt;<span class="built_in">len</span>(grid) <span class="keyword">and</span> <span class="number">0</span>&lt;=ny&lt;<span class="built_in">len</span>(grid[<span class="number">0</span>]) <span class="keyword">and</span> grid[nx][ny] == <span class="number">1</span>:</span><br><span class="line">                        grid[nx][ny] = <span class="number">2</span></span><br><span class="line">                        fresh -= <span class="number">1</span></span><br><span class="line">                        q.append((nx,ny))</span><br><span class="line">            time += <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> time <span class="keyword">if</span> fresh == <span class="number">0</span> <span class="keyword">else</span> -<span class="number">1</span></span><br></pre></td></tr></table></figure>
 
+
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/98.%20%E9%AA%8C%E8%AF%81%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/icon.JPG">
+      <meta itemprop="name" content="Uncle Antonio">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Uncle Antonio">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/98.%20%E9%AA%8C%E8%AF%81%E4%BA%8C%E5%8F%89%E6%90%9C%E7%B4%A2%E6%A0%91/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-11-22 22:50:52" itemprop="dateCreated datePublished" datetime="2025-11-22T22:50:52+08:00">2025-11-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-11-11 20:46:17" itemprop="dateModified" datetime="2025-11-11T20:46:17+08:00">2025-11-11</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>🏷中等 #树 #深度优先搜索 #二叉搜索树 #二叉树 </p>
+<p>给你一个二叉树的根节点 <code>root</code> ，判断其是否是一个有效的二叉搜索树。</p>
+<p><strong>有效</strong> 二叉搜索树定义如下：</p>
+<ul>
+<li>节点的左子树只包含 <strong>严格小于</strong> 当前节点的数。</li>
+<li>节点的右子树只包含 <strong>严格大于</strong> 当前节点的数。</li>
+<li>所有左子树和右子树自身必须也是二叉搜索树。</li>
+</ul>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2020/12/01/tree1.jpg" alt=" | 200"></p>
+<p>输入：root &#x3D; [2,1,3]<br>输出：true</p>
+<p><strong>示例 2：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2020/12/01/tree2.jpg" alt="|250"></p>
+<p>输入：root &#x3D; [5,1,4,null,null,3,6]<br>输出：false<br>解释：根节点的值是 5 ，但是右子节点的值是 4 。</p>
+<p><strong>提示：</strong></p>
+<ul>
+<li>树中节点数目范围在<code>[1, 104]</code> 内</li>
+<li><code>-231 &lt;= Node.val &lt;= 231 - 1</code></li>
+</ul>
+<h1 id="解题思路与实现"><a href="#解题思路与实现" class="headerlink" title="解题思路与实现"></a>解题思路与实现</h1><ul>
+<li>递归</li>
+<li>注意每个节点的上下限</li>
+</ul>
+<h2 id="方法一：递归"><a href="#方法一：递归" class="headerlink" title="方法一：递归"></a>方法一：递归</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">isValidBST</span>(<span class="params">self, root: <span class="type">Optional</span>[TreeNode]</span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">node, low = <span class="built_in">float</span>(<span class="params"><span class="string">&#x27;-inf&#x27;</span></span>), high = <span class="built_in">float</span>(<span class="params"><span class="string">&#x27;inf&#x27;</span></span>)</span>):</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> node:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> (low &lt; node.val &lt; high):</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            <span class="keyword">return</span> dfs(node.left, low, node.val) <span class="keyword">and</span> dfs(node.right, node.val, high) </span><br><span class="line">        <span class="keyword">return</span> dfs(root)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/94.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/icon.JPG">
+      <meta itemprop="name" content="Uncle Antonio">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Uncle Antonio">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/94.%20%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%B8%AD%E5%BA%8F%E9%81%8D%E5%8E%86/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-11-22 22:50:52" itemprop="dateCreated datePublished" datetime="2025-11-22T22:50:52+08:00">2025-11-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-11-08 14:25:33" itemprop="dateModified" datetime="2025-11-08T14:25:33+08:00">2025-11-08</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>🏷简单 #二叉树 #栈 #深度优先搜索</p>
+<p>给定一个二叉树的根节点 <code>root</code> ，返回 <em>它的 <strong>中序</strong> 遍历</em> 。</p>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2020/09/15/inorder_1.jpg" alt=" | 100"></p>
+<p>输入：root &#x3D; [1,null,2,3]<br>输出：[1,3,2]<br>示例 2：</p>
+<p>输入：root &#x3D; []<br>输出：[]<br>示例 3：</p>
+<p>输入：root &#x3D; [1]<br>输出：[1]</p>
+<p><strong>提示：</strong></p>
+<ul>
+<li>树中节点数目在范围 <code>[0, 100]</code> 内</li>
+<li><code>-100 &lt;= Node.val &lt;= 100</code></li>
+</ul>
+<p><strong>进阶:</strong> 递归算法很简单，你可以通过迭代算法完成吗？</p>
+<h1 id="解题思路与实现"><a href="#解题思路与实现" class="headerlink" title="解题思路与实现"></a>解题思路与实现</h1><ul>
+<li>递归</li>
+<li>迭代</li>
+</ul>
+<h2 id="方法一：递归"><a href="#方法一：递归" class="headerlink" title="方法一：递归"></a>方法一：递归</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inorderTraversal</span>(<span class="params">self, root: <span class="type">Optional</span>[TreeNode]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span><br><span class="line">        res = []</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">node</span>):</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> node:</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            dfs(node.left)</span><br><span class="line">            res.append(node.val)</span><br><span class="line">            dfs(node.right)</span><br><span class="line">        dfs(root)</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+
+<h2 id="方法二：迭代"><a href="#方法二：迭代" class="headerlink" title="方法二：迭代"></a>方法二：迭代</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">inorderTraversal</span>(<span class="params">self, root: <span class="type">Optional</span>[TreeNode]</span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span><br><span class="line">        res, stack =[],[]</span><br><span class="line">        cur = root</span><br><span class="line">        <span class="keyword">while</span> cur <span class="keyword">or</span> stack:</span><br><span class="line">            <span class="keyword">while</span> cur:</span><br><span class="line">                stack.append(cur)</span><br><span class="line">                cur = cur.left</span><br><span class="line">            cur = stack.pop()</span><br><span class="line">            res.append(cur.val)</span><br><span class="line">            cur = cur.right</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/79.%20%E6%9C%80%E5%B0%8F%E8%A6%86%E7%9B%96%E5%AD%90%E4%B8%B2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/icon.JPG">
+      <meta itemprop="name" content="Uncle Antonio">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Uncle Antonio">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/79.%20%E6%9C%80%E5%B0%8F%E8%A6%86%E7%9B%96%E5%AD%90%E4%B8%B2/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-11-22 22:50:52" itemprop="dateCreated datePublished" datetime="2025-11-22T22:50:52+08:00">2025-11-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-10-30 22:43:00" itemprop="dateModified" datetime="2025-10-30T22:43:00+08:00">2025-10-30</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>🏷困难 #哈希表 #字符串 #滑动窗口 </p>
+<p>给你一个字符串 <code>s</code> 、一个字符串 <code>t</code> 。返回 <code>s</code> 中涵盖 <code>t</code> 所有字符的最小子串。如果 <code>s</code> 中不存在涵盖 <code>t</code> 所有字符的子串，则返回空字符串 <code>&quot;&quot;</code> 。</p>
+<p><strong>注意：</strong></p>
+<ul>
+<li>对于 <code>t</code> 中重复字符，我们寻找的子字符串中该字符数量必须不少于 <code>t</code> 中该字符数量。</li>
+<li>如果 <code>s</code> 中存在这样的子串，我们保证它是唯一的答案。</li>
+</ul>
+<p><strong>示例 1：</strong></p>
+<p><strong>输入：s &#x3D; “ADOBECODEBANC”, t &#x3D; “ABC”<br>输出：</strong>“BANC”<br>**解释：最小覆盖子串 “BANC” 包含来自字符串 t 的 ‘A’、’B’ 和 ‘C’。</p>
+<p><strong>示例 2：</strong></p>
+<p><strong>输入：s &#x3D; “a”, t &#x3D; “a”<br>输出：</strong>“a”<br>**解释：整个字符串 s 是最小覆盖子串。</p>
+<p><strong>示例 3:</strong></p>
+<p><strong>输入:</strong> s &#x3D; “a”, t &#x3D; “aa”<br><strong>输出:</strong> “”<br><strong>解释:</strong> t 中两个字符 ‘a’ 均应包含在 s 的子串中，<br>因此没有符合条件的子字符串，返回空字符串。</p>
+<h1 id="解题思路与实现"><a href="#解题思路与实现" class="headerlink" title="解题思路与实现"></a>解题思路与实现</h1><ul>
+<li>转化字符个数比较，通过Count函数得出t的字符个数，然后进行滑动，不断地记录最小的左右位置，不断滑动。</li>
+</ul>
+<h2 id="方法一：集合遍历"><a href="#方法一：集合遍历" class="headerlink" title="方法一：集合遍历"></a>方法一：集合遍历</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">minWindow</span>(<span class="params">self, s: <span class="built_in">str</span>, t: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        ans_left,ans_right = -<span class="number">1</span>,<span class="built_in">len</span>(s)</span><br><span class="line">        cnt_s = Counter()</span><br><span class="line">        cnt_t = Counter(t)</span><br><span class="line">        left = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> right,c <span class="keyword">in</span> <span class="built_in">enumerate</span>(s):</span><br><span class="line">            cnt_s[c] += <span class="number">1</span></span><br><span class="line">            <span class="keyword">while</span> cnt_s &gt;= cnt_t:</span><br><span class="line">                <span class="keyword">if</span> right - left &lt; ans_right - ans_left:</span><br><span class="line">                    ans_left, ans_right = left, right</span><br><span class="line">                cnt_s[s[left]] -= <span class="number">1</span></span><br><span class="line">                left += <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span> <span class="keyword">if</span> ans_left &lt; <span class="number">0</span> <span class="keyword">else</span> s[ans_left:ans_right+<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/79.%20%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/icon.JPG">
+      <meta itemprop="name" content="Uncle Antonio">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Uncle Antonio">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/79.%20%E5%8D%95%E8%AF%8D%E6%90%9C%E7%B4%A2/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-11-22 22:50:52" itemprop="dateCreated datePublished" datetime="2025-11-22T22:50:52+08:00">2025-11-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-11-18 23:04:59" itemprop="dateModified" datetime="2025-11-18T23:04:59+08:00">2025-11-18</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>🏷中等 #深度优先搜索 #数组 #字符串 #回溯 #矩阵 </p>
+<p>给定一个 <code>m x n</code> 二维字符网格 <code>board</code> 和一个字符串单词 <code>word</code> 。如果 <code>word</code> 存在于网格中，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
+<p>单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。</p>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2020/11/04/word2.jpg" alt=" | 200"></p>
+<p>输入：board &#x3D; [[‘A’,’B’,’C’,’E’],[‘S’,’F’,’C’,’S’],[‘A’,’D’,’E’,’E’]], word &#x3D; “ABCCED”<br>输出：true</p>
+<p><strong>示例 2：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2020/11/04/word-1.jpg" alt=" |200"></p>
+<p>输入：board &#x3D; [[‘A’,’B’,’C’,’E’],[‘S’,’F’,’C’,’S’],[‘A’,’D’,’E’,’E’]], word &#x3D; “SEE”<br>输出：true</p>
+<p><strong>示例 3：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2020/10/15/word3.jpg" alt="200"></p>
+<p>输入：board &#x3D; [[‘A’,’B’,’C’,’E’],[‘S’,’F’,’C’,’S’],[‘A’,’D’,’E’,’E’]], word &#x3D; “ABCB”<br>输出：false</p>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>m == board.length</code></li>
+<li><code>n = board[i].length</code></li>
+<li><code>1 &lt;= m, n &lt;= 6</code></li>
+<li><code>1 &lt;= word.length &lt;= 15</code></li>
+<li><code>board</code> 和 <code>word</code> 仅由大小写英文字母组成</li>
+</ul>
+<p>**进阶：你可以使用搜索剪枝的技术来优化解决方案，使其在 <code>board</code> 更大的情况下可以更快解决问题？</p>
+<h1 id="解题思路与实现"><a href="#解题思路与实现" class="headerlink" title="解题思路与实现"></a>解题思路与实现</h1><p>最关键的只有 3 点：</p>
+<ol>
+<li>每个起点 i, j 去尝试 dfs<br>因为 word[0] 可以从任何一个格子开始。</li>
+<li>dfs 的含义是：从 board[i][j] 开始能不能匹配 word[k]<br>并尝试走四个方向。</li>
+<li>必须有 visited（这里用 board[i][j] &#x3D; ‘#’ 临时占位）<br>否则你会走回头路。</li>
+</ol>
+<h2 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">exist</span>(<span class="params">self, board: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">str</span>]], word: <span class="built_in">str</span></span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">        m, n = <span class="built_in">len</span>(board), <span class="built_in">len</span>(board[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">dfs</span>(<span class="params">i,j,k</span>):</span><br><span class="line">            <span class="keyword">if</span> k == <span class="built_in">len</span>(word):</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">if</span> i &lt; <span class="number">0</span> <span class="keyword">or</span> i &gt;= m <span class="keyword">or</span> j &lt; <span class="number">0</span> <span class="keyword">or</span> j&gt;=n:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            <span class="keyword">if</span> board[i][j] != word[k]:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            tmp = board[i][j]</span><br><span class="line">            board[i][j] = <span class="string">&#x27;#&#x27;</span></span><br><span class="line"></span><br><span class="line">            found = (dfs(i+<span class="number">1</span>, j, k+<span class="number">1</span>) <span class="keyword">or</span></span><br><span class="line">            dfs(i-<span class="number">1</span>, j, k+<span class="number">1</span>) <span class="keyword">or</span></span><br><span class="line">            dfs(i, j+<span class="number">1</span>, k+<span class="number">1</span>) <span class="keyword">or</span></span><br><span class="line">            dfs(i, j-<span class="number">1</span>, k+<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">            board[i][j] = tmp</span><br><span class="line">            <span class="keyword">return</span> found</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(m):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">                <span class="keyword">if</span> dfs(i,j,<span class="number">0</span>):</span><br><span class="line">                    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/74.%20%E6%90%9C%E7%B4%A2%E4%BA%8C%E7%BB%B4%E7%9F%A9%E9%98%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/icon.JPG">
+      <meta itemprop="name" content="Uncle Antonio">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Uncle Antonio">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/74.%20%E6%90%9C%E7%B4%A2%E4%BA%8C%E7%BB%B4%E7%9F%A9%E9%98%B5/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-11-22 22:50:52" itemprop="dateCreated datePublished" datetime="2025-11-22T22:50:52+08:00">2025-11-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-11-19 20:45:26" itemprop="dateModified" datetime="2025-11-19T20:45:26+08:00">2025-11-19</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>🏷中等 #数组 #二分查找 #矩阵 </p>
+<p>给你一个满足下述两条属性的 <code>m x n</code> 整数矩阵：</p>
+<ul>
+<li>每行中的整数从左到右按非严格递增顺序排列。</li>
+<li>每行的第一个整数大于前一行的最后一个整数。</li>
+</ul>
+<p>给你一个整数 <code>target</code> ，如果 <code>target</code> 在矩阵中，返回 <code>true</code> ；否则，返回 <code>false</code> 。</p>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2020/10/05/mat.jpg" alt="|200"></p>
+<p>输入：matrix &#x3D; [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target &#x3D; 3<br>输出：true</p>
+<p><strong>示例 2：</strong></p>
+<p><img src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2020/11/25/mat2.jpg" alt="|200"></p>
+<p>输入：matrix &#x3D; [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target &#x3D; 13<br>输出：false</p>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>m == matrix.length</code></li>
+<li><code>n == matrix[i].length</code></li>
+<li><code>1 &lt;= m, n &lt;= 100</code></li>
+<li><code>-104 &lt;= matrix[i][j], target &lt;= 104</code></li>
+</ul>
+<h1 id="解题思路与实现"><a href="#解题思路与实现" class="headerlink" title="解题思路与实现"></a>解题思路与实现</h1><ul>
+<li>二分查找</li>
+</ul>
+<h2 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">searchMatrix</span>(<span class="params">self, matrix: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]], target: <span class="built_in">int</span></span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">        m, n = <span class="built_in">len</span>(matrix), <span class="built_in">len</span>(matrix[<span class="number">0</span>])</span><br><span class="line">        left, right = <span class="number">0</span>, m*n -<span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> left &lt;= right:</span><br><span class="line">            mid = (left+right) //<span class="number">2</span></span><br><span class="line">            row = mid // n</span><br><span class="line">            col = mid % n</span><br><span class="line">            val = matrix[row][col]</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> val == target:</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">elif</span> val &lt; target:</span><br><span class="line">                left = mid + <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                right = mid - <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/78.%20%E5%AD%90%E9%9B%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/icon.JPG">
+      <meta itemprop="name" content="Uncle Antonio">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Uncle Antonio">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/78.%20%E5%AD%90%E9%9B%86/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-11-22 22:50:52" itemprop="dateCreated datePublished" datetime="2025-11-22T22:50:52+08:00">2025-11-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-11-16 21:38:11" itemprop="dateModified" datetime="2025-11-16T21:38:11+08:00">2025-11-16</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>🏷子集 #位运算 #数组 #回溯 </p>
+<p>给你一个整数数组 <code>nums</code> ，数组中的元素 <strong>互不相同</strong> 。返回该数组所有可能的子集（幂集）。</p>
+<p>解集 <strong>不能</strong> 包含重复的子集。你可以按 <strong>任意顺序</strong> 返回解集。</p>
+<p>示例 1：</p>
+<p>输入：nums &#x3D; [1,2,3]<br>输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]<br>示例 2：</p>
+<p>输入：nums &#x3D; [0]<br>输出：[[],[0]]</p>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= nums.length &lt;= 10</code></li>
+<li><code>-10 &lt;= nums[i] &lt;= 10</code></li>
+<li><code>nums</code> 中的所有元素 <strong>互不相同</strong></li>
+</ul>
+<h1 id="解题思路与实现"><a href="#解题思路与实现" class="headerlink" title="解题思路与实现"></a>解题思路与实现</h1><p>从左到右扫描 nums，每到一个位置，你都可以选择要它或不要它。<br>每一次递归时，当前 path 就是一个合法子集，加入结果。<br>然后向后继续做选择。</p>
+<h2 id="方法一："><a href="#方法一：" class="headerlink" title="方法一："></a>方法一：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">subsets</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]:</span><br><span class="line">        res = []</span><br><span class="line">        path = []</span><br><span class="line"></span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">backtrack</span>(<span class="params">start</span>):</span><br><span class="line">            res.append(path[:])</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(start, <span class="built_in">len</span>(nums)):</span><br><span class="line">                path.append(nums[i])</span><br><span class="line">                backtrack(i+<span class="number">1</span>)</span><br><span class="line">                path.pop()</span><br><span class="line">        backtrack(<span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/73.%20%E7%9F%A9%E9%98%B5%E7%BD%AE%E9%9B%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/icon.JPG">
+      <meta itemprop="name" content="Uncle Antonio">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Uncle Antonio">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/73.%20%E7%9F%A9%E9%98%B5%E7%BD%AE%E9%9B%B6/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-11-22 22:50:52" itemprop="dateCreated datePublished" datetime="2025-11-22T22:50:52+08:00">2025-11-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-11-01 20:21:04" itemprop="dateModified" datetime="2025-11-01T20:21:04+08:00">2025-11-01</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>🏷中等 #数组 #哈希表 #矩阵</p>
+<p>给定一个 <code>_m_ x _n_</code> 的矩阵，如果一个元素为 <strong>0</strong> ，则将其所在行和列的所有元素都设为 <strong>0</strong> 。请使用 **[原地] 算法。</p>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://assets.leetcode.com/uploads/2020/08/17/mat1.jpg" alt=" | 500"></p>
+<p><strong>输入：matrix &#x3D; [[1,1,1],[1,0,1],[1,1,1]]<br>输出：</strong>[[1,0,1],[0,0,0],[1,0,1]]</p>
+<p>**示例 2：</p>
+<p><img src="https://assets.leetcode.com/uploads/2020/08/17/mat2.jpg" alt=" | 500"></p>
+<p><strong>输入：matrix &#x3D; [[0,1,2,0],[3,4,5,2],[1,3,1,5]]<br>输出：</strong>[[0,0,0,0],[0,4,5,0],[0,3,1,0]]</p>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>m == matrix.length</code></li>
+<li><code>n == matrix[0].length</code></li>
+<li><code>1 &lt;= m, n &lt;= 200</code></li>
+<li><code>-231 &lt;= matrix[i][j] &lt;= 231 - 1</code></li>
+</ul>
+<p><strong>进阶：</strong></p>
+<ul>
+<li>一个直观的解决方案是使用  <code>O(_m__n_)</code> 的额外空间，但这并不是一个好的解决方案。</li>
+<li>一个简单的改进方案是使用 <code>O(_m_ + _n_)</code> 的额外空间，但这仍然不是最好的解决方案。</li>
+<li>你能想出一个仅使用常量空间的解决方案吗？</li>
+</ul>
+<h1 id="解题思路与实现"><a href="#解题思路与实现" class="headerlink" title="解题思路与实现"></a>解题思路与实现</h1><ul>
+<li>转化为找0问题，记录0所在的横纵坐标，由于可能重复，所以需要借助set去重</li>
+</ul>
+<h2 id="方法一：集合遍历"><a href="#方法一：集合遍历" class="headerlink" title="方法一：集合遍历"></a>方法一：集合遍历</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">setZeroes</span>(<span class="params">self, matrix: <span class="type">List</span>[<span class="type">List</span>[<span class="built_in">int</span>]]</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Do not return anything, modify matrix in-place instead.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> matrix <span class="keyword">or</span> <span class="keyword">not</span> matrix[<span class="number">0</span>]:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        M, N = <span class="built_in">len</span>(matrix), <span class="built_in">len</span>(matrix[<span class="number">0</span>])</span><br><span class="line">        row, col = <span class="built_in">set</span>(), <span class="built_in">set</span>()</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(M):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">                <span class="keyword">if</span> matrix[i][j] == <span class="number">0</span>:</span><br><span class="line">                    row.add(i)</span><br><span class="line">                    col.add(j)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(M):</span><br><span class="line">            <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(N):</span><br><span class="line">                <span class="keyword">if</span> i <span class="keyword">in</span> row <span class="keyword">or</span> j <span class="keyword">in</span> col:</span><br><span class="line">                    matrix[i][j] = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/560.%20%E5%92%8C%E4%B8%BAK%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/icon.JPG">
+      <meta itemprop="name" content="Uncle Antonio">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Uncle Antonio">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/560.%20%E5%92%8C%E4%B8%BAK%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-11-22 22:50:52" itemprop="dateCreated datePublished" datetime="2025-11-22T22:50:52+08:00">2025-11-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-11-02 13:34:02" itemprop="dateModified" datetime="2025-11-02T13:34:02+08:00">2025-11-02</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>🏷中等 #数组 #哈希表 #前缀和</p>
+<p>给你一个整数数组 <code>nums</code> 和一个整数 <code>k</code> ，请你统计并返回 <em>该数组中和为 <code>k</code> 的子数组的个数</em> 。</p>
+<p>子数组是数组中元素的连续非空序列。</p>
+<p><strong>示例 1：</strong></p>
+<p>**输入：nums &#x3D; [1,1,1], k &#x3D; 2<br>输出：2</p>
+<p><strong>示例 2：</strong></p>
+<p>**输入：nums &#x3D; [1,2,3], k &#x3D; 3<br>输出：2</p>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= nums.length &lt;= 2 * 104</code></li>
+<li><code>-1000 &lt;= nums[i] &lt;= 1000</code></li>
+<li><code>-107 &lt;= k &lt;= 107</code></li>
+</ul>
+<h1 id="解题思路与实现"><a href="#解题思路与实现" class="headerlink" title="解题思路与实现"></a>解题思路与实现</h1><ul>
+<li>暴力解法会超时</li>
+<li>问题转化为：通过前缀和，任意范围的子数组 【i, j) 的元素和就等于 preSum[j] - preSum[i]。我们要查找的就是前缀和数组中满足 j &gt; i 且 preSum[j] - preSum[i] &#x3D; k 的下标对 (i,j) 的个数。</li>
+</ul>
+<p>![[file-20251029185817771.png]]</p>
+<h2 id="方法一：前缀和法"><a href="#方法一：前缀和法" class="headerlink" title="方法一：前缀和法"></a>方法一：前缀和法</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">subarraySum</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>], k: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        ps_counts = &#123;<span class="number">0</span>:<span class="number">1</span>&#125;</span><br><span class="line">        res = <span class="number">0</span></span><br><span class="line">        ps = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">            ps += num</span><br><span class="line">            res += ps_counts.get(ps-k,<span class="number">0</span>)</span><br><span class="line">            ps_counts[ps] = ps_counts.get(ps,<span class="number">0</span>) + <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/70.%20%E7%88%AC%E6%A5%BC%E6%A2%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/icon.JPG">
+      <meta itemprop="name" content="Uncle Antonio">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Uncle Antonio">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2025/11/22/%E6%97%A5%E5%B8%B8%E5%8A%9B%E6%89%A3/%E7%83%AD%E9%A2%98100/70.%20%E7%88%AC%E6%A5%BC%E6%A2%AF/" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2025-11-22 22:50:52" itemprop="dateCreated datePublished" datetime="2025-11-22T22:50:52+08:00">2025-11-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2025-10-30 22:57:51" itemprop="dateModified" datetime="2025-10-30T22:57:51+08:00">2025-10-30</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>🏷简单 #数学 #动态规划 </p>
+<p>假设你正在爬楼梯。需要 <code>n</code> 阶你才能到达楼顶。</p>
+<p>每次你可以爬 <code>1</code> 或 <code>2</code> 个台阶。你有多少种不同的方法可以爬到楼顶呢？</p>
+<p>示例 1：</p>
+<p>输入：n &#x3D; 2<br>输出：2<br>解释：有两种方法可以爬到楼顶。</p>
+<ol>
+<li>1 阶 + 1 阶</li>
+<li>2 阶<br>示例 2：</li>
+</ol>
+<p>输入：n &#x3D; 3<br>输出：3<br>解释：有三种方法可以爬到楼顶。</p>
+<ol>
+<li>1 阶 + 1 阶 + 1 阶</li>
+<li>1 阶 + 2 阶</li>
+<li>2 阶 + 1 阶</li>
+</ol>
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>1 &lt;= n &lt;= 45</code></li>
+</ul>
+<h1 id="解题思路与实现"><a href="#解题思路与实现" class="headerlink" title="解题思路与实现"></a>解题思路与实现</h1><ul>
+<li>正向循环迭代，f(n) &#x3D; f(n-1) + f(n-2)</li>
+</ul>
+<h2 id="方法一：迭代法"><a href="#方法一：迭代法" class="headerlink" title="方法一：迭代法"></a>方法一：迭代法</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span>:</span><br><span class="line"><span class="meta">    @lru_cache(<span class="params"><span class="literal">None</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">climbStairs</span>(<span class="params">self, n: <span class="built_in">int</span></span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">        f= [<span class="number">0</span>]*(n+<span class="number">1</span>)</span><br><span class="line">        f[<span class="number">0</span>] = f[<span class="number">1</span>] = <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>,n+<span class="number">1</span>):</span><br><span class="line">            f[i] = f[i-<span class="number">2</span>] + f[i-<span class="number">1</span>]</span><br><span class="line">        <span class="keyword">return</span> f[n]  </span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -1499,6 +1029,9 @@
 
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
 
 
 
@@ -1565,16 +1098,16 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">categories</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
